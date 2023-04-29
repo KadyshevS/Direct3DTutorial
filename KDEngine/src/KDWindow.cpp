@@ -1,5 +1,7 @@
 #include "KDWindow.h"
 
+#include <sstream>
+
 namespace KDE
 {
 //////////////////////////////////////////////////////////////////////////
@@ -49,7 +51,9 @@ namespace KDE
 		wr.right = width + wr.left;
 		wr.top = 100;
 		wr.bottom = height + wr.top;
-		AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+
+		if ( FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)) )
+			throw KD_EXCEPT_LAST();
 
 		m_WindowHandle = CreateWindow(
 			KDWindowClass::Name(), title,
@@ -57,6 +61,10 @@ namespace KDE
 			CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 			nullptr, nullptr, KDWindowClass::Instance(), this
 		);
+
+		if(m_WindowHandle == nullptr)
+			throw KD_EXCEPT_LAST();
+
 		ShowWindow(m_WindowHandle, SW_SHOWDEFAULT);
 	}
 	KDWindow::~KDWindow()
@@ -92,6 +100,54 @@ namespace KDE
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+//////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////
+////	Window Exception
+	KDWindow::Exception::Exception(int line, const char* file, HRESULT hr)
+		: KDException(line, file), m_ErrorCode(hr)
+	{}
+
+	const char* KDWindow::Exception::what() const
+	{ 
+		std::ostringstream oss;
+		oss << Type() << '\n'
+			<< "[Error Code] " << ErrorCode() << '\n'
+			<< "[Description] " << ErrorString() << '\n'
+			<< StringOrigin();
+
+		m_WhatBuffer = oss.str();
+		return m_WhatBuffer.c_str();
+	}
+	const char* KDWindow::Exception::Type() const
+	{
+		return "KDWindow Exception";
+	}
+	std::string KDWindow::Exception::TranslateErrorCode(HRESULT hr)
+	{
+		char* pMsgBuf = nullptr;
+		DWORD nMsgLen = FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			reinterpret_cast<LPSTR>(&pMsgBuf), 0, nullptr
+		);
+		if (nMsgLen == 0)
+			return "Unidentified Error Code";
+
+		std::string errorString = pMsgBuf;
+		LocalFree(pMsgBuf);
+		return errorString;
+	}
+	HRESULT KDWindow::Exception::ErrorCode() const
+	{
+		return m_ErrorCode;
+	}
+	std::string KDWindow::Exception::ErrorString() const
+	{
+		return TranslateErrorCode(m_ErrorCode);
 	}
 //////////////////////////////////////////////////////////////////////////
 }
