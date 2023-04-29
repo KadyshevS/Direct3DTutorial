@@ -17,6 +17,7 @@ project "KDEngine"
 	language "C++"
 	cppdialect "C++20"
 	staticruntime "on"
+	characterset "MBCS"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -29,6 +30,7 @@ project "KDEngine"
 
 	includedirs
 	{
+		"%{prj.name}",
 		"%{prj.name}/src"
 	}
 	

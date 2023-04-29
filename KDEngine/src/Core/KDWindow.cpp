@@ -1,5 +1,7 @@
 #include "KDWindow.h"
 
+#include "resource.h"
+
 #include <sstream>
 
 namespace KDE
@@ -19,12 +21,12 @@ namespace KDE
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = Instance();
-		wc.hIcon = nullptr;
+		wc.hIcon = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
 		wc.hCursor = nullptr;
 		wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
 		wc.lpszMenuName = nullptr;
 		wc.lpszClassName = m_WindowClassName;
-		wc.hIconSm = nullptr;
+		wc.hIconSm = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));;
 		RegisterClassEx(&wc);
 	}
 
