@@ -79,6 +79,21 @@ namespace KDE
 		if (SetWindowText(m_WindowHandle, title) == 0)
 			throw KD_EXCEPT_LAST();
 	}
+	std::optional<int> KDWindow::ProcessMessages()
+	{
+		MSG msg;
+
+		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+				return msg.wParam;
+
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		return {};
+	}
 
 	const char* KDWindow::Title() const
 	{

@@ -1,8 +1,11 @@
 #pragma once
+
 #include "KDWin.h"
 #include "KDException.h"
 #include "Input/KDKeyboard.h"
 #include "Input/KDMouse.h"
+
+#include <optional>
 
 namespace KDE
 {
@@ -15,6 +18,7 @@ namespace KDE
 		~KDWindow();
 
 		void SetTitle(const char* title);
+		static std::optional<int> ProcessMessages();
 	public:
 		class Exception : public KDException
 		{
