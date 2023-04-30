@@ -1,6 +1,7 @@
 #pragma once
 #include "KDWin.h"
 #include "KDException.h"
+#include "Input/KDKeyboard.h"
 
 namespace KDE
 {
@@ -26,6 +27,8 @@ namespace KDE
 		private:
 			HRESULT m_ErrorCode;
 		};
+
+		KDKeyboard Keyboard;
 
 	private:
 		static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

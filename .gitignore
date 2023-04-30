@@ -1,0 +1,7 @@
+bin
+bin-int
+.vs
+
+KDEngine.sln
+KDEngine.vcxproj
+KDEngine.vcxproj.user

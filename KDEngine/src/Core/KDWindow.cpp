@@ -99,6 +99,22 @@ namespace KDE
 			case WM_CLOSE:
 				PostQuitMessage(0);
 				break;
+			case WM_KILLFOCUS:
+				Keyboard.ClearState();
+				break;
+
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+				if( !(lParam & 0x40000000) || Keyboard.IsAutorepeatEnabled() )
+					Keyboard.OnKeyPressed((unsigned char)wParam);
+				break;
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+				Keyboard.OnKeyReleased((unsigned char)wParam);
+				break;
+			case WM_CHAR:
+				Keyboard.OnChar((unsigned char)wParam);
+				break;
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -110,7 +126,7 @@ namespace KDE
 	KDWindow::Exception::Exception(int line, const char* file, HRESULT hr)
 		: KDException(line, file), m_ErrorCode(hr)
 	{}
-
+	
 	const char* KDWindow::Exception::what() const
 	{ 
 		std::ostringstream oss;

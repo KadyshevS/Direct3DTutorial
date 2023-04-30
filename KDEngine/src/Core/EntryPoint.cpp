@@ -18,6 +18,13 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
+			if (window.Keyboard.IsKeyPressed(KDE::Key::Space))
+				MessageBox(nullptr, "Something happen", "Space key was pressed.", MB_OK);
+			if (window.Keyboard.IsKeyPressed(KDE::Key::Control))
+				MessageBox(nullptr, "Something happen", "Control key was pressed.", MB_OK);
+			if (window.Keyboard.IsKeyPressed(KDE::Key::Shift))
+				MessageBox(nullptr, "Something happen", "Shift key was pressed.", MB_OK);
 		}
 
 		return (int)msg.wParam;
