@@ -22,6 +22,8 @@ namespace KDE
 				RightRelease,
 				WheelDown,
 				WheelUp,
+				Enter,
+				Leave,
 				Move
 			};
 		public:
@@ -50,6 +52,7 @@ namespace KDE
 		std::pair<int, int> Position() const;
 		int PositionX() const;
 		int PositionY() const;
+		bool IsInWindow() const;
 		bool IsLeftIsPressed() const;
 		bool IsRightIsPressed() const;
 		Event Read();
@@ -61,6 +64,8 @@ namespace KDE
 	private:
 		void OnLeftPressed();
 		void OnRightPressed();
+		void OnLeave();
+		void OnEnter();
 		void OnLeftReleased();
 		void OnRightReleased();
 		void OnWheelDown(int x, int y);
@@ -68,8 +73,9 @@ namespace KDE
 		void OnMove(int x, int y);
 	private:
 		static constexpr uint32_t m_BufferSize = 16;
-		int m_PositionX, m_PositionY;
-		bool m_LeftIsPressed, m_RightIsPressed;
+		int m_PositionX = 0, m_PositionY = 0;
+		bool m_LeftIsPressed = false, m_RightIsPressed = false;
+		bool m_IsInWindow = false;
 		std::queue<Event> m_Buffer;
 	};
 }

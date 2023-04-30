@@ -143,7 +143,27 @@ namespace KDE
 			case WM_MOUSEMOVE:
 			{
 				const POINTS pt = MAKEPOINTS(lParam);
-				Mouse.OnMove(pt.x, pt.y);
+				if (pt.x >= 0 && pt.x <= m_Width && pt.y >= 0 && pt.y <= m_Height)
+				{
+					Mouse.OnMove(pt.x, pt.y);
+					if (!Mouse.IsInWindow())
+					{
+						SetCapture(hWnd);
+						Mouse.OnEnter();
+					}
+				}
+				else
+				{
+					if (wParam & (MK_LBUTTON | MK_RBUTTON))
+					{
+						Mouse.OnMove(pt.x, pt.y);
+					}
+					else
+					{
+						ReleaseCapture();
+						Mouse.OnLeave();
+					}
+				}
 				break;
 			}
 			case WM_LBUTTONDOWN:

@@ -16,6 +16,10 @@ namespace KDE
 	{
 		return m_PositionY;
 	}
+	bool KDMouse::IsInWindow() const
+	{
+		return m_IsInWindow;
+	}
 	bool KDMouse::IsLeftIsPressed() const
 	{
 		return m_LeftIsPressed;
@@ -59,6 +63,20 @@ namespace KDE
 		m_Buffer.push({ KDMouse::Event::EventType::RightPress, *this});
 		TrimBuffer(m_Buffer);
 	}
+
+	void KDMouse::OnLeave()
+	{
+		m_IsInWindow = false;
+		m_Buffer.push({ KDMouse::Event::EventType::Leave, *this });
+		TrimBuffer(m_Buffer);
+	}
+	void KDMouse::OnEnter()
+	{
+		m_IsInWindow = true;
+		m_Buffer.push({ KDMouse::Event::EventType::Enter, *this });
+		TrimBuffer(m_Buffer);
+	}
+
 	void KDMouse::OnLeftReleased()
 	{
 		m_LeftIsPressed = false;
@@ -122,6 +140,7 @@ namespace KDE
 	{
 		return type;
 	}
+
 	std::pair<int, int> KDMouse::Event::Position() const
 	{
 		return std::pair(x, y);
@@ -134,6 +153,7 @@ namespace KDE
 	{
 		return y;
 	}
+
 	bool KDMouse::Event::IsLeftIsPressed() const
 	{
 		return LeftIsPressed;
