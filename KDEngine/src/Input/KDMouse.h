@@ -55,6 +55,7 @@ namespace KDE
 		bool IsInWindow() const;
 		bool IsLeftIsPressed() const;
 		bool IsRightIsPressed() const;
+		int WheelDelta() const;
 		Event Read();
 		bool IsEmpty();
 		void Clear();
@@ -64,18 +65,20 @@ namespace KDE
 	private:
 		void OnLeftPressed();
 		void OnRightPressed();
-		void OnLeave();
-		void OnEnter();
 		void OnLeftReleased();
 		void OnRightReleased();
-		void OnWheelDown(int x, int y);
-		void OnWheelUp(int x, int y);
+		void OnWheelDown();
+		void OnWheelUp();
+		void OnLeave();
+		void OnEnter();
 		void OnMove(int x, int y);
+		void OnWheelDelta(int delta);
 	private:
 		static constexpr uint32_t m_BufferSize = 16;
 		int m_PositionX = 0, m_PositionY = 0;
 		bool m_LeftIsPressed = false, m_RightIsPressed = false;
 		bool m_IsInWindow = false;
+		int m_WheelDelta = 0;
 		std::queue<Event> m_Buffer;
 	};
 }

@@ -21,24 +21,28 @@ int CALLBACK WinMain(
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
+			static int i = 0;
 			while (!window.Mouse.IsEmpty())
 			{
 				const auto e = window.Mouse.Read();
 				switch (e.Type())
 				{
-					case KDE::KDMouse::Event::EventType::Leave:
-					{
-						window.SetTitle("Mouse is out region.");
+					case KDE::KDMouse::Event::EventType::WheelUp:
+						i++;
+						{
+							std::ostringstream oss;
+							oss << "Wheel Up: " << i;
+							window.SetTitle(oss.str().c_str());
+						}
 						break;
-					}
-					case KDE::KDMouse::Event::EventType::Move:
-					{
-						std::ostringstream oss;
-						oss << "Mouse Position: {" << e.PositionX()
-							<< ", " << e.PositionY() << "}";
-						window.SetTitle(oss.str().c_str());
+					case KDE::KDMouse::Event::EventType::WheelDown:
+						i--;
+						{
+							std::ostringstream oss;
+							oss << "Wheel Down: " << i;
+							window.SetTitle(oss.str().c_str());
+						}
 						break;
-					}
 				}
 			}
 		}

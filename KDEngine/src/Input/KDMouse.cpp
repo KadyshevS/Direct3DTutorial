@@ -1,5 +1,7 @@
 #include "KDMouse.h"
 
+#include "Core/KDWin.h"
+
 namespace KDE
 {
 //////////////////////////////////////////////////////////////////////////
@@ -27,6 +29,10 @@ namespace KDE
 	bool KDMouse::IsRightIsPressed() const
 	{
 		return m_RightIsPressed;
+	}
+	int KDMouse::WheelDelta() const
+	{
+		return m_WheelDelta;
 	}
 
 	KDMouse::Event KDMouse::Read()
@@ -91,12 +97,12 @@ namespace KDE
 		m_Buffer.push({ KDMouse::Event::EventType::RightRelease, *this });
 		TrimBuffer(m_Buffer);
 	}
-	void KDMouse::OnWheelDown(int x, int y)
+	void KDMouse::OnWheelDown()
 	{
 		m_Buffer.push({ KDMouse::Event::EventType::WheelDown, *this });
 		TrimBuffer(m_Buffer);
 	}
-	void KDMouse::OnWheelUp(int x, int y)
+	void KDMouse::OnWheelUp()
 	{
 		m_Buffer.push({ KDMouse::Event::EventType::WheelUp, *this });
 		TrimBuffer(m_Buffer);
@@ -109,6 +115,21 @@ namespace KDE
 		m_Buffer.push({ KDMouse::Event::EventType::Move, *this });
 		TrimBuffer(m_Buffer);
 	}
+	void KDMouse::OnWheelDelta(int delta)
+	{
+		m_WheelDelta += delta;
+		while (m_WheelDelta >= WHEEL_DELTA)
+		{
+			m_WheelDelta -= WHEEL_DELTA;
+			OnWheelUp();
+		}
+		while (m_WheelDelta <= -WHEEL_DELTA)
+		{
+			m_WheelDelta += WHEEL_DELTA;
+			OnWheelDown();
+		}
+	}
+
 	template<typename T>
 	void KDMouse::TrimBuffer(std::queue<T>& buffer)
 	{
