@@ -2,6 +2,7 @@
 #include "KDWin.h"
 #include "KDException.h"
 #include "Input/KDKeyboard.h"
+#include "Input/KDMouse.h"
 
 namespace KDE
 {
@@ -12,6 +13,8 @@ namespace KDE
 		KDWindow(const KDWindow&) = delete;
 		KDWindow& operator = (const KDWindow&) = delete;
 		~KDWindow();
+
+		void SetTitle(const char* title);
 	public:
 		class Exception : public KDException
 		{
@@ -28,7 +31,12 @@ namespace KDE
 			HRESULT m_ErrorCode;
 		};
 
+		const char* Title() const;
+		int Width() const;
+		int Height() const;
+
 		KDKeyboard Keyboard;
+		KDMouse Mouse;
 
 	private:
 		static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -50,7 +58,8 @@ namespace KDE
 			static KDWindowClass m_WindowClass;
 			HINSTANCE m_Instance;
 		};
-		static constexpr int const m_Width = 800, m_Height = 600;
+		std::string m_Title = "Unknown Title";
+		int m_Width = 800, m_Height = 600;
 		HWND m_WindowHandle;
 	};
 }

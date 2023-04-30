@@ -1,5 +1,7 @@
 #include "KDWindow.h"
 
+#include <sstream>
+
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -19,12 +21,17 @@ int CALLBACK WinMain(
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 
-			if (window.Keyboard.IsKeyPressed(KDE::Key::Space))
-				MessageBox(nullptr, "Something happen", "Space key was pressed.", MB_OK);
-			if (window.Keyboard.IsKeyPressed(KDE::Key::Control))
-				MessageBox(nullptr, "Something happen", "Control key was pressed.", MB_OK);
-			if (window.Keyboard.IsKeyPressed(KDE::Key::Shift))
-				MessageBox(nullptr, "Something happen", "Shift key was pressed.", MB_OK);
+			while (!window.Mouse.IsEmpty())
+			{
+				const auto e = window.Mouse.Read();
+				if (e.Type() == KDE::KDMouse::Event::EventType::Move)
+				{
+					std::ostringstream oss;
+					oss << "Mouse Position: {" << e.PositionX()
+						<< ", " << e.PositionY() << "}";
+					window.SetTitle(oss.str().c_str());
+				}
+			}
 		}
 
 		return (int)msg.wParam;

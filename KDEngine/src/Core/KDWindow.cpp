@@ -47,6 +47,7 @@ namespace KDE
 //////////////////////////////////////////////////////////////////////////
 ////	Window
 	KDWindow::KDWindow(const char* title, int width, int height)
+		: m_Title(title), m_Width(width), m_Height(height)
 	{
 		RECT wr{};
 		wr.left = 100;
@@ -54,7 +55,7 @@ namespace KDE
 		wr.top = 100;
 		wr.bottom = height + wr.top;
 
-		if ( FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)) )
+		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
 			throw KD_EXCEPT_LAST();
 
 		m_WindowHandle = CreateWindow(
@@ -72,6 +73,24 @@ namespace KDE
 	KDWindow::~KDWindow()
 	{
 		DestroyWindow(m_WindowHandle);
+	}
+	void KDWindow::SetTitle(const char* title)
+	{
+		if (SetWindowText(m_WindowHandle, title) == 0)
+			throw KD_EXCEPT_LAST();
+	}
+
+	const char* KDWindow::Title() const
+	{
+		return m_Title.c_str();
+	}
+	int KDWindow::Width() const
+	{
+		return m_Width;
+	}
+	int KDWindow::Height() const
+	{
+		return m_Height;
 	}
 
 	LRESULT CALLBACK KDWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -103,6 +122,8 @@ namespace KDE
 				Keyboard.ClearState();
 				break;
 
+		//////////////////////////////////////////////////////////////////////////
+		////	Keyboard Input
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
 				if( !(lParam & 0x40000000) || Keyboard.IsAutorepeatEnabled() )
@@ -115,6 +136,38 @@ namespace KDE
 			case WM_CHAR:
 				Keyboard.OnChar((unsigned char)wParam);
 				break;
+		//////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////
+		////	Mouse Input
+			case WM_MOUSEMOVE:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				Mouse.OnMove(pt.x, pt.y);
+				break;
+			}
+			case WM_LBUTTONDOWN:
+				Mouse.OnLeftPressed();
+				break;
+			case WM_RBUTTONDOWN:
+				Mouse.OnRightPressed();
+				break;
+			case WM_LBUTTONUP:
+				Mouse.OnLeftReleased();
+				break;
+			case WM_RBUTTONUP:
+				Mouse.OnRightPressed();
+				break;
+			case WM_MOUSEWHEEL:
+			{
+				const POINTS pt = MAKEPOINTS(lParam);
+				if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+					Mouse.OnWheelUp(pt.x, pt.y);
+				else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+					Mouse.OnWheelDown(pt.x, pt.y);
+			}
+				break;
+		//////////////////////////////////////////////////////////////////////////
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
