@@ -4,8 +4,10 @@
 #include "KDException.h"
 #include "Input/KDKeyboard.h"
 #include "Input/KDMouse.h"
+#include "Graphics/KDGraphics.h"
 
 #include <optional>
+#include <memory>
 
 namespace KDE
 {
@@ -38,6 +40,7 @@ namespace KDE
 		const char* Title() const;
 		int Width() const;
 		int Height() const;
+		KDGraphics& Graphics();
 
 		KDKeyboard Keyboard;
 		KDMouse Mouse;
@@ -65,6 +68,7 @@ namespace KDE
 		std::string m_Title = "Unknown Title";
 		int m_Width = 800, m_Height = 600;
 		HWND m_WindowHandle;
+		std::unique_ptr<KDGraphics> m_Graphics;
 	};
 }
 

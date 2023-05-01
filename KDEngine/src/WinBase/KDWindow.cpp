@@ -1,7 +1,5 @@
 #include "KDWindow.h"
 
-#include "resource.h"
-
 #include <sstream>
 
 namespace KDE
@@ -21,12 +19,14 @@ namespace KDE
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = Instance();
-		wc.hIcon = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
+//		wc.hIcon = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
+		wc.hIcon = nullptr;
 		wc.hCursor = nullptr;
 		wc.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
 		wc.lpszMenuName = nullptr;
 		wc.lpszClassName = m_WindowClassName;
-		wc.hIconSm = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));;
+//		wc.hIconSm = (HICON)(LoadImage(m_Instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));
+		wc.hIconSm = nullptr;
 		RegisterClassEx(&wc);
 	}
 
@@ -69,6 +69,8 @@ namespace KDE
 			throw KD_EXCEPT_LAST();
 
 		ShowWindow(m_WindowHandle, SW_SHOWDEFAULT);
+
+		m_Graphics = std::make_unique<KDGraphics>(m_WindowHandle);
 	}
 	KDWindow::~KDWindow()
 	{
@@ -86,7 +88,7 @@ namespace KDE
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
-				return msg.wParam;
+				return (int)msg.wParam;
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -106,6 +108,10 @@ namespace KDE
 	int KDWindow::Height() const
 	{
 		return m_Height;
+	}
+	KDGraphics& KDWindow::Graphics()
+	{
+		return *m_Graphics;
 	}
 
 	LRESULT CALLBACK KDWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

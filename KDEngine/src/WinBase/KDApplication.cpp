@@ -21,8 +21,6 @@ namespace KDE
 
 		while (m_Running)
 		{
-			Sleep(1);	// TODO: This is for fix CPU freezing while updating window. Need to find another solution  (!!!)
-
 			if (const auto ecode = m_Window->ProcessMessages())
 			{
 				return *ecode;
@@ -33,6 +31,13 @@ namespace KDE
 			{
 				layer->OnUpdate(m_LastFrameTime);
 			}
+
+			m_Window->Graphics().EndFrame();
+		}
+
+		for (auto& layer : m_LayerStack)
+		{
+			layer->OnDetach();
 		}
 
 		return 0;

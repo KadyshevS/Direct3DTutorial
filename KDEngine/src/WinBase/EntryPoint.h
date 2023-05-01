@@ -1,4 +1,4 @@
-#include "Core/KDApplication.h"
+#include "WinBase/KDApplication.h"
 
 extern KDE::KDApplication* KDE::CreateApplication();
 

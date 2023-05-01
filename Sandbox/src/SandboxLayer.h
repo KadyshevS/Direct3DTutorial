@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Core/Layer.h"
-#include "Core/KDWindow.h"
+#include "WinBase/Layer.h"
+#include "WinBase/KDWindow.h"
+#include "WinBase/KDTimer.h"
 
 class SandboxLayer : public KDE::Layer
 {
@@ -14,5 +15,5 @@ public:
 	virtual void OnDetach() override;
 	virtual void OnUpdate(float ts) override;
 private:
-	
+	KDE::KDTimer Timer;
 };

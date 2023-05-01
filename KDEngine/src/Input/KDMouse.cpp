@@ -1,6 +1,6 @@
 #include "KDMouse.h"
 
-#include "Core/KDWin.h"
+#include "WinBase/KDWin.h"
 
 namespace KDE
 {
