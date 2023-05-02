@@ -111,6 +111,10 @@ namespace KDE
 	}
 	KDGraphics& KDWindow::Graphics()
 	{
+		if (!m_Graphics)
+		{
+			throw KD_EXCEPT_NOGFX();
+		}
 		return *m_Graphics;
 	}
 
@@ -214,29 +218,10 @@ namespace KDE
 
 //////////////////////////////////////////////////////////////////////////
 ////	Window Exception
-	KDWindow::Exception::Exception(int line, const char* file, HRESULT hr)
-		: KDException(line, file), m_ErrorCode(hr)
-	{}
-	
-	const char* KDWindow::Exception::what() const
-	{ 
-		std::ostringstream oss;
-		oss << Type() << '\n'
-			<< "[Error Code] " << ErrorCode() << '\n'
-			<< "[Description] " << ErrorString() << '\n'
-			<< StringOrigin();
-
-		m_WhatBuffer = oss.str();
-		return m_WhatBuffer.c_str();
-	}
-	const char* KDWindow::Exception::Type() const
-	{
-		return "KDWindow Exception";
-	}
 	std::string KDWindow::Exception::TranslateErrorCode(HRESULT hr)
 	{
 		char* pMsgBuf = nullptr;
-		DWORD nMsgLen = FormatMessage(
+		const DWORD nMsgLen = FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			FORMAT_MESSAGE_FROM_SYSTEM |
 			FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -250,13 +235,38 @@ namespace KDE
 		LocalFree(pMsgBuf);
 		return errorString;
 	}
-	HRESULT KDWindow::Exception::ErrorCode() const
+
+	KDWindow::HrException::HrException(int line, const char* file, HRESULT hr)
+		: Exception(line, file), hr(hr) {}
+
+	const char* KDWindow::HrException::what() const
 	{
-		return m_ErrorCode;
+		std::ostringstream oss;
+		oss << Type() << std::endl
+			<< "[Error Code] 0x" << std::hex << std::uppercase << ErrorCode()
+			<< std::dec << " (" << (unsigned long)ErrorCode() << ")" << std::endl
+			<< "[Description] " << ErrorDescription() << std::endl
+			<< StringOrigin();
+
+		m_WhatBuffer = oss.str();
+		return m_WhatBuffer.c_str();
 	}
-	std::string KDWindow::Exception::ErrorString() const
+	const char* KDWindow::HrException::Type() const
 	{
-		return TranslateErrorCode(m_ErrorCode);
+		return "KDWindow Exception";
+	}
+	HRESULT KDWindow::HrException::ErrorCode() const
+	{
+		return hr;
+	}
+	std::string KDWindow::HrException::ErrorDescription() const
+	{
+		return TranslateErrorCode(hr);
+	}
+
+	const char* KDWindow::NoGfxException::Type() const
+	{
+		return "KDWindow Exception [NO GRAPHICS]";
 	}
 //////////////////////////////////////////////////////////////////////////
 }

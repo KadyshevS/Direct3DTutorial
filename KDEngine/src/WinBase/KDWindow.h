@@ -25,16 +25,25 @@ namespace KDE
 		class Exception : public KDException
 		{
 		public:
-			Exception(int line, const char* file, HRESULT hr);
-
+			using KDException::KDException;
+			static std::string TranslateErrorCode(HRESULT hr); 
+		};
+		class HrException : public Exception
+		{
+		public:
+			HrException(int line, const char* file, HRESULT hr);
 			const char* what() const override;
-			virtual const char* Type() const override;
-
-			static std::string TranslateErrorCode(HRESULT hr);
+			const char* Type() const override;
 			HRESULT ErrorCode() const;
-			std::string ErrorString() const;  
+			std::string ErrorDescription() const;
 		private:
-			HRESULT m_ErrorCode;
+			HRESULT hr;
+		};
+		class NoGfxException : public Exception
+		{
+		public:
+			using Exception::Exception;
+			const char* Type() const override;
 		};
 
 		const char* Title() const;
@@ -61,16 +70,17 @@ namespace KDE
 			static const char* Name();
 			static HINSTANCE Instance();
 		private:
-			static constexpr const char* m_WindowClassName = "KDEngine Window Class";
+			static constexpr const char* m_WindowClassName = "KDWindow Class";
 			static KDWindowClass m_WindowClass;
 			HINSTANCE m_Instance;
 		};
-		std::string m_Title = "Unknown Title";
+		std::string m_Title = "Unnamed Window";
 		int m_Width = 800, m_Height = 600;
 		HWND m_WindowHandle;
 		std::unique_ptr<KDGraphics> m_Graphics;
 	};
 }
 
-#define KD_EXCEPT(hr) KDWindow::Exception(__LINE__, __FILE__, hr)
-#define KD_EXCEPT_LAST() KDWindow::Exception(__LINE__, __FILE__, GetLastError())
+#define KD_EXCEPT(hr) KDWindow::HrException(__LINE__, __FILE__, (hr))
+#define KD_EXCEPT_LAST() KDWindow::HrException(__LINE__, __FILE__, GetLastError())
+#define KD_EXCEPT_NOGFX() KDWindow::NoGfxException(__LINE__, __FILE__)
