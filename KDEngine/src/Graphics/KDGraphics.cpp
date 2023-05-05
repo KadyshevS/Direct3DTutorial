@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+namespace wrl = Microsoft::WRL;
+
 #pragma comment(lib, "d3d11.lib")
 
 #define GFX_EXCEPT_NOINFO(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr) )
@@ -56,12 +58,11 @@ namespace KDE
 			&scd, &m_SwapChain, &m_Device, nullptr, &m_Context
 		) );
 
-		ID3D11Resource* pBackBuffer = nullptr;
-		GFX_THROW_INFO( m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)) );
+		wrl::ComPtr<ID3D11Resource> pBackBuffer;
+		GFX_THROW_INFO( m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer) );
 		GFX_THROW_INFO( m_Device->CreateRenderTargetView(
-			pBackBuffer, nullptr, &m_Target
+			pBackBuffer.Get(), nullptr, &m_Target
 		) );
-		pBackBuffer->Release();
 	}
 
 	void KDGraphics::EndFrame()
