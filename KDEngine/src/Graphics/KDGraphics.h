@@ -18,6 +18,7 @@ namespace KDE
 
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
+		void DrawTestTriangle();
 	public:
 		class Exception : public KDException
 		{
@@ -35,6 +36,16 @@ namespace KDE
 			std::string ErrorInfo() const;
 		private:
 			HRESULT hr;
+			std::string info;
+		};
+		class InfoException : public Exception
+		{
+		public:
+			InfoException(int line, const char* file, std::vector<std::string> infoMsgs);
+			const char* what() const override;
+			const char* Type() const override;
+			std::string ErrorInfo() const;
+		private:
 			std::string info;
 		};
 		class DeviceRemovedException : public HrException

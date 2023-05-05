@@ -45,7 +45,7 @@ namespace KDE
 		next = pDxgiInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 	}
 
-	std::vector<std::string> DXGIInfoManager::GetMessages() const
+	std::vector<std::string> DXGIInfoManager::Messages() const
 	{
 		std::vector<std::string> messages;
 		const auto end = pDxgiInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);

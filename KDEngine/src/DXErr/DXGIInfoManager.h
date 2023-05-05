@@ -17,7 +17,7 @@ namespace KDE
 		DXGIInfoManager& operator = (const DXGIInfoManager&) = delete;
 
 		void Set() noexcept;
-		std::vector<std::string> GetMessages() const;
+		std::vector<std::string> Messages() const;
 	private:
 		unsigned long long next = 0u;
 		IDXGIInfoQueue* pDxgiInfoQueue = nullptr;
