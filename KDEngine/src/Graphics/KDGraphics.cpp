@@ -6,8 +6,18 @@
 
 #pragma comment(lib, "d3d11.lib")
 
-#define GFX_THROW_FAILED(hrcall) if( FAILED(hr = (hrcall)) ) throw KDGraphics::HrException(__LINE__, __FILE__, (hr))
+#define GFX_EXCEPT_NOINFO(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr) )
+#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw KDGraphics::HrException( __LINE__,__FILE__,hr )
+
+#ifdef _DEBUG
+#define GFX_EXCEPT(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr),m_InfoManager.GetMessages() )
+#define GFX_THROW_INFO(hrcall) m_InfoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
+#define GFX_EXCEPT_DEVICE_REMOVED(hr) KDGraphics::DeviceRemovedException( __LINE__,__FILE__,(hr),m_InfoManager.GetMessages() )
+#else
+#define GFX_EXCEPT(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr) )
+#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
 #define GFX_EXCEPT_DEVICE_REMOVED(hr) KDGraphics::DeviceRemovedException( __LINE__,__FILE__,(hr) )
+#endif
 
 namespace KDE
 {
@@ -40,53 +50,57 @@ namespace KDE
 
 		HRESULT hr;
 
-		GFX_THROW_FAILED( D3D11CreateDeviceAndSwapChain(
+		GFX_THROW_INFO( D3D11CreateDeviceAndSwapChain(
 			nullptr, D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, gfxCreateFlags, nullptr, 0, D3D11_SDK_VERSION,
 			&scd, &m_SwapChain, &m_Device, nullptr, &m_Context
 		) );
 
 		ID3D11Resource* pBackBuffer = nullptr;
-		GFX_THROW_FAILED( m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)) );
-		GFX_THROW_FAILED( m_Device->CreateRenderTargetView(
+		GFX_THROW_INFO( m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)) );
+		GFX_THROW_INFO( m_Device->CreateRenderTargetView(
 			pBackBuffer, nullptr, &m_Target
 		) );
 		pBackBuffer->Release();
 	}
-	KDGraphics::~KDGraphics()
-	{
-		if (!m_Target)
-			m_Target->Release();
-		if (!m_Context)
-			m_Context->Release();
-		if (!m_SwapChain)
-			m_SwapChain->Release();
-		if (!m_Device)
-			m_Device->Release();
-	}
 
 	void KDGraphics::EndFrame()
 	{
+#ifdef _DEBUG
+		m_InfoManager.Set();
+#endif
+
 		HRESULT hr;
 		if ( FAILED(hr = m_SwapChain->Present(1u, 0u)) )
 		{
 			if (hr == DXGI_ERROR_DEVICE_REMOVED)
 				throw GFX_EXCEPT_DEVICE_REMOVED(m_Device->GetDeviceRemovedReason());
 			else
-				GFX_THROW_FAILED(hr);
+				throw GFX_EXCEPT(hr);
 		}
 	}
 	void KDGraphics::ClearBuffer(float red, float green, float blue)
 	{
 		float rgba[4] = {red, green, blue, 1.0f};
-		m_Context->ClearRenderTargetView(m_Target, rgba);
+		m_Context->ClearRenderTargetView(m_Target.Get(), rgba);
 	}
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 ////	Graphics Exception
-	KDGraphics::HrException::HrException(int line, const char* file, HRESULT hr)
-		: Exception(line, file), hr(hr) {}
+	KDGraphics::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs)
+		: Exception(line, file), hr(hr) 
+	{
+		for (const auto& m : infoMsgs)
+		{
+			info += m;
+			info.push_back('\n');
+		}
+
+		if (!info.empty())
+			info.pop_back();
+
+	}
 
 	const char* KDGraphics::HrException::what() const
 	{
@@ -95,8 +109,12 @@ namespace KDE
 			<< "[Error Code] 0x" << std::hex << std::uppercase << ErrorCode()
 			<< std::dec << " (" << (unsigned long)ErrorCode() << ")" << std::endl
 			<< "[Error String] " << ErrorString() << std::endl
-			<< "[Description] " << ErrorDescription() << std::endl
-			<< StringOrigin();
+			<< "[Description] " << ErrorDescription() << std::endl;
+		if (!info.empty())
+		{
+			oss << "\n[Error Info]\n" << ErrorInfo() << std::endl << std::endl;
+		}
+		oss << StringOrigin();
 
 		m_WhatBuffer = oss.str();
 		return m_WhatBuffer.c_str();
@@ -119,8 +137,12 @@ namespace KDE
 		DXGetErrorDescription(hr, buf, sizeof(buf));
 		return buf;
 	}
+	std::string KDGraphics::HrException::ErrorInfo() const
+	{
+		return info;
+	}
 
-	const char* KDGraphics::DeviceRemovedException::Type() const noexcept
+	const char* KDGraphics::DeviceRemovedException::Type() const
 	{
 		return "KDGraphics Exception [DEVICE REMOVED]";
 	}
