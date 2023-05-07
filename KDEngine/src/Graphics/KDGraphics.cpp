@@ -5,7 +5,6 @@
 
 #include <sstream>
 #include <d3dcompiler.h>
-#include <DirectXMath.h>
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
@@ -86,6 +85,15 @@ namespace KDE
 			pDepthStencil.Get(), &descDSV, &m_DepthStencilView
 		) );
 		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), m_DepthStencilView.Get());
+
+		D3D11_VIEWPORT vp{};
+		vp.Width = 800;
+		vp.Height = 600;
+		vp.MinDepth = 0;
+		vp.MaxDepth = 1;
+		vp.TopLeftX = 0;
+		vp.TopLeftY = 0;
+		m_Context->RSSetViewports(1, &vp);
 	}
 
 	void KDGraphics::EndFrame()
@@ -253,16 +261,19 @@ namespace KDE
 
 		m_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		D3D11_VIEWPORT vp{};
-		vp.Width = 800;
-		vp.Height = 600;
-		vp.MinDepth = 0;
-		vp.MaxDepth = 1;
-		vp.TopLeftX = 0;
-		vp.TopLeftY = 0;
-		m_Context->RSSetViewports(1, &vp);
-
-		GFX_THROW_INFO_ONLY( m_Context->DrawIndexed((UINT)std::size(indices), 0, 0) );
+		DrawIndexed((UINT)std::size(indices));
+	}
+	void KDGraphics::DrawIndexed(UINT count)
+	{
+		GFX_THROW_INFO_ONLY(m_Context->DrawIndexed(count, 0, 0));
+	}
+	void KDGraphics::SetProjection(DirectX::FXMMATRIX proj)
+	{
+		m_Projection = proj;
+	}
+	DirectX::XMMATRIX KDGraphics::Projection() const
+	{
+		return m_Projection;
 	}
 //////////////////////////////////////////////////////////////////////////
 

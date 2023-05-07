@@ -7,6 +7,7 @@
 #include <vector>
 #include <d3d11.h>
 #include <wrl.h>
+#include <DirectXMath.h>
 
 namespace KDE
 {
@@ -20,6 +21,10 @@ namespace KDE
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
 		void DrawTestTriangle(float x, float z, float val);
+		void DrawIndexed(UINT count);
+		void SetProjection(DirectX::FXMMATRIX proj);
+
+		DirectX::XMMATRIX Projection() const;
 	public:
 		class Exception : public KDException
 		{
@@ -58,6 +63,8 @@ namespace KDE
 			std::string reason;
 		};
 
+	private:
+		DirectX::XMMATRIX m_Projection;
 	private:
 #ifdef _DEBUG
 		DXGIInfoManager m_InfoManager;

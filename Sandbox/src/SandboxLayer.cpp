@@ -1,10 +1,12 @@
 #include "SandboxLayer.h"
 
-#include <cmath>
-
 void SandboxLayer::OnAttach()
 {
-	
+	Cube = std::make_unique<TestCube>(Window->Graphics());
+
+	Window->Graphics().SetProjection(
+		DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f)
+	);
 }
 void SandboxLayer::OnDetach()
 {
@@ -13,9 +15,11 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
-	const float c = sin(Timer.Peek()) / 2.0f + 0.5f;
-	Window->Graphics().ClearBuffer(c, c, 1.0f);
-	Window->Graphics().DrawTestTriangle(0.0f, 1.0f, Timer.Peek() + 7.0f);
-	Window->Graphics().DrawTestTriangle(Window->Mouse.PositionX() / 400.0f - 1.0f, -Window->Mouse.PositionY() / 300.0f + 1.0f, Timer.Peek());
+	auto dt = Timer.Mark();
+	Window->Graphics().ClearBuffer(0.07f, 0.0f, 0.12f);
+
+	Cube->Update(dt);
+	Cube->Draw(Window->Graphics());
+
 	Window->Graphics().EndFrame();
 }

@@ -16,9 +16,9 @@
 #endif
 
 #ifdef _DEBUG
-#define INFOMAN() HRESULT hr; KDE::DXGIInfoManager& m_InfoManager = *InfoManager()
+// #define INFOMAN() HRESULT hr; KDE::DXGIInfoManager& m_InfoManager = *InfoManager()
 #define INFOMAN(gfx) HRESULT hr; KDE::DXGIInfoManager& m_InfoManager = *InfoManager((gfx))
 #else
-#define INFOMAN() HRESULT hr
+// #define INFOMAN() HRESULT hr
 #define INFOMAN(gfx) HRESULT hr
 #endif

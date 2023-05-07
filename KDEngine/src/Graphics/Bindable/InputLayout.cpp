@@ -4,7 +4,9 @@
 
 namespace KDE
 {
-	InputLayout::InputLayout(KDGraphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_DESC>& layout, ID3DBlob* pVertexShaderBytecode)
+	InputLayout::InputLayout(KDGraphics& gfx, 
+		const std::vector<D3D11_INPUT_ELEMENT_DESC>& layout, 
+		ID3DBlob* pVertexShaderBytecode)
 	{
 		INFOMAN(gfx);
 
