@@ -1,5 +1,7 @@
 #include "KDWindow.h"
 
+#include "WindowThrowMacros.h"
+
 #include <sstream>
 
 namespace KDE

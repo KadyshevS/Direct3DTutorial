@@ -149,6 +149,8 @@
     <ClInclude Include="src\DXErr\DXGetErrorString.inl" />
     <ClInclude Include="src\DXErr\DXTrace.inl" />
     <ClInclude Include="src\DXErr\dxerr.h" />
+    <ClInclude Include="src\Graphics\Bindable\Bindable.h" />
+    <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
     <ClInclude Include="src\Input\KDKeyboard.h" />
     <ClInclude Include="src\Input\KDMouse.h" />
@@ -161,6 +163,7 @@
     <ClInclude Include="src\WinBase\KDWindow.h" />
     <ClInclude Include="src\WinBase\Layer.h" />
     <ClInclude Include="src\WinBase\LayerStack.h" />
+    <ClInclude Include="src\WinBase\WindowThrowMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DXErr\DXGIInfoManager.cpp" />

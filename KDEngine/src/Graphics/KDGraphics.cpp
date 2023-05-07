@@ -1,6 +1,7 @@
 #include "KDGraphics.h"
 
 #include "DXErr/dxerr.h"
+#include "GraphicsThrowMacros.h"
 
 #include <sstream>
 #include <d3dcompiler.h>
@@ -11,21 +12,6 @@ namespace dx = DirectX;
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
-
-#define GFX_EXCEPT_NOINFO(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr) )
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw KDGraphics::HrException( __LINE__,__FILE__,hr )
-
-#ifdef _DEBUG
-#define GFX_EXCEPT(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr),m_InfoManager.Messages() )
-#define GFX_THROW_INFO(hrcall) m_InfoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
-#define GFX_THROW_INFO_ONLY(call) m_InfoManager.Set(); (call); {auto v = m_InfoManager.Messages(); if(!v.empty()) {throw KDGraphics::InfoException(__LINE__, __FILE__, v);}} 
-#define GFX_EXCEPT_DEVICE_REMOVED(hr) KDGraphics::DeviceRemovedException( __LINE__,__FILE__,(hr),m_InfoManager.Messages() )
-#else
-#define GFX_EXCEPT(hr) KDGraphics::HrException( __LINE__,__FILE__,(hr) )
-#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
-#define GFX_THROW_INFO_ONLY(call) (call)
-#define GFX_EXCEPT_DEVICE_REMOVED(hr) KDGraphics::DeviceRemovedException( __LINE__,__FILE__,(hr) )
-#endif
 
 namespace KDE
 {
@@ -69,6 +55,37 @@ namespace KDE
 		GFX_THROW_INFO( m_Device->CreateRenderTargetView(
 			pBackBuffer.Get(), nullptr, &m_Target
 		) );
+
+		D3D11_DEPTH_STENCIL_DESC dsc{};
+		dsc.DepthEnable = TRUE;
+		dsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dsc.DepthFunc = D3D11_COMPARISON_LESS;
+		wrl::ComPtr<ID3D11DepthStencilState> pDSState;
+		GFX_THROW_INFO( m_Device->CreateDepthStencilState(&dsc, &pDSState) );
+
+		m_Context->OMSetDepthStencilState(pDSState.Get(), 1);
+
+		wrl::ComPtr<ID3D11Texture2D> pDepthStencil;
+		D3D11_TEXTURE2D_DESC descDepth{};
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.Width = 800;
+		descDepth.Height = 600;
+		descDepth.MipLevels = 1;
+		descDepth.ArraySize = 1;
+		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+		descDepth.SampleDesc.Count = 1;
+		descDepth.SampleDesc.Quality = 0;
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		GFX_THROW_INFO( m_Device->CreateTexture2D(&descDepth, nullptr, &pDepthStencil) );
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV{};
+		descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		descDSV.Texture2D.MipSlice = 0;
+		GFX_THROW_INFO(m_Device->CreateDepthStencilView(
+			pDepthStencil.Get(), &descDSV, &m_DepthStencilView
+		) );
+		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), m_DepthStencilView.Get());
 	}
 
 	void KDGraphics::EndFrame()
@@ -90,8 +107,9 @@ namespace KDE
 	{
 		float rgba[4] = {red, green, blue, 1.0f};
 		m_Context->ClearRenderTargetView(m_Target.Get(), rgba);
+		m_Context->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
-	void KDGraphics::DrawTestTriangle(float val)
+	void KDGraphics::DrawTestTriangle(float x, float z, float val)
 	{
 		namespace wrl = Microsoft::WRL;
 		HRESULT hr;
@@ -159,7 +177,7 @@ namespace KDE
 			dx::XMMatrixTranspose(
 				dx::XMMatrixRotationZ(val) *
 				dx::XMMatrixRotationY(val) *
-				dx::XMMatrixTranslation(0.0f, 0.0f, 2.0f) *
+				dx::XMMatrixTranslation(x, 0.0f, z + 2.0f) *
 				dx::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f)
 			)
 		};
@@ -232,8 +250,6 @@ namespace KDE
 		));
 
 		m_Context->IASetInputLayout(pInputLayout.Get());
-
-		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), nullptr);
 
 		m_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

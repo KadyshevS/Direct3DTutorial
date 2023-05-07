@@ -18,7 +18,7 @@ namespace KDE
 
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
-		void DrawTestTriangle(float val);
+		void DrawTestTriangle(float x, float z, float val);
 	public:
 		class Exception : public KDException
 		{
@@ -65,5 +65,6 @@ namespace KDE
 		Microsoft::WRL::ComPtr<IDXGISwapChain> m_SwapChain;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_Context;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_Target;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
 	};
 }

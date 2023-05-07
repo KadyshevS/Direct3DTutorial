@@ -1,6 +1,8 @@
 #include "DXGIInfoManager.h"
+
 #include "WinBase/KDWindow.h"
 #include "Graphics/KDGraphics.h"
+#include "WinBase/WindowThrowMacros.h"
 
 #include <memory>
 
