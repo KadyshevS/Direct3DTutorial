@@ -150,6 +150,7 @@
     <ClInclude Include="src\DXErr\DXTrace.inl" />
     <ClInclude Include="src\DXErr\dxerr.h" />
     <ClInclude Include="src\Graphics\Bindable\Bindable.h" />
+    <ClInclude Include="src\Graphics\Bindable\InputLayout.h" />
     <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
     <ClInclude Include="src\Input\KDKeyboard.h" />
@@ -168,6 +169,8 @@
   <ItemGroup>
     <ClCompile Include="src\DXErr\DXGIInfoManager.cpp" />
     <ClCompile Include="src\DXErr\dxerr.cpp" />
+    <ClCompile Include="src\Graphics\Bindable\Bindable.cpp" />
+    <ClCompile Include="src\Graphics\Bindable\InputLayout.cpp" />
     <ClCompile Include="src\Graphics\KDGraphics.cpp" />
     <ClCompile Include="src\Input\KDKeyboard.cpp" />
     <ClCompile Include="src\Input\KDMouse.cpp" />

@@ -14,3 +14,11 @@
 #define GFX_THROW_INFO_ONLY(call) (call)
 #define GFX_EXCEPT_DEVICE_REMOVED(hr) KDGraphics::DeviceRemovedException( __LINE__,__FILE__,(hr) )
 #endif
+
+#ifdef _DEBUG
+#define INFOMAN() HRESULT hr; KDE::DXGIInfoManager& m_InfoManager = *InfoManager()
+#define INFOMAN(gfx) HRESULT hr; KDE::DXGIInfoManager& m_InfoManager = *InfoManager((gfx))
+#else
+#define INFOMAN() HRESULT hr
+#define INFOMAN(gfx) HRESULT hr
+#endif

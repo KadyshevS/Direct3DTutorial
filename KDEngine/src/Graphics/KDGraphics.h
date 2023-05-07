@@ -12,6 +12,7 @@ namespace KDE
 {
 	class KDGraphics
 	{
+		friend class Bindable;
 	public:
 		KDGraphics(HWND hWnd);
 		~KDGraphics() {}
