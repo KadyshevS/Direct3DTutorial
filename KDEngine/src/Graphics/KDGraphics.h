@@ -18,7 +18,7 @@ namespace KDE
 
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
-		void DrawTestTriangle();
+		void DrawTestTriangle(float val);
 	public:
 		class Exception : public KDException
 		{

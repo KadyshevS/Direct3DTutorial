@@ -4,8 +4,10 @@
 
 #include <sstream>
 #include <d3dcompiler.h>
+#include <DirectXMath.h>
 
 namespace wrl = Microsoft::WRL;
+namespace dx = DirectX;
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -89,23 +91,27 @@ namespace KDE
 		float rgba[4] = {red, green, blue, 1.0f};
 		m_Context->ClearRenderTargetView(m_Target.Get(), rgba);
 	}
-	void KDGraphics::DrawTestTriangle()
+	void KDGraphics::DrawTestTriangle(float val)
 	{
 		namespace wrl = Microsoft::WRL;
 		HRESULT hr;
 
 		struct Vertex
 		{
-			float x;
-			float y;
+			dx::XMVECTOR pos;
 		};
 
-		const Vertex vertices[3] = {
-			{ 0.0f, 0.5f },
-			{ 0.5f,-0.5f },
-			{-0.5f,-0.5f }
+		const Vertex vertices[] = {
+			{ -0.5f, -0.5f, -0.5f },
+			{  0.5f, -0.5f, -0.5f },
+			{  0.5f,  0.5f, -0.5f },
+			{ -0.5f,  0.5f, -0.5f },
+			{ -0.5f, -0.5f,  0.5f },
+			{  0.5f, -0.5f,  0.5f },
+			{  0.5f,  0.5f,  0.5f },
+			{ -0.5f,  0.5f,  0.5f },
 		};
-
+		
 		wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
 		D3D11_BUFFER_DESC bd{};
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -121,6 +127,85 @@ namespace KDE
 		const UINT offset = 0;
 		m_Context->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
+		const uint16_t indices[] = {
+			0, 3, 1,	1, 3, 2,
+			5, 7, 4,	5, 6, 7,
+			4, 7, 3,	4, 3, 0,
+			2, 6, 5,	2, 5, 1,
+			3, 7, 6,	3, 6, 2,
+			0, 5, 4,	0, 1, 5
+		};
+
+		wrl::ComPtr<ID3D11Buffer> pIndexBuffer;
+		D3D11_BUFFER_DESC ibd{};
+		ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		ibd.Usage = D3D11_USAGE_DEFAULT;
+		ibd.CPUAccessFlags = 0;
+		ibd.MiscFlags = 0;
+		ibd.ByteWidth = sizeof(indices);
+		ibd.StructureByteStride = sizeof(uint16_t);
+		D3D11_SUBRESOURCE_DATA isd{};
+		isd.pSysMem = indices;
+		GFX_THROW_INFO(m_Device->CreateBuffer(&ibd, &isd, &pIndexBuffer));
+		const UINT indexOffset = 0;
+		m_Context->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, indexOffset);
+
+		struct ConstantBuffer
+		{
+			dx::XMMATRIX transform;
+		};
+
+		const ConstantBuffer cb = {
+			dx::XMMatrixTranspose(
+				dx::XMMatrixRotationZ(val) *
+				dx::XMMatrixRotationY(val) *
+				dx::XMMatrixTranslation(0.0f, 0.0f, 2.0f) *
+				dx::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f)
+			)
+		};
+
+		wrl::ComPtr<ID3D11Buffer> pConstantBuffer;
+		D3D11_BUFFER_DESC cbd{};
+		cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cbd.Usage = D3D11_USAGE_DYNAMIC;
+		cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cbd.MiscFlags = 0;
+		cbd.ByteWidth = sizeof(cb);
+		cbd.StructureByteStride = sizeof(ConstantBuffer);
+		D3D11_SUBRESOURCE_DATA csd{};
+		csd.pSysMem = &cb;
+		GFX_THROW_INFO(m_Device->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+		m_Context->VSSetConstantBuffers(0, 1, pConstantBuffer.GetAddressOf());
+
+		struct ConstantBuffer2
+		{
+			dx::XMVECTOR face_colors[6];
+		};
+
+		const ConstantBuffer2 cb2 = {
+			{
+				{ 1.0f, 0.0f, 0.0f },
+				{ 0.0f, 1.0f, 0.0f },
+				{ 0.0f, 0.0f, 1.0f },
+				{ 1.0f, 1.0f, 0.0f },
+				{ 0.0f, 1.0f, 1.0f },
+				{ 1.0f, 0.0f, 1.0f }
+			}
+		};
+
+		wrl::ComPtr<ID3D11Buffer> pConstantBuffer2;
+		D3D11_BUFFER_DESC cbd2{};
+		cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		cbd2.Usage = D3D11_USAGE_DYNAMIC;
+		cbd2.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		cbd2.MiscFlags = 0;
+		cbd2.ByteWidth = sizeof(cb2);
+		cbd2.StructureByteStride = sizeof(ConstantBuffer);
+		D3D11_SUBRESOURCE_DATA csd2{};
+		csd2.pSysMem = &cb2;
+		GFX_THROW_INFO(m_Device->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2));
+		m_Context->PSSetConstantBuffers(0, 1, pConstantBuffer2.GetAddressOf());
+		
 		wrl::ComPtr<ID3D11PixelShader> pPixelShader;
 		wrl::ComPtr<ID3DBlob> pBlob;
 		GFX_THROW_INFO( D3DReadFileToBlob(L"../KDEngine/src/Shaders/PixelShader.cso", &pBlob) );
@@ -136,7 +221,7 @@ namespace KDE
 
 		wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 		const D3D11_INPUT_ELEMENT_DESC ied[] = {
-			{ "Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+			{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
 		};
 		
 		GFX_THROW_INFO(m_Device->CreateInputLayout(
@@ -161,7 +246,7 @@ namespace KDE
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
 
-		GFX_THROW_INFO_ONLY( m_Context->Draw((UINT)std::size(vertices), 0));
+		GFX_THROW_INFO_ONLY( m_Context->DrawIndexed((UINT)std::size(indices), 0, 0) );
 	}
 //////////////////////////////////////////////////////////////////////////
 
