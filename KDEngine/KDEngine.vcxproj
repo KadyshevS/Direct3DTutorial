@@ -159,7 +159,9 @@
     <ClInclude Include="src\Graphics\Bindable\TransformCBuffer.h" />
     <ClInclude Include="src\Graphics\Bindable\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\Bindable\VertexShader.h" />
+    <ClInclude Include="src\Graphics\Drawable\ChiliTest.h" />
     <ClInclude Include="src\Graphics\Drawable\Drawable.h" />
+    <ClInclude Include="src\Graphics\Drawable\DrawableBase.h" />
     <ClInclude Include="src\Graphics\Drawable\TestCube.h" />
     <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
@@ -187,6 +189,7 @@
     <ClCompile Include="src\Graphics\Bindable\TransformCBuffer.cpp" />
     <ClCompile Include="src\Graphics\Bindable\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Bindable\VertexShader.cpp" />
+    <ClCompile Include="src\Graphics\Drawable\ChiliTest.cpp" />
     <ClCompile Include="src\Graphics\Drawable\Drawable.cpp" />
     <ClCompile Include="src\Graphics\Drawable\TestCube.cpp" />
     <ClCompile Include="src\Graphics\KDGraphics.cpp" />

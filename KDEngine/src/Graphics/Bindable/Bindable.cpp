@@ -1,5 +1,7 @@
 #include "Bindable.h"
 
+#include <stdexcept>
+
 namespace KDE
 {
 	ID3D11DeviceContext* Bindable::Context(KDGraphics& gfx)

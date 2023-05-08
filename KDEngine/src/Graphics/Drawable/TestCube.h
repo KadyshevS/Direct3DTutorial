@@ -1,7 +1,7 @@
 #pragma once
-#include "Drawable.h"
+#include "DrawableBase.h"
 
-class TestCube : public KDE::Drawable
+class TestCube : public KDE::DrawableBase<TestCube>
 {
 public:
 	TestCube(KDE::KDGraphics& gfx);

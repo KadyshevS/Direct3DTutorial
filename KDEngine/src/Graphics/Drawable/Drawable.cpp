@@ -13,6 +13,10 @@ namespace KDE
 		{
 			b->Bind(gfx);
 		}
+		for (auto& b : StaticBinds())
+		{
+			b->Bind(gfx);
+		}
 		gfx.DrawIndexed(pIndexBuffer->Count());
 	}
 

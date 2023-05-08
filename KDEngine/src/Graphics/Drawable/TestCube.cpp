@@ -7,70 +7,77 @@ namespace dx = DirectX;
 
 TestCube::TestCube(KDE::KDGraphics& gfx)
 {
-	struct Vertex
+	if (!IsStaticInitialized())
 	{
-		struct
+		struct Vertex
 		{
-			float x, y, z;
-		} pos;
-	};
-	const std::vector<Vertex> vertices =
-	{
-		{ -0.5f, -0.5f, -0.5f },
-		{  0.5f, -0.5f, -0.5f },
-		{  0.5f,  0.5f, -0.5f },
-		{ -0.5f,  0.5f, -0.5f },
-		{ -0.5f, -0.5f,  0.5f },
-		{  0.5f, -0.5f,  0.5f },
-		{  0.5f,  0.5f,  0.5f },
-		{ -0.5f,  0.5f,  0.5f },
-	};
-	AddBind(std::make_unique<KDE::VertexBuffer>(gfx, vertices));
-
-	auto pvs = std::make_unique<KDE::VertexShader>(gfx, L"../KDEngine/src/Shaders/VertexShader.cso");
-	auto pvsbc = pvs->Bytecode();
-	AddBind(std::move(pvs));
-
-	AddBind(std::make_unique<KDE::PixelShader>(gfx, L"../KDEngine/src/Shaders/PixelShader.cso"));
-
-	const std::vector<uint32_t> indices =
-	{
-		0, 3, 1,	1, 3, 2,
-		5, 7, 4,	5, 6, 7,
-		4, 7, 3,	4, 3, 0,
-		2, 6, 5,	2, 5, 1,
-		3, 7, 6,	3, 6, 2,
-		0, 5, 4,	0, 1, 5
-	};
-	AddIndexBuffer(std::make_unique<KDE::IndexBuffer>(gfx, indices));
-
-	struct ConstantBuffer2
-	{
-		struct
+			struct
+			{
+				float x, y, z;
+			} pos;
+		};
+		const std::vector<Vertex> vertices =
 		{
-			float r, g, b, a;
-		} face_colors[6];
-	};
-	const ConstantBuffer2 cb2 =
-	{
+			{ -0.5f, -0.5f, -0.5f },
+			{  0.5f, -0.5f, -0.5f },
+			{  0.5f,  0.5f, -0.5f },
+			{ -0.5f,  0.5f, -0.5f },
+			{ -0.5f, -0.5f,  0.5f },
+			{  0.5f, -0.5f,  0.5f },
+			{  0.5f,  0.5f,  0.5f },
+			{ -0.5f,  0.5f,  0.5f },
+		};
+		AddStaticBind(std::make_unique<KDE::VertexBuffer>(gfx, vertices));
+
+		auto pvs = std::make_unique<KDE::VertexShader>(gfx, L"../KDEngine/src/Shaders/VertexShader.cso");
+		auto pvsbc = pvs->Bytecode();
+		AddStaticBind(std::move(pvs));
+
+		AddStaticBind(std::make_unique<KDE::PixelShader>(gfx, L"../KDEngine/src/Shaders/PixelShader.cso"));
+
+		const std::vector<uint32_t> indices =
 		{
-			{ 1.0f, 0.0f, 1.0f, 1.0f },
-			{ 1.0f, 0.0f, 0.0f, 1.0f },
-			{ 0.0f, 1.0f, 0.0f, 1.0f },
-			{ 0.0f, 0.0f, 1.0f, 1.0f },
-			{ 1.0f, 1.0f, 0.0f, 1.0f },
-			{ 0.0f, 1.0f, 1.0f, 1.0f },
-		}
-	};
-	AddBind(std::make_unique<KDE::PixelConstantBuffer<ConstantBuffer2>>(gfx, cb2));
+			0, 3, 1,	1, 3, 2,
+			5, 7, 4,	5, 6, 7,
+			4, 7, 3,	4, 3, 0,
+			2, 6, 5,	2, 5, 1,
+			3, 7, 6,	3, 6, 2,
+			0, 5, 4,	0, 1, 5
+		};
+		AddStaticIndexBuffer(std::make_unique<KDE::IndexBuffer>(gfx, indices));
 
-	const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+		struct ConstantBuffer2
+		{
+			struct
+			{
+				float r, g, b, a;
+			} face_colors[6];
+		};
+		const ConstantBuffer2 cb2 =
+		{
+			{
+				{ 1.0f, 0.0f, 1.0f, 1.0f },
+				{ 1.0f, 0.0f, 0.0f, 1.0f },
+				{ 0.0f, 1.0f, 0.0f, 1.0f },
+				{ 0.0f, 0.0f, 1.0f, 1.0f },
+				{ 1.0f, 1.0f, 0.0f, 1.0f },
+				{ 0.0f, 1.0f, 1.0f, 1.0f },
+			}
+		};
+		AddStaticBind(std::make_unique<KDE::PixelConstantBuffer<ConstantBuffer2>>(gfx, cb2));
+
+		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+		{
+			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+		};
+		AddStaticBind(std::make_unique<KDE::InputLayout>(gfx, ied, pvsbc));
+
+		AddStaticBind(std::make_unique<KDE::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	}
+	else
 	{
-		{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-	};
-	AddBind(std::make_unique<KDE::InputLayout>(gfx, ied, pvsbc));
-
-	AddBind(std::make_unique<KDE::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		SetIndexFromStatic();
+	}
 
 	AddBind(std::make_unique<KDE::TransformCBuffer>(gfx, *this));
 }

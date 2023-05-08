@@ -10,6 +10,8 @@ namespace KDE
 {
 	class Drawable
 	{
+		template<typename T>
+		friend class DrawableBase;
 	public:
 		Drawable() = default;
 		Drawable(const Drawable&) = delete;
@@ -19,8 +21,10 @@ namespace KDE
 		void Draw(KDGraphics& gfx) const;
 		virtual void Update(float dt) = 0;
 		void AddBind(std::unique_ptr<Bindable> bind);
-		void AddIndexBuffer(std::unique_ptr<class IndexBuffer> ibuf);
+		void AddIndexBuffer(std::unique_ptr<IndexBuffer> ibuf);
 
+	private:
+		virtual const std::vector<std::unique_ptr<Bindable>>& StaticBinds() const = 0;
 	private:
 		const IndexBuffer* pIndexBuffer = nullptr;
 		std::vector<std::unique_ptr<Bindable>> binds;
