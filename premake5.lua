@@ -95,6 +95,7 @@ project "Sandbox"
 	includedirs
 	{
 		"KDEngine/src",
+		"KDEngine/vendor",
 		"%{prj.name}",
 		"%{prj.name}/src"
 	}

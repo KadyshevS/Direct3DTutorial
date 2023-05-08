@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics/KDMesh.h"
+#include "KDGraphics.h"
 
 #include <vector>
 
@@ -9,7 +10,7 @@ namespace KDE::GP
 	class Cube
 	{
 	public:
-		KDMesh Make() const
+		static KDMesh Make(KDGraphics& gfx)
 		{
 			const std::vector<Vertex> vertices = {
 				{ -0.5f, -0.5f, -0.5f },
@@ -31,7 +32,7 @@ namespace KDE::GP
 				0, 5, 4,	0, 1, 5
 			};
 
-			return KDMesh{vertices, indices};
+			return { gfx, vertices, indices };
 		}
 	};
 }

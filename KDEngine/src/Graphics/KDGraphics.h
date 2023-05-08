@@ -20,7 +20,6 @@ namespace KDE
 
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
-		void DrawTestTriangle(float x, float z, float val);
 		void DrawIndexed(UINT count);
 		void SetProjection(DirectX::FXMMATRIX proj);
 

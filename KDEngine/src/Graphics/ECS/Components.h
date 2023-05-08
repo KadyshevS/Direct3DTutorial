@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Graphics/KDGraphics.h"
+
 #include <DirectXMath.h>
 #include <string>
 
@@ -10,7 +12,7 @@ namespace KDE
 		std::string Name;
 
 		TagComponent() = default;
-		TagComponent(const TagComponent&) = delete;
+		TagComponent(const TagComponent&) = default;
 		TagComponent(const std::string& name)
 			: Name(name)
 		{}
@@ -23,14 +25,25 @@ namespace KDE
 		float ScaleX	= 1.0f, ScaleY	  = 1.0f, ScaleZ	= 1.0f;
 
 		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = delete;
+		TransformComponent(const TransformComponent&) = default;
 		
+		void Bind(KDGraphics& gfx)
+		{
+			cb1.transform = DirectX::XMMatrixTranspose(Transform() * gfx.Projection());
+
+			if (m_VertexConstantBuffer == nullptr)
+				m_VertexConstantBuffer = std::make_shared<VertexConstantBuffer<ConstantBuffer1>>(gfx, cb1);
+
+			m_VertexConstantBuffer->Update(gfx, cb1);
+			m_VertexConstantBuffer->Bind(gfx);
+		}
+
 		DirectX::XMMATRIX Transform() const
 		{
 			namespace dx = DirectX;
 
-			return dx::XMMatrixTranslation(PositionX, PositionY, PositionZ) *
-				dx::XMMatrixRotationRollPitchYaw(RotationX, RotationY, RotationZ) *
+			return dx::XMMatrixRotationRollPitchYaw(RotationX, RotationY, RotationZ) * 
+				dx::XMMatrixTranslation(PositionX, PositionY, PositionZ) *
 				dx::XMMatrixScaling(ScaleX, ScaleY, ScaleZ);
 		}
 
@@ -46,5 +59,41 @@ namespace KDE
 		{
 			return { ScaleX, ScaleY, ScaleZ };
 		}
+
+	private:
+		struct ConstantBuffer1
+		{
+			DirectX::XMMATRIX transform;
+		};
+		ConstantBuffer1 cb1;
+		std::shared_ptr<VertexConstantBuffer<ConstantBuffer1>> m_VertexConstantBuffer = nullptr;
+	};
+
+	struct MeshComponent
+	{
+		std::shared_ptr<KDMesh> Mesh = nullptr;
+
+		MeshComponent() = default;
+		MeshComponent(const MeshComponent&) = default;
+		MeshComponent(KDMesh mesh)
+			: Mesh(std::make_shared<KDMesh>(mesh))
+		{}
+
+		void Bind(KDGraphics& gfx)
+		{
+			if (m_VertexBuffer == nullptr)
+				m_VertexBuffer = std::make_shared<VertexBuffer>(gfx, Mesh->Vertices());
+
+			m_VertexBuffer->Bind(gfx);
+
+			if (m_IndexBuffer == nullptr)
+				m_IndexBuffer = std::make_shared<IndexBuffer>(gfx, Mesh->Indices());
+
+			m_IndexBuffer->Bind(gfx);
+		}
+
+	private:
+		std::shared_ptr<VertexBuffer> m_VertexBuffer = nullptr;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer = nullptr;
 	};
 }

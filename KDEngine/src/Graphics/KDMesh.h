@@ -1,9 +1,15 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 namespace KDE
 {
+	class VertexBuffer;
+	class IndexBuffer;
+	class KDGraphics;
+	class Cube;
+
 	struct Vertex
 	{
 		struct
@@ -15,17 +21,14 @@ namespace KDE
 	class KDMesh
 	{
 	public:
-		KDMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
-		KDMesh(const KDMesh& mesh);
+		KDMesh(KDGraphics& gfx, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+		KDMesh(const KDMesh& mesh) = default;
 		~KDMesh() = default;
 
-		KDMesh& operator = (const KDMesh& mesh);
+		KDMesh& operator = (const KDMesh& mesh) = delete;
 
 		const std::vector<Vertex>& Vertices() const;
 		const std::vector<uint32_t>& Indices() const;
-
-		uint32_t VerticesCount() const;
-		uint32_t IndicesCount() const;
 	private:
 		std::vector<Vertex> m_Vertices;
 		std::vector<uint32_t> m_Indices;

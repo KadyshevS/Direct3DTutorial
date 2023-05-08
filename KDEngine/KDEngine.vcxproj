@@ -165,11 +165,11 @@
     <ClInclude Include="src\Graphics\Drawable\TestCube.h" />
     <ClInclude Include="src\Graphics\ECS\Components.h" />
     <ClInclude Include="src\Graphics\ECS\KDEntity.h" />
+    <ClInclude Include="src\Graphics\ECS\KDScene.h" />
     <ClInclude Include="src\Graphics\GeoPrimitives.h" />
     <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
     <ClInclude Include="src\Graphics\KDMesh.h" />
-    <ClInclude Include="src\Graphics\ECS\KDScene.h" />
     <ClInclude Include="src\Input\KDKeyboard.h" />
     <ClInclude Include="src\Input\KDMouse.h" />
     <ClInclude Include="src\Input\KeyCodes.h" />
@@ -199,9 +199,9 @@
     <ClCompile Include="src\Graphics\Drawable\Drawable.cpp" />
     <ClCompile Include="src\Graphics\Drawable\TestCube.cpp" />
     <ClCompile Include="src\Graphics\ECS\KDEntity.cpp" />
+    <ClCompile Include="src\Graphics\ECS\KDScene.cpp" />
     <ClCompile Include="src\Graphics\KDGraphics.cpp" />
     <ClCompile Include="src\Graphics\KDMesh.cpp" />
-    <ClCompile Include="src\Graphics\ECS\KDScene.cpp" />
     <ClCompile Include="src\Input\KDKeyboard.cpp" />
     <ClCompile Include="src\Input\KDMouse.cpp" />
     <ClCompile Include="src\WinBase\KDApplication.cpp" />
@@ -212,8 +212,28 @@
     <ClCompile Include="src\WinBase\LayerStack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Shaders\PixelShader.hlsl" />
-    <FxCompile Include="src\Shaders\VertexShader.hlsl" />
+    <FxCompile Include="src\Shaders\PixelShader.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\VertexShader.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

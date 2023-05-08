@@ -3,7 +3,7 @@
 #include "WinBase/Layer.h"
 #include "WinBase/KDWindow.h"
 #include "WinBase/KDTimer.h"
-#include "Graphics/Drawable/ChiliTest.h"
+#include "Graphics/ECS/KDEntity.h"
 
 class SandboxLayer : public KDE::Layer
 {
@@ -17,5 +17,8 @@ public:
 	virtual void OnUpdate(float ts) override;
 private:
 	KDE::KDTimer Timer;
-	std::vector<std::unique_ptr<ChiliTest>> boxes;
+	std::unique_ptr<KDE::KDScene> Scene;
+
+	float* RotX = nullptr; 
+	float* RotZ = nullptr;
 };
