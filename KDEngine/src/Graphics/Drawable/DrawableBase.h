@@ -8,12 +8,12 @@ namespace KDE
 	template<typename T>
 	class DrawableBase : public Drawable
 	{
-	public:
-		bool IsStaticInitialized() const
+	protected:
+		static bool IsStaticInitialized()
 		{
 			return !m_StaticBinds.empty();
 		}
-		void AddStaticBind(std::unique_ptr<Bindable> bind)
+		static void AddStaticBind(std::unique_ptr<Bindable> bind)
 		{
 			assert("Must use AddStaticIndexBuffer to bind index buffer" && typeid(*bind) != typeid(IndexBuffer));
 			m_StaticBinds.push_back(std::move(bind));

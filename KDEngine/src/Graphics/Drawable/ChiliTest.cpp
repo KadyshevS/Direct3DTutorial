@@ -31,14 +31,14 @@ ChiliTest::ChiliTest(KDE::KDGraphics& gfx,
 		};
 		const std::vector<Vertex> vertices =
 		{
-			{ -1.0f, -1.0f,-1.0f },
-			{  1.0f, -1.0f,-1.0f },
-			{ -1.0f, 1.0f,-1.0f },
-			{  1.0f, 1.0f,-1.0f },
-			{ -1.0f, -1.0f,1.0f },
-			{  1.0f, -1.0f,1.0f },
-			{ -1.0f, 1.0f,1.0f },
-			{  1.0f, 1.0f,1.0f },
+			{ -1.0f, -1.0f, -1.0f },
+			{  1.0f, -1.0f, -1.0f },
+			{ -1.0f,  1.0f, -1.0f },
+			{  1.0f,  1.0f, -1.0f },
+			{ -1.0f, -1.0f,  1.0f },
+			{  1.0f, -1.0f,  1.0f },
+			{ -1.0f,  1.0f,  1.0f },
+			{  1.0f,  1.0f,  1.0f },
 		};
 		AddStaticBind(std::make_unique<KDE::VertexBuffer>(gfx, vertices));
 

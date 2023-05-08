@@ -20,6 +20,8 @@ namespace KDE
 		virtual DirectX::XMMATRIX Transform() const = 0;
 		void Draw(KDGraphics& gfx) const;
 		virtual void Update(float dt) = 0;
+
+	protected:
 		void AddBind(std::unique_ptr<Bindable> bind);
 		void AddIndexBuffer(std::unique_ptr<IndexBuffer> ibuf);
 
