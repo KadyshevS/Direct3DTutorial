@@ -20,9 +20,18 @@ namespace KDE
 
 	struct TransformComponent
 	{
-		float PositionX = 0.0f, PositionY = 0.0f, PositionZ = 0.0f;
-		float RotationX = 0.0f, RotationY = 0.0f, RotationZ = 0.0f;
-		float ScaleX	= 1.0f, ScaleY	  = 1.0f, ScaleZ	= 1.0f;
+		struct
+		{
+			float X = 0.0f, Y = 0.0f, Z = 0.0f;
+		} Position;
+		struct
+		{
+			float X = 0.0f, Y = 0.0f, Z = 0.0f;
+		} Rotation;
+		struct
+		{
+			float X = 1.0f, Y = 1.0f, Z = 1.0f;
+		} Scale;
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
@@ -42,22 +51,9 @@ namespace KDE
 		{
 			namespace dx = DirectX;
 
-			return dx::XMMatrixRotationRollPitchYaw(RotationX, RotationY, RotationZ) * 
-				dx::XMMatrixTranslation(PositionX, PositionY, PositionZ) *
-				dx::XMMatrixScaling(ScaleX, ScaleY, ScaleZ);
-		}
-
-		DirectX::XMVECTOR Position() const
-		{
-			return { PositionX, PositionY, PositionZ };
-		}
-		DirectX::XMVECTOR Rotation() const
-		{
-			return { RotationX, RotationY, RotationZ };
-		}
-		DirectX::XMVECTOR Scale() const
-		{
-			return { ScaleX, ScaleY, ScaleZ };
+			return dx::XMMatrixRotationRollPitchYaw(Rotation.X, Rotation.Y, Rotation.Z) * 
+				dx::XMMatrixTranslation(Position.X, Position.Y, Position.Z) *
+				dx::XMMatrixScaling(Scale.X, Scale.Y, Scale.Z);
 		}
 
 	private:
@@ -65,7 +61,7 @@ namespace KDE
 		{
 			DirectX::XMMATRIX transform;
 		};
-		ConstantBuffer1 cb1;
+		ConstantBuffer1 cb1{};
 		std::shared_ptr<VertexConstantBuffer<ConstantBuffer1>> m_VertexConstantBuffer = nullptr;
 	};
 

@@ -18,7 +18,7 @@ public:
 private:
 	KDE::KDTimer Timer;
 	std::unique_ptr<KDE::KDScene> Scene;
+	KDE::KDEntity Entities[5];
 
-	float* RotX = nullptr; 
-	float* RotZ = nullptr;
+	size_t primitiveSwitch = 0;
 };

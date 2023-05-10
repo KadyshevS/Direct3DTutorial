@@ -169,6 +169,7 @@
     <ClInclude Include="src\Graphics\GeoPrimitives.h" />
     <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
+    <ClInclude Include="src\Graphics\KDMath.h" />
     <ClInclude Include="src\Graphics\KDMesh.h" />
     <ClInclude Include="src\Input\KDKeyboard.h" />
     <ClInclude Include="src\Input\KDMouse.h" />

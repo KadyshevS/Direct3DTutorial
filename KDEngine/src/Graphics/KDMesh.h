@@ -1,5 +1,7 @@
 #pragma once
 
+#include <DirectXMath.h>
+
 #include <vector>
 #include <memory>
 
@@ -7,21 +9,17 @@ namespace KDE
 {
 	class VertexBuffer;
 	class IndexBuffer;
-	class KDGraphics;
 	class Cube;
 
 	struct Vertex
 	{
-		struct
-		{
-			float x, y, z;
-		} pos;
+		DirectX::XMFLOAT3 pos;
 	};
 
 	class KDMesh
 	{
 	public:
-		KDMesh(KDGraphics& gfx, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+		KDMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 		KDMesh(const KDMesh& mesh) = default;
 		~KDMesh() = default;
 

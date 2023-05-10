@@ -17,6 +17,7 @@ namespace KDE
 	{
 		friend class KDScene;
 	public:
+		KDEntity() = default;
 		KDEntity(entt::entity handle, KDScene* scene);
 		KDEntity(const KDEntity& other) = default;
 		KDEntity& operator = (const KDEntity& other) = default;
