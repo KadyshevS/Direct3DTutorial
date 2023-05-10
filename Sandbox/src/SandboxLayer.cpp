@@ -53,8 +53,8 @@ void SandboxLayer::OnUpdate(float ts)
 	for (size_t i = 0; i < 5; i++)
 	{
 		auto& rot = Entities[i].GetComponent<KDE::TransformComponent>().Rotation;
-		rot.X += dt;
-		rot.Y += dt;
+		rot.X = KDE::WrapAngle(rot.X + dt);
+		rot.Y = KDE::WrapAngle(rot.Y + dt);
 	}
 
 	Window->Graphics().EndFrame();

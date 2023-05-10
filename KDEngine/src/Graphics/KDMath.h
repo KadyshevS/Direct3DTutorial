@@ -17,10 +17,10 @@ namespace KDE
 	template<typename T>
 	T WrapAngle(T theta)
 	{
-		const T modded = fmod(theta, (T)2.0 * (T)PI_D);
-		return (modded > (T)PI_D) ?
-			(modded - (T)2.0 * (T)PI_D) :
-			modded;
+		theta = fmod(theta, (T)360);
+		if (theta < (T)0)
+			theta += (T)360;
+		return theta;
 	}
 
 	template<typename T>
