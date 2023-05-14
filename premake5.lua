@@ -11,6 +11,11 @@ workspace "KDEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["ImGui"] = "KDEngine/vendor/imgui"
+
+include "KDEngine/vendor/imgui"
+
 project "KDEngine"
 	location "KDEngine"
 	kind "StaticLib"
@@ -27,13 +32,19 @@ project "KDEngine"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/src/**.inl",
-		"%{prj.name}/src/**.hlsl"
+		"%{prj.name}/src/**.hlsl",
+		"%{prj.name}/vendor/**.h",
+		"%{prj.name}/vendor/**.hpp",
+		"%{prj.name}/vendor/**.c",
+		"%{prj.name}/vendor/**.cpp",
+		"%{prj.name}/vendor/**.inl"
 	}
 
 	includedirs
 	{
 		"%{prj.name}",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor"
 	}
 	
 	flags
@@ -89,6 +100,7 @@ project "Sandbox"
 	includedirs
 	{
 		"KDEngine/src",
+		"KDEngine/vendor",
 		"%{prj.name}",
 		"%{prj.name}/src"
 	}
