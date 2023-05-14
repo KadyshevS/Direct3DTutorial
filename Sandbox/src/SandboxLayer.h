@@ -2,7 +2,7 @@
 
 #include "WinBase/Layer.h"
 #include "WinBase/KDWindow.h"
-#include "Graphics/Drawable/ChiliTest.h"
+#include "Graphics/Drawable/Drawable.h"
 
 class SandboxLayer : public KDE::Layer
 {

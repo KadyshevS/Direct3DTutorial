@@ -1,6 +1,5 @@
 #define KD_INCLUDE_WINAPI_FULL
 #include "KDSurface.h"
-
 #include <algorithm>
 namespace Gdiplus
 {
@@ -14,11 +13,9 @@ namespace Gdiplus
 
 namespace KDE
 {
-//////////////////////////////////////////////////////////////////////////
-////	Surface
-	KDSurface::KDSurface(unsigned int width, unsigned int height, unsigned int pitch)
+	KDSurface::KDSurface(unsigned int width, unsigned int height)
 		:
-		pBuffer(std::make_unique<Color[]>(pitch* height)),
+		pBuffer(std::make_unique<Color[]>(width* height)),
 		width(width),
 		height(height)
 	{}
@@ -31,11 +28,6 @@ namespace KDE
 		donor.pBuffer = nullptr;
 		return *this;
 	}
-
-	KDSurface::KDSurface(unsigned int width, unsigned int height)
-		:
-		KDSurface(width, height, width)
-	{}
 
 	KDSurface::KDSurface(KDSurface&& source)
 		:
@@ -99,10 +91,10 @@ namespace KDE
 	{
 		unsigned int width = 0;
 		unsigned int height = 0;
-		unsigned int pitch = 0;
-		std::unique_ptr<Color[]> pBuffer = nullptr;
+		std::unique_ptr<Color[]> pBuffer;
 
 		{
+			// convert filenam to wide string (for Gdiplus)
 			wchar_t wideName[512];
 			mbstowcs_s(nullptr, wideName, name.c_str(), _TRUNCATE);
 
@@ -114,6 +106,7 @@ namespace KDE
 				throw Exception(__LINE__, __FILE__, ss.str());
 			}
 
+			width = bitmap.GetWidth();
 			height = bitmap.GetHeight();
 			pBuffer = std::make_unique<Color[]>(width * height);
 
@@ -123,7 +116,7 @@ namespace KDE
 				{
 					Gdiplus::Color c;
 					bitmap.GetPixel(x, y, &c);
-					pBuffer[y * pitch + x] = c.GetValue();
+					pBuffer[y * width + x] = c.GetValue();
 				}
 			}
 		}
@@ -135,8 +128,8 @@ namespace KDE
 	{
 		auto GetEncoderClsid = [&filename](const WCHAR* format, CLSID* pClsid) -> void
 		{
-			UINT  num = 0; 
-			UINT  size = 0;
+			UINT  num = 0;          // number of image encoders
+			UINT  size = 0;         // size of the image encoder array in bytes
 
 			Gdiplus::ImageCodecInfo* pImageCodecInfo = nullptr;
 
@@ -203,10 +196,9 @@ namespace KDE
 		height(height),
 		pBuffer(std::move(pBufferParam))
 	{}
-//////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////
-////	Surface Exception
+
+	// surface exception stuff
 	KDSurface::Exception::Exception(int line, const char* file, std::string note)
 		:
 		KDException(line, file),
@@ -224,12 +216,11 @@ namespace KDE
 
 	const char* KDSurface::Exception::Type() const
 	{
-		return "KDGraphics Exception";
+		return "Chili Graphics Exception";
 	}
 
 	const std::string& KDSurface::Exception::GetNote() const
 	{
 		return note;
 	}
-//////////////////////////////////////////////////////////////////////////
 }

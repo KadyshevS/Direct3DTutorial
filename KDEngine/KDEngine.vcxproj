@@ -159,6 +159,7 @@
     <ClInclude Include="src\Graphics\Bindable\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\Bindable\VertexShader.h" />
     <ClInclude Include="src\Graphics\Drawable\ChiliTest.h" />
+    <ClInclude Include="src\Graphics\Drawable\ChiliTestTextured.h" />
     <ClInclude Include="src\Graphics\Drawable\Drawable.h" />
     <ClInclude Include="src\Graphics\Drawable\DrawableBase.h" />
     <ClInclude Include="src\Graphics\Drawable\TestCube.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\Graphics\Bindable\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Bindable\VertexShader.cpp" />
     <ClCompile Include="src\Graphics\Drawable\ChiliTest.cpp" />
+    <ClCompile Include="src\Graphics\Drawable\ChiliTestTextured.cpp" />
     <ClCompile Include="src\Graphics\Drawable\Drawable.cpp" />
     <ClCompile Include="src\Graphics\Drawable\TestCube.cpp" />
     <ClCompile Include="src\Graphics\KDGraphics.cpp" />
@@ -216,6 +218,15 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\TexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\TextureVS.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="src\Shaders\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

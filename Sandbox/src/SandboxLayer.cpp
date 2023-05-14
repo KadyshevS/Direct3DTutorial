@@ -2,6 +2,8 @@
 
 #include "Graphics/GeoPrimitives.h"
 #include "WinBase/GDIPlusManager.h"
+#include "Graphics/Drawable/ChiliTest.h"
+#include "Graphics/Drawable/ChiliTestTextured.h"
 
 #include <string>
 
@@ -32,31 +34,34 @@ void SandboxLayer::OnAttach()
 			case 0:
 			{
 				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Cone::Make());
+				Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
 				break;
 			}
 			case 1:
 			{
 				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Cube::Make());
+				Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
 				break;
 			}
 			case 2:
 			{
-				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Plane::Make());
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Plane::MakeTextured());
+				Entities[i] = std::make_unique<ChiliTestTextured>(Window->Graphics(), *mesh.get(), "assets\\textures\\kappa50.png", rng, adist, ddist, odist, rdist);
 				break;
 			}
 			case 3:
 			{
 				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Prism::Make());
+				Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
 				break;
 			}
 			case 4:
 			{
 				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Sphere::Make());
+				Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
 				break;
 			}
 		}
-
-		Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
 	}
 }
 void SandboxLayer::OnDetach()
@@ -70,7 +75,7 @@ void SandboxLayer::OnUpdate(float ts)
 
 	for (auto& e : Entities)
 	{
-		e->Update(ts);
+		e->Update(Window->Keyboard.IsKeyPressed(KDE::Key::Shift) ? 0.0f : ts);
 		e->Draw(Window->Graphics());
 	}
 
