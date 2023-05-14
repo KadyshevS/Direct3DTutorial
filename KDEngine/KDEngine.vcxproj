@@ -26,19 +26,19 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -83,7 +83,6 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,7 +106,6 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,7 +130,6 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +152,8 @@
     <ClInclude Include="src\Graphics\Bindable\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\Bindable\InputLayout.h" />
     <ClInclude Include="src\Graphics\Bindable\PixelShader.h" />
+    <ClInclude Include="src\Graphics\Bindable\Sampler.h" />
+    <ClInclude Include="src\Graphics\Bindable\Texture.h" />
     <ClInclude Include="src\Graphics\Bindable\Topology.h" />
     <ClInclude Include="src\Graphics\Bindable\TransformCBuffer.h" />
     <ClInclude Include="src\Graphics\Bindable\VertexBuffer.h" />
@@ -163,18 +162,17 @@
     <ClInclude Include="src\Graphics\Drawable\Drawable.h" />
     <ClInclude Include="src\Graphics\Drawable\DrawableBase.h" />
     <ClInclude Include="src\Graphics\Drawable\TestCube.h" />
-    <ClInclude Include="src\Graphics\ECS\Components.h" />
-    <ClInclude Include="src\Graphics\ECS\KDEntity.h" />
-    <ClInclude Include="src\Graphics\ECS\KDScene.h" />
     <ClInclude Include="src\Graphics\GeoPrimitives.h" />
     <ClInclude Include="src\Graphics\GraphicsThrowMacros.h" />
     <ClInclude Include="src\Graphics\KDGraphics.h" />
     <ClInclude Include="src\Graphics\KDMath.h" />
     <ClInclude Include="src\Graphics\KDMesh.h" />
+    <ClInclude Include="src\Graphics\KDSurface.h" />
     <ClInclude Include="src\Input\KDKeyboard.h" />
     <ClInclude Include="src\Input\KDMouse.h" />
     <ClInclude Include="src\Input\KeyCodes.h" />
     <ClInclude Include="src\WinBase\EntryPoint.h" />
+    <ClInclude Include="src\WinBase\GDIPlusManager.h" />
     <ClInclude Include="src\WinBase\KDApplication.h" />
     <ClInclude Include="src\WinBase\KDException.h" />
     <ClInclude Include="src\WinBase\KDTimer.h" />
@@ -183,7 +181,6 @@
     <ClInclude Include="src\WinBase\Layer.h" />
     <ClInclude Include="src\WinBase\LayerStack.h" />
     <ClInclude Include="src\WinBase\WindowThrowMacros.h" />
-    <ClInclude Include="vendor\EnTT\entt.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DXErr\DXGIInfoManager.cpp" />
@@ -192,6 +189,8 @@
     <ClCompile Include="src\Graphics\Bindable\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Bindable\InputLayout.cpp" />
     <ClCompile Include="src\Graphics\Bindable\PixelShader.cpp" />
+    <ClCompile Include="src\Graphics\Bindable\Sampler.cpp" />
+    <ClCompile Include="src\Graphics\Bindable\Texture.cpp" />
     <ClCompile Include="src\Graphics\Bindable\Topology.cpp" />
     <ClCompile Include="src\Graphics\Bindable\TransformCBuffer.cpp" />
     <ClCompile Include="src\Graphics\Bindable\VertexBuffer.cpp" />
@@ -199,12 +198,12 @@
     <ClCompile Include="src\Graphics\Drawable\ChiliTest.cpp" />
     <ClCompile Include="src\Graphics\Drawable\Drawable.cpp" />
     <ClCompile Include="src\Graphics\Drawable\TestCube.cpp" />
-    <ClCompile Include="src\Graphics\ECS\KDEntity.cpp" />
-    <ClCompile Include="src\Graphics\ECS\KDScene.cpp" />
     <ClCompile Include="src\Graphics\KDGraphics.cpp" />
     <ClCompile Include="src\Graphics\KDMesh.cpp" />
+    <ClCompile Include="src\Graphics\KDSurface.cpp" />
     <ClCompile Include="src\Input\KDKeyboard.cpp" />
     <ClCompile Include="src\Input\KDMouse.cpp" />
+    <ClCompile Include="src\WinBase\GDIPlusManager.cpp" />
     <ClCompile Include="src\WinBase\KDApplication.cpp" />
     <ClCompile Include="src\WinBase\KDException.cpp" />
     <ClCompile Include="src\WinBase\KDTimer.cpp" />
@@ -215,25 +214,12 @@
   <ItemGroup>
     <FxCompile Include="src\Shaders\PixelShader.hlsl">
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="src\Shaders\VertexShader.hlsl">
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/src/Shaders/%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Graphics/KDMesh.h"
-#include "KDGraphics.h"
 #include "Graphics/KDMath.h"
+#include "KDGraphics.h"
 
 #include <vector>
 #include <array>
@@ -16,7 +16,7 @@ namespace KDE::GP
 		{
 			namespace dx = DirectX;
 
-			constexpr float side = 1.0f / 2.0f;
+			constexpr float side = 3.0f / 4.0f;
 
 			std::vector<dx::XMFLOAT3> vertices;
 			vertices.emplace_back(-side, -side, -side);
@@ -54,7 +54,7 @@ namespace KDE::GP
 			assert(longDiv >= 3);
 
 			const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
-			const float longitudeAngle = 2.0f * PI / longDiv;
+			const float longitudeAngle = 2.0f * Math::PI / longDiv;
 
 			
 			std::vector<Vertex> vertices;
@@ -135,7 +135,7 @@ namespace KDE::GP
 			}
 
 			std::vector<uint32_t> indices;
-			indices.reserve(Sq(divisions_x * divisions_y) * 6);
+			indices.reserve(Math::Sq(divisions_x * divisions_y) * 6);
 			{
 				const auto vxy2i = [nVertices_x](size_t x, size_t y)
 				{
@@ -177,7 +177,7 @@ namespace KDE::GP
 
 			const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
 			const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
-			const float longitudeAngle = 2.0f * PI / longDiv;
+			const float longitudeAngle = 2.0f * Math::PI / longDiv;
 
 			
 			std::vector<Vertex> vertices;
@@ -254,8 +254,8 @@ namespace KDE::GP
 
 			constexpr float radius = 1.0f;
 			const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
-			const float lattitudeAngle = PI / latDiv;
-			const float longitudeAngle = 2.0f * PI / longDiv;
+			const float lattitudeAngle = Math::PI / latDiv;
+			const float longitudeAngle = 2.0f * Math::PI / longDiv;
 
 			std::vector<Vertex> vertices;
 			for (int iLat = 1; iLat < latDiv; iLat++)

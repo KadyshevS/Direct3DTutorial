@@ -2,8 +2,8 @@
 
 #include <Graphics/Bindable/BindableBase.h>
 
-ChiliTest::ChiliTest(KDE::KDGraphics& gfx, 
-	std::mt19937& rng, 
+ChiliTest::ChiliTest(
+	KDE::KDGraphics& gfx, const KDE::KDMesh& mesh, std::mt19937& rng, 
 	std::uniform_real_distribution<float>& adist, 
 	std::uniform_real_distribution<float>& ddist, 
 	std::uniform_real_distribution<float>& odist, 
@@ -22,42 +22,11 @@ ChiliTest::ChiliTest(KDE::KDGraphics& gfx,
 {
 	if (!IsStaticInitialized())
 	{
-		struct Vertex
-		{
-			struct
-			{
-				float x, y, z;
-			} pos;
-		};
-		const std::vector<Vertex> vertices =
-		{
-			{ -1.0f, -1.0f, -1.0f },
-			{  1.0f, -1.0f, -1.0f },
-			{ -1.0f,  1.0f, -1.0f },
-			{  1.0f,  1.0f, -1.0f },
-			{ -1.0f, -1.0f,  1.0f },
-			{  1.0f, -1.0f,  1.0f },
-			{ -1.0f,  1.0f,  1.0f },
-			{  1.0f,  1.0f,  1.0f },
-		};
-		AddStaticBind(std::make_unique<KDE::VertexBuffer>(gfx, vertices));
-
 		auto pvs = std::make_unique<KDE::VertexShader>(gfx, L"../KDEngine/src/Shaders/VertexShader.cso");
 		auto pvsbc = pvs->Bytecode();
 		AddStaticBind(std::move(pvs));
 
 		AddStaticBind(std::make_unique<KDE::PixelShader>(gfx, L"../KDEngine/src/Shaders/PixelShader.cso"));
-
-		const std::vector<uint32_t> indices =
-		{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4
-		};
-		AddStaticIndexBuffer(std::make_unique<KDE::IndexBuffer>(gfx, indices));
 
 		struct ConstantBuffer2
 		{
@@ -91,7 +60,9 @@ ChiliTest::ChiliTest(KDE::KDGraphics& gfx,
 	{
 		SetIndexFromStatic();
 	}
-
+	
+	AddBind(std::make_unique<KDE::VertexBuffer>(gfx, mesh.Vertices()));
+	AddIndexBuffer(std::make_unique<KDE::IndexBuffer>(gfx, mesh.Indices()));
 	AddBind(std::make_unique<KDE::TransformCBuffer>(gfx, *this));
 }
 

@@ -14,6 +14,7 @@ namespace KDE
 	struct Vertex
 	{
 		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT2 tex;
 	};
 
 	class KDMesh
@@ -23,7 +24,7 @@ namespace KDE
 		KDMesh(const KDMesh& mesh) = default;
 		~KDMesh() = default;
 
-		KDMesh& operator = (const KDMesh& mesh) = delete;
+		KDMesh& operator = (const KDMesh& mesh) = default;
 
 		const std::vector<Vertex>& Vertices() const;
 		const std::vector<uint32_t>& Indices() const;

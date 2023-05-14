@@ -6,7 +6,7 @@ namespace KDE
 {
 	KDApplication::KDApplication(const std::string& name)
 	{
-		m_Window = std::make_unique<KDWindow>(name.c_str(), 800, 600);
+		m_Window = std::make_unique<KDWindow>(name.c_str(), 1280, 720);
 
 		m_Timer.Mark();
 	}

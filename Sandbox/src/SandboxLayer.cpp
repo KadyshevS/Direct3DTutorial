@@ -1,42 +1,63 @@
 #include "SandboxLayer.h"
 
-#include "Graphics/ECS/Components.h"
 #include "Graphics/GeoPrimitives.h"
+#include "WinBase/GDIPlusManager.h"
 
 #include <string>
 
+KDE::GDIPlusManager gdipm;
+
 void SandboxLayer::OnAttach()
 {
-	Window->Graphics().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	Window->Graphics().SetProjection(
+		DirectX::XMMatrixTranslation(0.0f, 0.0f, 4.0f) *
+		DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 
-	Scene = std::make_unique<KDE::KDScene>(Window->Graphics());
-	
-	Entities[0] = Scene->CreateEntity("Test Sphere");
-	Entities[0].AddComponent<KDE::MeshComponent>(KDE::GP::Sphere::MakeTesselated(20, 20));
+	std::mt19937 rng{ std::random_device{}() };
+	std::uniform_real_distribution<float> adist{ 0.0f,KDE::Math::PI * 2.0f };
+	std::uniform_real_distribution<float> ddist{ 0.0f,KDE::Math::PI * 0.5f };
+	std::uniform_real_distribution<float> odist{ 0.0f,KDE::Math::PI * 0.08f };
+	std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
+	std::uniform_real_distribution<float> bdist{ 0.4f,3.0f }; 
+	std::uniform_int_distribution<int> edist{ 0,4 }; 
 
-	Entities[1] = Scene->CreateEntity("Test Cone");
-	Entities[1].AddComponent<KDE::MeshComponent>(KDE::GP::Cone::MakeTesselated(20));
+	Entities.resize(180);
 
-	Entities[2] = Scene->CreateEntity("Test Cube");
-	Entities[2].AddComponent<KDE::MeshComponent>(KDE::GP::Cube::Make());
+	for (int i = 0; i < 180; i++)
+	{
+		std::unique_ptr<KDE::KDMesh> mesh;
 
-	Entities[3] = Scene->CreateEntity("Test Prism");
-	Entities[3].AddComponent<KDE::MeshComponent>(KDE::GP::Prism::MakeTesselated(20));
+		switch (edist(rng))
+		{
+			case 0:
+			{
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Cone::Make());
+				break;
+			}
+			case 1:
+			{
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Cube::Make());
+				break;
+			}
+			case 2:
+			{
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Plane::Make());
+				break;
+			}
+			case 3:
+			{
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Prism::Make());
+				break;
+			}
+			case 4:
+			{
+				mesh = std::make_unique<KDE::KDMesh>(KDE::GP::Sphere::Make());
+				break;
+			}
+		}
 
-	Entities[4] = Scene->CreateEntity("Test Plane");
-	Entities[4].AddComponent<KDE::MeshComponent>(KDE::GP::Plane::Make());
-
-	auto& pos  = Entities[0].GetComponent<KDE::TransformComponent>().Position;
-	auto& pos2 = Entities[1].GetComponent<KDE::TransformComponent>().Position;
-	auto& pos3 = Entities[2].GetComponent<KDE::TransformComponent>().Position;
-	auto& pos4 = Entities[3].GetComponent<KDE::TransformComponent>().Position;
-	auto& pos5 = Entities[4].GetComponent<KDE::TransformComponent>().Position;
-
-	pos = { 0.0f, -1.0f, 4.0f };
-	pos2 = { 2.0f, -1.0f, 4.0f };
-	pos3 = { -2.0f, -1.0f, 4.0f };
-	pos4 = { -1.0f, 1.0f, 4.0f };
-	pos5 = { 1.0f, 1.0f, 4.0f };
+		Entities[i] = std::make_unique<ChiliTest>(Window->Graphics(), *mesh.get(), rng, adist, ddist, odist, rdist);
+	}
 }
 void SandboxLayer::OnDetach()
 {
@@ -45,16 +66,12 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
-	auto dt = Timer.Mark();
-	Window->Graphics().ClearBuffer(0.07f, 0.0f, 0.12f);
+	Window->Graphics().ClearBuffer(0.1f, 0.1f, 0.2f);
 
-	Scene->OnUpdate(Window->Graphics(), dt);
-
-	for (size_t i = 0; i < 5; i++)
+	for (auto& e : Entities)
 	{
-		auto& rot = Entities[i].GetComponent<KDE::TransformComponent>().Rotation;
-		rot.X = KDE::WrapAngle(rot.X + dt);
-		rot.Y = KDE::WrapAngle(rot.Y + dt);
+		e->Update(ts);
+		e->Draw(Window->Graphics());
 	}
 
 	Window->Graphics().EndFrame();

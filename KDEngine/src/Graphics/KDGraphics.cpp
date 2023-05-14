@@ -16,7 +16,7 @@ namespace KDE
 {
 //////////////////////////////////////////////////////////////////////////
 ////	Graphics
-	KDGraphics::KDGraphics(HWND hWnd)
+	KDGraphics::KDGraphics(HWND hWnd, uint32_t width, uint32_t height)
 	{
 		DXGI_SWAP_CHAIN_DESC scd{};
 		scd.BufferDesc.Width = 0;
@@ -67,8 +67,8 @@ namespace KDE
 		wrl::ComPtr<ID3D11Texture2D> pDepthStencil;
 		D3D11_TEXTURE2D_DESC descDepth{};
 		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		descDepth.Width = 800;
-		descDepth.Height = 600;
+		descDepth.Width = width;
+		descDepth.Height = height;
 		descDepth.MipLevels = 1;
 		descDepth.ArraySize = 1;
 		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -87,8 +87,8 @@ namespace KDE
 		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), m_DepthStencilView.Get());
 
 		D3D11_VIEWPORT vp{};
-		vp.Width = 800;
-		vp.Height = 600;
+		vp.Width = (float)width;
+		vp.Height = (float)height;
 		vp.MinDepth = 0;
 		vp.MaxDepth = 1;
 		vp.TopLeftX = 0;

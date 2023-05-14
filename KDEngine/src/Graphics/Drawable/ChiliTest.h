@@ -1,13 +1,14 @@
 #pragma once
 
 #include "DrawableBase.h"
+#include "Graphics/KDMesh.h"
 
 #include <random>
 
 class ChiliTest : public KDE::DrawableBase<ChiliTest>
 {
 public:
-	ChiliTest(KDE::KDGraphics& gfx, std::mt19937& rng,
+	ChiliTest(KDE::KDGraphics& gfx, const KDE::KDMesh& mesh, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

@@ -27,19 +27,13 @@ project "KDEngine"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/src/**.inl",
-		"%{prj.name}/src/**.hlsl",
-		"%{prj.name}/vendor/**.h",
-		"%{prj.name}/vendor/**.hpp",
-		"%{prj.name}/vendor/**.c",
-		"%{prj.name}/vendor/**.cpp",
-		"%{prj.name}/vendor/**.inl"
+		"%{prj.name}/src/**.hlsl"
 	}
 
 	includedirs
 	{
 		"%{prj.name}",
-		"%{prj.name}/src",
-		"%{prj.name}/vendor"
+		"%{prj.name}/src"
 	}
 	
 	flags
@@ -95,7 +89,6 @@ project "Sandbox"
 	includedirs
 	{
 		"KDEngine/src",
-		"KDEngine/vendor",
 		"%{prj.name}",
 		"%{prj.name}/src"
 	}

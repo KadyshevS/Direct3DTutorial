@@ -72,7 +72,7 @@ namespace KDE
 
 		ShowWindow(m_WindowHandle, SW_SHOWDEFAULT);
 
-		m_Graphics = std::make_unique<KDGraphics>(m_WindowHandle);
+		m_Graphics = std::make_unique<KDGraphics>(m_WindowHandle, (uint32_t)width, (uint32_t)height);
 	}
 	KDWindow::~KDWindow()
 	{
