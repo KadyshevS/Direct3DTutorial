@@ -1,6 +1,7 @@
 #define _WIN32_WINNT 0x0601
 #include <sdkddkver.h>
 
+#if 0
 #ifndef KD_INCLUDE_WINAPI_FULL
 #define WIN32_LEAN_AND_MEAN
 #define NOGDICAPMASKS
@@ -35,6 +36,7 @@
 #define NOPROXYSTUB
 #define NOIMAGE
 #define NOTAPE
+#endif
 #endif
 
 #define NOMINMAX
