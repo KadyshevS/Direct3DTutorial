@@ -14,7 +14,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["ImGui"] = "KDEngine/vendor/imgui"
 
-include "KDEngine/vendor/imgui"
+group "Dependencies"
+	include "KDEngine/vendor/imgui"
+group ""
 
 project "KDEngine"
 	location "KDEngine"
@@ -37,7 +39,7 @@ project "KDEngine"
 		"%{prj.name}/vendor/**.hpp",
 		"%{prj.name}/vendor/**.c",
 		"%{prj.name}/vendor/**.cpp",
-		"%{prj.name}/vendor/**.inl"
+		"%{prj.name}/vendor/**.inl",
 	}
 
 	includedirs
@@ -45,6 +47,11 @@ project "KDEngine"
 		"%{prj.name}",
 		"%{prj.name}/src",
 		"%{prj.name}/vendor"
+	}
+
+	links 
+	{
+		"ImGui"
 	}
 	
 	flags
