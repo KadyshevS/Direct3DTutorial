@@ -1,0 +1,3 @@
+[submodule "KDEngine/vendor/imgui"]
+	path = KDEngine/vendor/imgui
+	url = https://github.com/KadyshevS/imgui.git
