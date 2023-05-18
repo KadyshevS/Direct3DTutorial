@@ -2,6 +2,7 @@
 
 #include "DXErr/dxerr.h"
 #include "GraphicsThrowMacros.h"
+#include "imgui/backends/imgui_impl_dx11.h"
 
 #include <sstream>
 #include <d3dcompiler.h>
@@ -94,6 +95,8 @@ namespace KDE
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
+
+		ImGui_ImplDX11_Init(m_Device.Get(), m_Context.Get());
 	}
 
 	void KDGraphics::EndFrame()

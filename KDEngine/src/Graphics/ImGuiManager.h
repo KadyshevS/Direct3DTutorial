@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui/imgui.h"
+
 namespace KDE
 {
 	class ImGuiManager
@@ -7,5 +9,8 @@ namespace KDE
 	public:
 		ImGuiManager();
 		~ImGuiManager();
+
+		void Begin();
+		void End();
 	};
 }

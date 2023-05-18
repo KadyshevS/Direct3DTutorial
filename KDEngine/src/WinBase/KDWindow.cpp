@@ -1,6 +1,7 @@
 #include "KDWindow.h"
 
 #include "WindowThrowMacros.h"
+#include "imgui/backends/imgui_impl_win32.h"
 
 #include <sstream>
 
@@ -72,10 +73,15 @@ namespace KDE
 
 		ShowWindow(m_WindowHandle, SW_SHOWDEFAULT);
 
+		ImGui::CreateContext();
+		ImGui_ImplWin32_Init(m_WindowHandle);
+
 		m_Graphics = std::make_unique<KDGraphics>(m_WindowHandle, (uint32_t)width, (uint32_t)height);
 	}
 	KDWindow::~KDWindow()
 	{
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
 		DestroyWindow(m_WindowHandle);
 	}
 	void KDWindow::SetTitle(const char* title)
@@ -140,6 +146,11 @@ namespace KDE
 	}
 	LRESULT KDWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		{
+			return true;
+		}
+
 		switch (msg)
 		{
 			case WM_CLOSE:

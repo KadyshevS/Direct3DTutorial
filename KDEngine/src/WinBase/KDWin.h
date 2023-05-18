@@ -1,8 +1,8 @@
 #define _WIN32_WINNT 0x0601
 #include <sdkddkver.h>
 
+// #ifndef KD_INCLUDE_WINAPI_FULL
 #if 0
-#ifndef KD_INCLUDE_WINAPI_FULL
 #define WIN32_LEAN_AND_MEAN
 #define NOGDICAPMASKS
 #define NOSYSMETRICS
@@ -13,11 +13,11 @@
 #define OEMRESOURCE
 #define NOATOM
 #define NOCLIPBOARD
-// #define NOCOLOR
+#define NOCOLOR
 #define NOCTLMGR
 #define NODRAWTEXT
 #define NOKERNEL
-// #define NONLS
+#define NONLS
 #define NOMEMMGR
 #define NOMETAFILE
 #define NOOPENFILE
@@ -37,10 +37,8 @@
 #define NOIMAGE
 #define NOTAPE
 #endif
-#endif
 
 #define NOMINMAX
-
 #define STRICT
 
 #include <Windows.h>

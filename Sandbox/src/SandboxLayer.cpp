@@ -79,5 +79,13 @@ void SandboxLayer::OnUpdate(float ts)
 		e->Draw(Window->Graphics());
 	}
 
+	ImguiMgr.Begin();
+	static bool show_demo_window = true;
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+	ImguiMgr.End();
+
 	Window->Graphics().EndFrame();
 }
