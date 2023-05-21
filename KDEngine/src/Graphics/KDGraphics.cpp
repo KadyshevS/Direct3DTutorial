@@ -129,6 +129,36 @@ namespace KDE
 	{
 		return m_Projection;
 	}
+	void KDGraphics::OnResize(uint32_t width, uint32_t height)
+	{
+		if (m_SwapChain)
+		{
+			HRESULT hr;
+
+			m_Context->OMSetRenderTargets(0, 0, 0);
+
+			GFX_THROW_INFO(m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
+
+			wrl::ComPtr<ID3D11Resource> pBuffer;
+			GFX_THROW_INFO(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource),
+				&pBuffer));
+
+			GFX_THROW_INFO(m_Device->CreateRenderTargetView(pBuffer.Get(), nullptr,
+				&m_Target));
+
+			m_Context->OMSetRenderTargets(1, &m_Target, nullptr);
+
+			D3D11_VIEWPORT vp{};
+			vp.Width = (float)width;
+			vp.Height = (float)height;
+			vp.MinDepth = 0.0f;
+			vp.MaxDepth = 1.0f;
+			vp.TopLeftX = 0;
+			vp.TopLeftY = 0;
+			m_Context->RSSetViewports(1, &vp);
+		}
+	}
+
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////

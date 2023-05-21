@@ -15,6 +15,7 @@ namespace KDE
 	{
 		friend class Bindable;
 		friend class ImGuiLayer;
+		friend class KDWindow;
 	public:
 		KDGraphics(HWND hWnd, uint32_t width = 800, uint32_t height = 600);
 		~KDGraphics() {}
@@ -64,8 +65,10 @@ namespace KDE
 		};
 
 	private:
-		DirectX::XMMATRIX m_Projection;
+		void OnResize(uint32_t width, uint32_t height);
 	private:
+		bool first_frame = true;
+		DirectX::XMMATRIX m_Projection;
 #ifdef _DEBUG
 		DXGIInfoManager m_InfoManager;
 #endif

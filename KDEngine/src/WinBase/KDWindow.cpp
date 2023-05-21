@@ -58,12 +58,12 @@ namespace KDE
 		wr.top = 100;
 		wr.bottom = height + wr.top;
 
-		if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
+		if (AdjustWindowRect(&wr, WS_CAPTION | WS_SIZEBOX | WS_SYSMENU, FALSE) == 0)
 			throw KD_EXCEPT_LAST();
 
 		m_WindowHandle = CreateWindow(
 			KDWindowClass::Name(), title,
-			WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+			WS_CAPTION | WS_SIZEBOX | WS_SYSMENU,
 			CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 			nullptr, nullptr, KDWindowClass::Instance(), this
 		);
@@ -121,6 +121,24 @@ namespace KDE
 		return *m_Graphics;
 	}
 
+	void KDWindow::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		m_Graphics->OnResize(width, height);
+
+		m_Width = (int)width;
+		m_Height = (int)height;
+
+		RECT wr{};
+		wr.left = 100;
+		wr.right = width + wr.left;
+		wr.top = 100;
+		wr.bottom = height + wr.top;
+
+		if (AdjustWindowRect(&wr, WS_CAPTION | WS_SIZEBOX | WS_SYSMENU, FALSE) == 0)
+			throw KD_EXCEPT_LAST();
+
+		
+	}
 	LRESULT CALLBACK KDWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		if (msg == WM_NCCREATE)
@@ -155,6 +173,22 @@ namespace KDE
 				Keyboard.ClearState();
 				break;
 
+		//////////////////////////////////////////////////////////////////////////
+		////	Window Events
+			case WM_SIZE:
+			{
+				if (first_frame)
+					first_frame = true;
+				else
+				{
+					UINT width = LOWORD(lParam);
+					UINT height = HIWORD(lParam);
+					OnWindowResize((uint32_t)width, (uint32_t)height);
+				}
+				break;
+			}
+		////////////////////////////////////////////////////////////////////////////
+	
 		//////////////////////////////////////////////////////////////////////////
 		////	Keyboard Input
 			case WM_KEYDOWN:
@@ -215,8 +249,9 @@ namespace KDE
 			{
 				const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 				Mouse.OnWheelDelta(delta);
-			}
 				break;
+			}
+				
 		//////////////////////////////////////////////////////////////////////////
 		}
 

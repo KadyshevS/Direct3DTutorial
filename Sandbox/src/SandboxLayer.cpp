@@ -14,7 +14,7 @@ void SandboxLayer::OnAttach()
 {
 	Window->Graphics().SetProjection(
 		DirectX::XMMatrixTranslation(0.0f, 0.0f, 4.0f) *
-		DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
+		DirectX::XMMatrixPerspectiveLH(1.0f, (float)Window->Height() / (float)Window->Width(), 0.5f, 40.0f));
 
 	std::mt19937 rng{ std::random_device{}() };
 	std::uniform_real_distribution<float> adist{ 0.0f,KDE::Math::PI * 2.0f };

@@ -59,7 +59,10 @@ namespace KDE
 		static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+		void OnWindowResize(uint32_t width, uint32_t height);
 	private:
+		bool first_frame = true;
 		class KDWindowClass
 		{
 		public:
