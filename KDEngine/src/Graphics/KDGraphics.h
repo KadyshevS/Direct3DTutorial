@@ -67,7 +67,7 @@ namespace KDE
 	private:
 		void OnResize(uint32_t width, uint32_t height);
 	private:
-		bool first_frame = true;
+		HWND m_WindowHandle;
 		DirectX::XMMATRIX m_Projection;
 #ifdef _DEBUG
 		DXGIInfoManager m_InfoManager;

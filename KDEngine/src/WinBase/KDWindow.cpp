@@ -123,8 +123,6 @@ namespace KDE
 
 	void KDWindow::OnWindowResize(uint32_t width, uint32_t height)
 	{
-		m_Graphics->OnResize(width, height);
-
 		m_Width = (int)width;
 		m_Height = (int)height;
 
@@ -137,7 +135,7 @@ namespace KDE
 		if (AdjustWindowRect(&wr, WS_CAPTION | WS_SIZEBOX | WS_SYSMENU, FALSE) == 0)
 			throw KD_EXCEPT_LAST();
 
-		
+		m_Graphics->OnResize(width, height);
 	}
 	LRESULT CALLBACK KDWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
@@ -178,7 +176,7 @@ namespace KDE
 			case WM_SIZE:
 			{
 				if (first_frame)
-					first_frame = true;
+					first_frame = false;
 				else
 				{
 					UINT width = LOWORD(lParam);

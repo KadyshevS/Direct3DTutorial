@@ -72,6 +72,10 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
+	Window->Graphics().SetProjection(
+		DirectX::XMMatrixTranslation(0.0f, 0.0f, 4.0f) *
+		DirectX::XMMatrixPerspectiveLH(1.0f, (float)Window->Height() / (float)Window->Width(), 0.5f, 40.0f));
+
 	for (auto& e : Entities)
 	{
 		e->Update(Window->Keyboard.IsKeyPressed(KDE::Key::Shift) ? 0.0f : ts);
