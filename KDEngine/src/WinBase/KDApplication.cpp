@@ -7,6 +7,7 @@ namespace KDE
 	KDApplication::KDApplication(const std::string& name)
 	{
 		m_Window = std::make_unique<KDWindow>(name.c_str(), 1280, 720);
+		m_ImGuiLayer = std::make_unique<ImGuiLayer>(m_Window.get());
 
 		m_Timer.Mark();
 	}
@@ -18,6 +19,7 @@ namespace KDE
 		{
 			layer->OnAttach();
 		}
+		m_ImGuiLayer->OnAttach();
 
 		while (m_Running)
 		{
@@ -27,10 +29,21 @@ namespace KDE
 			}
 
 			m_LastFrameTime = m_Timer.Mark();
+
+			m_Window->Graphics().ClearBuffer(0.1f, 0.1f, 0.2f);
+
 			for (auto& layer : m_LayerStack)
 			{
 				layer->OnUpdate(m_LastFrameTime);
 			}
+			
+			m_ImGuiLayer->Begin();
+			for (auto& layer : m_LayerStack)
+			{
+				layer->OnImGuiUpdate();
+			}
+
+			m_ImGuiLayer->End();
 
 			m_Window->Graphics().EndFrame();
 		}
@@ -39,6 +52,7 @@ namespace KDE
 		{
 			layer->OnDetach();
 		}
+		m_ImGuiLayer->OnDetach();
 
 		return 0;
 	}

@@ -4,6 +4,7 @@
 #include "WinBase/GDIPlusManager.h"
 #include "Graphics/Drawable/ChiliTest.h"
 #include "Graphics/Drawable/ChiliTestTextured.h"
+#include "imgui/imgui.h"
 
 #include <string>
 
@@ -71,21 +72,19 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
-	Window->Graphics().ClearBuffer(0.1f, 0.1f, 0.2f);
-
 	for (auto& e : Entities)
 	{
 		e->Update(Window->Keyboard.IsKeyPressed(KDE::Key::Shift) ? 0.0f : ts);
 		e->Draw(Window->Graphics());
 	}
+}
+void SandboxLayer::OnImGuiUpdate()
+{
+	static bool show_demo = true;
+	if (show_demo)
+		ImGui::ShowDemoWindow(&show_demo);
 
-	ImguiMgr.Begin();
-	static bool show_demo_window = true;
-	if (show_demo_window)
-	{
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-	ImguiMgr.End();
-
-	Window->Graphics().EndFrame();
+	ImGui::Begin("Test Window");
+	ImGui::TextColored({ 0.2, 0.8, 0.3, 1.0 }, "Hello ImGui!");
+	ImGui::End();
 }

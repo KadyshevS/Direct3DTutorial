@@ -15,6 +15,7 @@ namespace KDE
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate(float dt) {}
+		virtual void OnImGuiUpdate() {}
 
 		const std::string& Name() const { return m_DebugName; }
 

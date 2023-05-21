@@ -3,7 +3,6 @@
 #include "WinBase/Layer.h"
 #include "WinBase/KDWindow.h"
 #include "Graphics/Drawable/Drawable.h"
-#include "Graphics/ImGuiManager.h"
 
 class SandboxLayer : public KDE::Layer
 {
@@ -15,8 +14,7 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 	virtual void OnUpdate(float ts) override;
+	virtual void OnImGuiUpdate() override;
 private:
-	KDE::ImGuiManager ImguiMgr;
-
 	std::vector<std::unique_ptr<KDE::Drawable>> Entities;
 };

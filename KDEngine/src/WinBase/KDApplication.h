@@ -3,6 +3,7 @@
 #include "KDWindow.h"
 #include "LayerStack.h"
 #include "KDTimer.h"
+#include "Graphics/ImGui/ImGuiLayer.h"
 
 #include <memory>
 
@@ -21,6 +22,8 @@ namespace KDE
 		void PushOverlay(Layer* overlay);
 	protected:
 		std::unique_ptr<KDWindow> m_Window;
+		std::unique_ptr<ImGuiLayer> m_ImGuiLayer;
+		
 		LayerStack m_LayerStack;
 		KDTimer m_Timer;
 

@@ -14,6 +14,7 @@ namespace KDE
 	class KDGraphics
 	{
 		friend class Bindable;
+		friend class ImGuiLayer;
 	public:
 		KDGraphics(HWND hWnd, uint32_t width = 800, uint32_t height = 600);
 		~KDGraphics() {}

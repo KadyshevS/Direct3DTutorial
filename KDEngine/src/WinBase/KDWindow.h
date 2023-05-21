@@ -13,6 +13,7 @@ namespace KDE
 {
 	class KDWindow
 	{
+		friend class ImGuiLayer;
 	public:
 		KDWindow(const char* title, int width, int height);
 		KDWindow(const KDWindow&) = delete;
