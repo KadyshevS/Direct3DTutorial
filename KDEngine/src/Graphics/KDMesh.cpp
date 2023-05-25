@@ -2,22 +2,51 @@
 
 #include "Bindable/VertexBuffer.h"
 #include "Bindable/IndexBuffer.h"
+#include "Bindable/TransformCBuffer.h"
 #include "GeoPrimitives.h"
 
 #include <cassert>
 
 namespace KDE
 {
-	KDMesh::KDMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+	KDMesh::KDMesh(KDGraphics& gfx, 
+		const std::vector<Vertex>& vertices, 
+		const std::vector<uint32_t>& indices)
 	{
 		assert("Indices must be divide by 3." && indices.size() % 3 == 0);
 		m_Vertices = vertices;
 		m_Indices = indices;
+
+		m_Binds.resize(3);
+
+		m_Binds.emplace_back(std::make_unique<KDE::VertexBuffer>(gfx, m_Vertices));
+		m_Binds.emplace_back(std::make_unique<KDE::IndexBuffer>(gfx, m_Indices));
+		m_Binds.emplace_back(std::make_unique<KDE::TransformCBuffer>(gfx, *this));
 	}
 
-	void KDMesh::Draw(KDGraphics& gfx)
+	void KDMesh::Bind(KDGraphics& gfx)
 	{
+		for (auto& b : m_Binds)
+		{
+			b.Bind(gfx);
+		}
+	}
 
+	DirectX::XMMATRIX KDMesh::TransformMat() const
+	{
+		return DirectX::XMMatrixTranspose(
+			DirectX::XMMatrixTranslation(
+				Transform.Position.X, 
+				Transform.Position.Y,
+				Transform.Position.Z) *
+			DirectX::XMMatrixRotationRollPitchYaw(
+				Transform.Rotation.X,
+				Transform.Rotation.Y,
+				Transform.Rotation.Z) *
+			DirectX::XMMatrixScaling(
+				Transform.Scaling.X,
+				Transform.Scaling.Y,
+				Transform.Scaling.Z));
 	}
 
 	void KDMesh::SetNormalsFlat()

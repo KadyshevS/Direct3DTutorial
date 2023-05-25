@@ -4,7 +4,7 @@ namespace KDE
 {
 	std::unique_ptr<KDE::VertexConstantBuffer<TransformCBuffer::Transforms>> TransformCBuffer::pVcbuf;
 
-	TransformCBuffer::TransformCBuffer(KDGraphics& gfx, const Drawable& parent)
+	TransformCBuffer::TransformCBuffer(KDGraphics& gfx, const KDMesh& parent)
 		:  parent(parent)
 	{
 		if (!pVcbuf)
@@ -17,7 +17,7 @@ namespace KDE
 	{
 		using namespace DirectX;
 
-		const auto model = parent.Transform();
+		const auto model = parent.TransformMat();
 		const Transforms tf =
 		{
 			XMMatrixTranspose(model),

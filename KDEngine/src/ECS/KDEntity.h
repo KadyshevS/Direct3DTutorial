@@ -1,0 +1,54 @@
+#pragma once
+
+#include "Graphics/KDGraphics.h"
+#include "Graphics/Bindable/Bindable.h"
+#include "KDScene.h"
+
+#include <cassert>
+
+namespace KDE
+{
+	class KDEntity
+	{
+	public:
+		KDEntity(entt::entity ent, KDScene* scene);
+		KDEntity(const KDEntity&) = delete;
+		KDEntity& operator = (const KDEntity&) = delete;
+
+		template<typename T, typename... Args>
+		T& AddComponent(Args&&... args)
+		{
+			assert(!HasComponent<T>() && "This component is already exist.");
+			T& component = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			return component;
+		}
+
+		template<typename T>
+		T& GetComponent()
+		{
+			assert(HasComponent<T>() && "This component does not exist.");
+			return m_Scene->m_Registry.get<T>(m_EntityHandle);
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return m_Scene->m_Registry.all_of<T>(m_EntityHandle);
+		}
+
+		template<typename T>
+		void RemoveComponent()
+		{
+			assert(!HasComponent<T>() && "Attempt to remove non-existent component");
+			if (HasComponent<T>())
+				m_Scene->m_Registry.remove<T>(m_EntityHandle);
+		}
+
+		void Bind(KDGraphics& gfx);
+		void Update();
+
+	private:
+		entt::entity m_EntityHandle = entt::null;
+		KDScene* m_Scene = nullptr;
+	};
+}
