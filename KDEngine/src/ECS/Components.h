@@ -21,6 +21,9 @@ namespace KDE::CS
 
 	struct RenderComponent
 	{
+	private:
+		std::shared_ptr<TransformCBuffer> m_TransformCBuffer;
+	public:
 		KDMesh Mesh;
 
 		RenderComponent() = default;

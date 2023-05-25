@@ -1,6 +1,7 @@
 #include "KDEntity.h"
 
 #include "Graphics/Bindable/BindableBase.h"
+#include "Components.h"
 
 namespace KDE
 {
@@ -12,7 +13,15 @@ namespace KDE
 
 	void KDEntity::Bind(KDGraphics& gfx)
 	{
-		
+		if (HasComponent<CS::TagComponent>())
+		{
+
+		}
+		if (HasComponent<CS::RenderComponent>())
+		{
+			auto& rc = GetComponent<CS::RenderComponent>();
+			rc.Bind(gfx);
+		}
 	}
 	void KDEntity::Update()
 	{
