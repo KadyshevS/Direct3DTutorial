@@ -2,7 +2,8 @@
 
 #include "WinBase/Layer.h"
 #include "WinBase/KDWindow.h"
-#include "Graphics/Drawable/Drawable.h"
+#include "ECS/KDScene.h"
+#include "ECS/KDEntity.h"
 
 class SandboxLayer : public KDE::Layer
 {
@@ -16,5 +17,5 @@ public:
 	virtual void OnUpdate(float ts) override;
 	virtual void OnImGuiUpdate() override;
 private:
-	
+	std::unique_ptr<KDE::KDScene> Scene;
 };

@@ -25,6 +25,6 @@ namespace KDE
 	}
 	void KDEntity::Update()
 	{
-
+		
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "KDEntity.h"
 #include "Graphics/Bindable/BindableBase.h"
+#include "Components.h"
 
 namespace KDE
 {
@@ -25,9 +26,19 @@ namespace KDE
 		m_Binds.emplace_back(std::make_unique<KDE::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 
-	KDEntity KDScene::CreateEntity()
+	KDEntity KDScene::CreateEntity(const std::string& name)
 	{
-		return KDEntity(m_Registry.create(), this);
+		KDEntity ent = { m_Registry.create(), this };
+		ent.AddComponent<CS::TagComponent>();
+		ent.AddComponent<CS::RenderComponent>();
+
+		auto tag = ent.GetComponent<CS::TagComponent>();
+		tag.Tag = name.empty() ? "Entity" : name;
+		return ent;
+	}
+	void KDScene::DestroyEntity(KDEntity* entity)
+	{
+		m_Registry.destroy(entity->EntityHandle());
 	}
 
 	void KDScene::Bind()
@@ -36,9 +47,24 @@ namespace KDE
 		{
 			b->Bind(*m_Graphics);
 		}
+		auto view = m_Registry.view<CS::TagComponent, CS::RenderComponent>();
+		for (auto& b : view)
+		{
+			auto& componenet = view.get<CS::RenderComponent>(b);
+			componenet.Bind(*m_Graphics);
+		}
 	}
 	void KDScene::Draw()
 	{
+		Bind();
 
+		auto group = m_Registry.group<CS::RenderComponent>(entt::get<CS::TagComponent>);
+		for (auto& e : group)
+		{
+			auto& componenet = group.get<CS::RenderComponent>(e);
+			int indCount = (int)componenet.Mesh.Indices().size();
+
+			m_Graphics->DrawIndexed(indCount);
+		}
 	}
 }
