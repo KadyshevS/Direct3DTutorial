@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConstantBuffers.h"
-#include "Graphics/Drawable/Drawable.h"
+#include "Graphics/KDMesh.h"
 
 #include <DirectXMath.h>
 
@@ -16,11 +16,11 @@ namespace KDE
 			DirectX::XMMATRIX model;
 		};
 	public:
-		TransformCBuffer(KDGraphics& gfx, const Drawable& parent);
+		TransformCBuffer(KDGraphics& gfx, const KDMesh& parent);
 		void Bind(KDGraphics& gfx) override;
 
 	private:
 		static std::unique_ptr<VertexConstantBuffer<Transforms>> pVcbuf;
-		const Drawable& parent;
+		const KDMesh& parent;
 	};
 }

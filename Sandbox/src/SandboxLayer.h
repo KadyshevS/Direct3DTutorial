@@ -16,5 +16,5 @@ public:
 	virtual void OnUpdate(float ts) override;
 	virtual void OnImGuiUpdate() override;
 private:
-	std::vector<std::unique_ptr<KDE::Drawable>> Entities;
+	
 };
