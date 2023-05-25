@@ -13,8 +13,8 @@ namespace KDE
 	{
 	public:
 		KDEntity(entt::entity ent, KDScene* scene);
-		KDEntity(const KDEntity&) = delete;
-		KDEntity& operator = (const KDEntity&) = delete;
+		KDEntity(const KDEntity&) = default;
+		KDEntity& operator = (const KDEntity&) = default;
 
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
@@ -43,6 +43,8 @@ namespace KDE
 			assert(HasComponent<T>() && "Attempt to remove non-existent component");
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
+
+		entt::entity& EntityHandle() { return m_EntityHandle; }
 
 		void Bind(KDGraphics& gfx);
 		void Update();
