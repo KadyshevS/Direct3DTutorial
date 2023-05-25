@@ -15,6 +15,7 @@ namespace KDE
 	{
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT2 tex;
+		DirectX::XMFLOAT3 norm;
 	};
 
 	class KDMesh
@@ -25,6 +26,10 @@ namespace KDE
 		~KDMesh() = default;
 
 		KDMesh& operator = (const KDMesh& mesh) = default;
+
+		void Draw(KDGraphics& gfx);
+
+		void SetNormalsFlat();
 
 		const std::vector<Vertex>& Vertices() const;
 		const std::vector<uint32_t>& Indices() const;

@@ -2,24 +2,32 @@
 
 namespace KDE
 {
-	std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> TransformCBuffer::pVcbuf;
+	std::unique_ptr<KDE::VertexConstantBuffer<TransformCBuffer::Transforms>> TransformCBuffer::pVcbuf;
 
 	TransformCBuffer::TransformCBuffer(KDGraphics& gfx, const Drawable& parent)
 		:  parent(parent)
 	{
 		if (!pVcbuf)
 		{
-			pVcbuf = std::make_unique<VertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+			pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx);
 		}
 	}
 
 	void TransformCBuffer::Bind(KDGraphics& gfx)
 	{
-		pVcbuf->Update(gfx,
-			DirectX::XMMatrixTranspose(
-				parent.Transform() * gfx.Projection()
+		using namespace DirectX;
+
+		const auto model = parent.Transform();
+		const Transforms tf =
+		{
+			XMMatrixTranspose(model),
+			XMMatrixTranspose(
+				model *
+				gfx.Projection()
 			)
-		);
+		};
+
+		pVcbuf->Update(gfx, tf);
 		pVcbuf->Bind(gfx);
 	}
 }

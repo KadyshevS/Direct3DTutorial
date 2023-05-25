@@ -139,7 +139,7 @@ namespace KDE
 		m_Target.Reset();
 		m_DepthStencilView.Reset();
 
-		GFX_THROW_INFO(m_SwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0));
+		GFX_THROW_INFO(m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
 
 		wrl::ComPtr<ID3D11Resource> pBackBuffer;
 		GFX_THROW_INFO(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
@@ -167,8 +167,8 @@ namespace KDE
 		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), m_DepthStencilView.Get());
 
 		D3D11_VIEWPORT vp{};
-		vp.Width = static_cast<float>(width);
-		vp.Height = static_cast<float>(height);
+		vp.Width = (float)width;
+		vp.Height = (float)height;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
