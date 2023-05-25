@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Graphics/KDGraphics.h"
 #include "Graphics/Bindable/Bindable.h"
-#include "KDEntity.h"
 #include "ECS/entt.hpp"
 
 namespace KDE
 {
+	class KDEntity;
+
 	class KDScene
 	{
+		friend class KDEntity;
 	public:
 		KDScene(KDGraphics& gfx);
 		KDScene(const KDScene&) = delete;
@@ -18,11 +19,11 @@ namespace KDE
 		KDEntity CreateEntity();
 
 		void Bind();
-		void Update();
+		void Draw();
 
-	private:
-		std::vector<Bindable> m_Binds;
+	protected:
 		KDGraphics* m_Graphics = nullptr;
+		std::vector<std::unique_ptr<Bindable>> m_Binds;
 		entt::registry m_Registry;
 	};
 }

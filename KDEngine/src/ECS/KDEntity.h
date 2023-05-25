@@ -3,6 +3,7 @@
 #include "Graphics/KDGraphics.h"
 #include "Graphics/Bindable/Bindable.h"
 #include "KDScene.h"
+#include "ECS/entt.hpp"
 
 #include <cassert>
 
@@ -39,9 +40,8 @@ namespace KDE
 		template<typename T>
 		void RemoveComponent()
 		{
-			assert(!HasComponent<T>() && "Attempt to remove non-existent component");
-			if (HasComponent<T>())
-				m_Scene->m_Registry.remove<T>(m_EntityHandle);
+			assert(HasComponent<T>() && "Attempt to remove non-existent component");
+			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
 
 		void Bind(KDGraphics& gfx);

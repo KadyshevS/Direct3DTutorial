@@ -1,6 +1,7 @@
 cbuffer LightCBuf
 {
     float3 LightPos;
+    float4 face_colors[6];
 };
 
 static const float3 MaterialColor = { 0.7f, 0.7f, 0.9f };

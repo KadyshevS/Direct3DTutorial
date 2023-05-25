@@ -9,26 +9,29 @@
 
 namespace KDE
 {
-	KDMesh::KDMesh(KDGraphics& gfx, 
-		const std::vector<Vertex>& vertices, 
+	KDMesh::KDMesh(const std::vector<Vertex>& vertices, 
 		const std::vector<uint32_t>& indices)
 	{
 		assert("Indices must be divide by 3." && indices.size() % 3 == 0);
 		m_Vertices = vertices;
 		m_Indices = indices;
-
-		m_Binds.resize(3);
-
-		m_Binds.emplace_back(std::make_unique<KDE::VertexBuffer>(gfx, m_Vertices));
-		m_Binds.emplace_back(std::make_unique<KDE::IndexBuffer>(gfx, m_Indices));
-		m_Binds.emplace_back(std::make_unique<KDE::TransformCBuffer>(gfx, *this));
+		SetNormalsFlat();
 	}
 
 	void KDMesh::Bind(KDGraphics& gfx)
 	{
+		if (m_Binds.empty())
+		{
+			m_Binds.resize(3);
+
+			m_Binds.emplace_back(std::make_shared<KDE::VertexBuffer>(gfx, m_Vertices));
+			m_Binds.emplace_back(std::make_shared<KDE::IndexBuffer>(gfx, m_Indices));
+			m_Binds.emplace_back(std::make_shared<KDE::TransformCBuffer>(gfx, *this));
+		}
+
 		for (auto& b : m_Binds)
 		{
-			b.Bind(gfx);
+			b->Bind(gfx);
 		}
 	}
 

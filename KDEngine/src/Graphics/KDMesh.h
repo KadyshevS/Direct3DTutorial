@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bindable/TransformCBuffer.h"
+#include "Graphics/Bindable/Bindable.h"
 
 #include <DirectXMath.h>
 #include <vector>
@@ -22,8 +22,8 @@ namespace KDE
 
 	class KDMesh
 	{
-	public:
-		struct
+	private:
+		struct TransformInfo
 		{
 			struct
 			{
@@ -37,10 +37,11 @@ namespace KDE
 			{
 				float X = 1.0f, Y = 1.0f, Z = 1.0f;
 			} Scaling;
-		} Transform;
+		};
 	public:
-		KDMesh(KDGraphics& gfx,
-			const std::vector<Vertex>& vertices,
+		TransformInfo Transform{};
+	public:
+		KDMesh(const std::vector<Vertex>& vertices,
 			const std::vector<uint32_t>& indices);
 		KDMesh(const KDMesh& mesh) = default;
 		~KDMesh() = default;
@@ -56,10 +57,8 @@ namespace KDE
 		const std::vector<Vertex>& Vertices() const;
 		const std::vector<uint32_t>& Indices() const;
 	private:
-		std::vector<Bindable> m_Binds;
+		std::vector<std::shared_ptr<Bindable>> m_Binds;
 		std::vector<Vertex> m_Vertices;
 		std::vector<uint32_t> m_Indices;
-
-		std::shared_ptr<TransformCBuffer> m_TransformCBuffer;
 	};
 }
