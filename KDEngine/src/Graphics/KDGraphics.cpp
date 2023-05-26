@@ -95,6 +95,9 @@ namespace KDE
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
+
+		SetProjection(
+			DirectX::XMMatrixPerspectiveLH(1.0f, (float)height / (float)width, 0.5f, 40.0f));
 	}
 
 	void KDGraphics::EndFrame()
@@ -174,6 +177,9 @@ namespace KDE
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
+
+		SetProjection(
+			DirectX::XMMatrixPerspectiveLH(1.0f, (float)height / (float)width, 0.5f, 40.0f));
 	}
 //////////////////////////////////////////////////////////////////////////
 

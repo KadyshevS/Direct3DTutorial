@@ -22,7 +22,7 @@ namespace KDE
 
 	class KDMesh
 	{
-	private:
+	public:
 		struct TransformInfo
 		{
 			struct
@@ -38,7 +38,6 @@ namespace KDE
 				float X = 1.0f, Y = 1.0f, Z = 1.0f;
 			} Scaling;
 		};
-	public:
 		TransformInfo Transform{};
 	public:
 		KDMesh(const std::vector<Vertex>& vertices,

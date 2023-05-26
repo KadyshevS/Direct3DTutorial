@@ -11,7 +11,7 @@ namespace KDE::CS
 {
 	struct TagComponent
 	{
-		std::string Tag;
+		std::string Tag = "Unnamed Tag";
 
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
