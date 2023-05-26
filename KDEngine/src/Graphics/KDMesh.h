@@ -43,16 +43,16 @@ namespace KDE
 	public:
 		KDMesh(const std::vector<Vertex>& vertices,
 			const std::vector<uint32_t>& indices);
-		KDMesh(const KDMesh& mesh) = default;
+		KDMesh(const KDMesh& mesh);
 		~KDMesh() = default;
 
-		KDMesh& operator = (const KDMesh& mesh) = default;
+		KDMesh& operator = (const KDMesh& mesh);
 
 		void Bind(KDGraphics& gfx);
+		void SetNormalsFlat();
+		void Clear();
 
 		DirectX::XMMATRIX TransformMat() const;
-
-		void SetNormalsFlat();
 
 		const std::vector<Vertex>& Vertices() const;
 		const std::vector<uint32_t>& Indices() const;

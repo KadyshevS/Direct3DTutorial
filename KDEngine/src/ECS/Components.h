@@ -5,6 +5,7 @@
 #include "Graphics/KDMesh.h"
 
 #include <string>
+#include <memory>
 
 namespace KDE::CS
 {
@@ -22,21 +23,15 @@ namespace KDE::CS
 
 	struct RenderComponent
 	{
-	private:
-		std::shared_ptr<TransformCBuffer> m_TransformCBuffer;
-	public:
-		KDMesh Mesh;
+		std::unique_ptr<KDMesh> Mesh;
 
 		RenderComponent() = default;
-		RenderComponent(const RenderComponent&) = default;
-		RenderComponent& operator = (const RenderComponent&) = default;
-
-		RenderComponent(KDMesh mesh)
-			: Mesh(mesh) {}
+		RenderComponent(const RenderComponent&) = delete;
+		RenderComponent& operator = (const RenderComponent&) = delete;
 
 		void Bind(KDGraphics& gfx)
 		{
-			Mesh.Bind(gfx);
+			Mesh->Bind(gfx);
 		}
 	};
 }

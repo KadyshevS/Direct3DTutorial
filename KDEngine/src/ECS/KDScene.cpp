@@ -18,7 +18,8 @@ namespace KDE
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-//			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,sizeof(float) * 4,D3D11_INPUT_PER_VERTEX_DATA,0 }
+			{ "TexCoord",0,DXGI_FORMAT_R32G32_FLOAT,0,sizeof(float) * 2,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,sizeof(float) * 5,D3D11_INPUT_PER_VERTEX_DATA,0 }
 		};
 		
 		m_Binds.emplace_back(std::make_unique<KDE::InputLayout>(gfx, ied, pvsbc));
@@ -36,9 +37,9 @@ namespace KDE
 		tag.Tag = name.empty() ? "Entity" : name;
 		return ent;
 	}
-	void KDScene::DestroyEntity(KDEntity* entity)
+	void KDScene::DestroyEntity(KDEntity entity)
 	{
-		m_Registry.destroy(entity->EntityHandle());
+		m_Registry.destroy(entity.EntityHandle());
 	}
 
 	void KDScene::Bind()
@@ -58,11 +59,11 @@ namespace KDE
 	{
 		Bind();
 
-		auto group = m_Registry.group<CS::RenderComponent>(entt::get<CS::TagComponent>);
-		for (auto& e : group)
+		auto view = m_Registry.view<CS::TagComponent, CS::RenderComponent>();
+		for (auto& e : view)
 		{
-			auto& componenet = group.get<CS::RenderComponent>(e);
-			int indCount = (int)componenet.Mesh.Indices().size();
+			auto& componenet = view.get<CS::RenderComponent>(e);
+			int indCount = (int)componenet.Mesh->Indices().size();
 
 			m_Graphics->DrawIndexed(indCount);
 		}
