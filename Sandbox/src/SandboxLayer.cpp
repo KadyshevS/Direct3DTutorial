@@ -50,6 +50,12 @@ void SandboxLayer::OnAttach()
 	Entities[3]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -1.0f,  1.0f, 4.0f };
 	Entities[4]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  1.0f,  1.0f, 4.0f };
 
+	for (auto& e : Entities)
+	{
+		auto& scale = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling;
+		scale = {0.8f, 0.8f, 0.8f};
+	}
+
 	Scene->Bind();
 }
 void SandboxLayer::OnDetach()
@@ -75,6 +81,17 @@ void SandboxLayer::OnImGuiUpdate()
 		ImGui::SliderFloat3("Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
 		ImGui::SliderFloat3("Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
 		ImGui::SliderFloat3("Scale", reinterpret_cast<float*>(&scale), -10.0f, 10.0f, "%.1f");
+		ImGui::End();
+	}
+	{
+		auto& cam = Window->Graphics().Camera;
+
+		auto& pos = cam.Transform.Position;
+		auto& rot = cam.Transform.Rotation;
+
+		ImGui::Begin("Camera");
+		ImGui::SliderFloat3(" Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
+		ImGui::SliderFloat3(" Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
 		ImGui::End();
 	}
 }

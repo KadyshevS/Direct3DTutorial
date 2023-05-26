@@ -4,6 +4,7 @@
 #include "Bindable/IndexBuffer.h"
 #include "Bindable/TransformCBuffer.h"
 #include "GeoPrimitives.h"
+#include "Graphics/KDMath.h"
 
 #include <cassert>
 
@@ -56,19 +57,19 @@ namespace KDE
 
 	DirectX::XMMATRIX KDMesh::TransformMat() const
 	{
-		return 
-			DirectX::XMMatrixTranslation(
-				Transform.Position.X, 
-				Transform.Position.Y,
-				Transform.Position.Z) *
+		return
 			DirectX::XMMatrixRotationRollPitchYaw(
-				Transform.Rotation.X,
-				Transform.Rotation.Y,
-				Transform.Rotation.Z) *
+				Math::ToRadians(Transform.Rotation.X),
+				Math::ToRadians(Transform.Rotation.Y),
+				Math::ToRadians(Transform.Rotation.Z)) *
 			DirectX::XMMatrixScaling(
 				Transform.Scaling.X,
 				Transform.Scaling.Y,
-				Transform.Scaling.Z);
+				Transform.Scaling.Z) *
+			DirectX::XMMatrixTranslation(
+				Transform.Position.X,
+				Transform.Position.Y,
+				Transform.Position.Z);
 	}
 
 	void KDMesh::SetNormalsFlat()

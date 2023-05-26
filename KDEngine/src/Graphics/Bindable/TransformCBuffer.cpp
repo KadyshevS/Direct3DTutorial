@@ -23,8 +23,8 @@ namespace KDE
 			XMMatrixTranspose(model),
 			XMMatrixTranspose(
 				model *
-				gfx.Projection()
-			)
+				gfx.Camera.ViewMat() *
+				gfx.Camera.ProjectionMat())
 		};
 
 		pVcbuf->Update(gfx, tf);

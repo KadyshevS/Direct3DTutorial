@@ -96,8 +96,8 @@ namespace KDE
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
 
-		SetProjection(
-			DirectX::XMMatrixPerspectiveLH(1.0f, (float)height / (float)width, 0.5f, 40.0f));
+		Camera.Projection.Width = float(width);
+		Camera.Projection.Height = float(height);
 	}
 
 	void KDGraphics::EndFrame()
@@ -124,14 +124,6 @@ namespace KDE
 	void KDGraphics::DrawIndexed(UINT count)
 	{
 		GFX_THROW_INFO_ONLY(m_Context->DrawIndexed(count, 0, 0));
-	}
-	void KDGraphics::SetProjection(DirectX::FXMMATRIX proj)
-	{
-		m_Projection = proj;
-	}
-	DirectX::XMMATRIX KDGraphics::Projection() const
-	{
-		return m_Projection;
 	}
 	
 	void KDGraphics::OnResize(uint32_t width, uint32_t height)
@@ -178,8 +170,8 @@ namespace KDE
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
 
-		SetProjection(
-			DirectX::XMMatrixPerspectiveLH(1.0f, (float)height / (float)width, 0.5f, 40.0f));
+		Camera.Projection.Width = float(width);
+		Camera.Projection.Height = float(height);
 	}
 //////////////////////////////////////////////////////////////////////////
 
