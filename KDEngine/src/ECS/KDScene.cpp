@@ -33,7 +33,7 @@ namespace KDE
 		ent.AddComponent<CS::TagComponent>();
 		ent.AddComponent<CS::RenderComponent>();
 
-		auto tag = ent.GetComponent<CS::TagComponent>();
+		auto& tag = ent.GetComponent<CS::TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 		return ent;
 	}
@@ -48,12 +48,6 @@ namespace KDE
 		{
 			b->Bind(*m_Graphics);
 		}
-		auto view = m_Registry.view<CS::TagComponent, CS::RenderComponent>();
-		for (auto& b : view)
-		{
-			auto& componenet = view.get<CS::RenderComponent>(b);
-			componenet.Bind(*m_Graphics);
-		}
 	}
 	void KDScene::Draw()
 	{
@@ -63,8 +57,9 @@ namespace KDE
 		for (auto& e : view)
 		{
 			auto& componenet = view.get<CS::RenderComponent>(e);
-			int indCount = (int)componenet.Mesh->Indices().size();
+			componenet.Bind(*m_Graphics);
 
+			int indCount = (int)componenet.Mesh->Indices().size();
 			m_Graphics->DrawIndexed(indCount);
 		}
 	}

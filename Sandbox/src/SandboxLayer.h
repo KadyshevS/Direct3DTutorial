@@ -18,5 +18,5 @@ public:
 	virtual void OnImGuiUpdate() override;
 private:
 	std::unique_ptr<KDE::KDScene> Scene;
-	std::unique_ptr<KDE::KDEntity> Entity;
+	std::vector<std::unique_ptr<KDE::KDEntity>> Entities;
 };
