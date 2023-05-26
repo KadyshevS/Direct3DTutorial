@@ -21,13 +21,14 @@ void SandboxLayer::OnAttach()
 
 	Scene = std::make_unique<KDScene>(Window->Graphics());
 
-	auto ent = Scene->CreateEntity("Test entity");
+	Entity = std::make_unique<KDE::KDEntity>(Scene->CreateEntity("Test entity"));
 	
-	auto& mesh = ent.GetComponent<CS::RenderComponent>().Mesh;
-	auto& pos = mesh.Transform.Position;
+	auto& mesh = Entity->GetComponent<CS::RenderComponent>().Mesh;
+	mesh = std::make_unique<KDE::KDMesh>(GP::Sphere::Make());
 
-	pos.Z = 4.0f;
-	mesh = GP::Sphere::Make();
+	auto& pos = mesh->Transform.Position;
+	
+	pos.Z = -2.0f;
 
 	Scene->Bind();
 }
@@ -41,4 +42,14 @@ void SandboxLayer::OnUpdate(float ts)
 }
 void SandboxLayer::OnImGuiUpdate()
 {
+	auto& mesh = Entity->GetComponent<CS::RenderComponent>().Mesh;
+	auto& pos = mesh->Transform.Position;
+	auto& rot = mesh->Transform.Rotation;
+	auto& scale = mesh->Transform.Scaling;
+
+	ImGui::Begin("Entity Transform");
+	ImGui::SliderFloat3("Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
+	ImGui::SliderFloat3("Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
+	ImGui::SliderFloat3("Scale", reinterpret_cast<float*>(&scale), -10.0f, 10.0f, "%.1f");
+	ImGui::End();
 }

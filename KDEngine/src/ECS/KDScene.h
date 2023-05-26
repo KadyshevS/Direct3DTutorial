@@ -17,7 +17,7 @@ namespace KDE
 		~KDScene() = default;
 
 		KDEntity CreateEntity(const std::string& name = "");
-		void DestroyEntity(KDEntity* entity);
+		void DestroyEntity(KDEntity entity);
 
 		void Bind();
 		void Draw();

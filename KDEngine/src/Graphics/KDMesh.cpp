@@ -17,13 +17,32 @@ namespace KDE
 		m_Indices = indices;
 		SetNormalsFlat();
 	}
+	KDMesh::KDMesh(const KDMesh& mesh)
+	{
+		operator=(mesh);
+	}
+
+	KDMesh& KDMesh::operator=(const KDMesh& mesh)
+	{
+		assert("Indices must be divide by 3." && mesh.m_Indices.size() % 3 == 0);
+
+		Clear();
+		m_Vertices = mesh.m_Vertices;
+		m_Indices = mesh.m_Indices;
+		m_Binds.resize(m_Binds.size());
+		for (int i = 0; i < mesh.m_Binds.size(); i++)
+		{
+			m_Binds[i] = mesh.m_Binds[i];
+		}
+		SetNormalsFlat();
+
+		return *this;
+	}
 
 	void KDMesh::Bind(KDGraphics& gfx)
 	{
 		if (m_Binds.empty())
 		{
-			m_Binds.resize(3);
-
 			m_Binds.emplace_back(std::make_shared<KDE::VertexBuffer>(gfx, m_Vertices));
 			m_Binds.emplace_back(std::make_shared<KDE::IndexBuffer>(gfx, m_Indices));
 			m_Binds.emplace_back(std::make_shared<KDE::TransformCBuffer>(gfx, *this));
@@ -37,7 +56,7 @@ namespace KDE
 
 	DirectX::XMMATRIX KDMesh::TransformMat() const
 	{
-		return DirectX::XMMatrixTranspose(
+		return 
 			DirectX::XMMatrixTranslation(
 				Transform.Position.X, 
 				Transform.Position.Y,
@@ -49,7 +68,7 @@ namespace KDE
 			DirectX::XMMatrixScaling(
 				Transform.Scaling.X,
 				Transform.Scaling.Y,
-				Transform.Scaling.Z));
+				Transform.Scaling.Z);
 	}
 
 	void KDMesh::SetNormalsFlat()
@@ -71,6 +90,15 @@ namespace KDE
 			XMStoreFloat3(&v1.norm, n);
 			XMStoreFloat3(&v2.norm, n);
 		}
+	}
+	void KDMesh::Clear()
+	{
+		if (!m_Vertices.empty())
+			m_Vertices.clear();
+		if (!m_Indices.empty())
+			m_Indices.clear();
+		if (!m_Binds.empty())
+			m_Binds.clear();
 	}
 
 	const std::vector<Vertex>& KDMesh::Vertices() const
