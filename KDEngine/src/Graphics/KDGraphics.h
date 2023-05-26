@@ -3,6 +3,7 @@
 #include "WinBase/KDWin.h"
 #include "WinBase/KDException.h"
 #include "DXErr/DXGIInfoManager.h"
+#include "ECS/KDCamera.h"
 
 #include <vector>
 #include <d3d11.h>
@@ -23,9 +24,6 @@ namespace KDE
 		void EndFrame();
 		void ClearBuffer(float red, float green, float blue);
 		void DrawIndexed(UINT count);
-		void SetProjection(DirectX::FXMMATRIX proj);
-
-		DirectX::XMMATRIX Projection() const;
 	public:
 		class Exception : public KDException
 		{
@@ -66,6 +64,8 @@ namespace KDE
 
 	private:
 		void OnResize(uint32_t width, uint32_t height);
+	public:
+		KDCamera Camera;
 	private:
 		HWND m_WindowHandle;
 		DirectX::XMMATRIX m_Projection;

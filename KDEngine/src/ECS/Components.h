@@ -34,4 +34,18 @@ namespace KDE::CS
 			Mesh->Bind(gfx);
 		}
 	};
+
+	struct PointLight
+	{
+		std::unique_ptr<KDMesh> Mesh;
+
+		PointLight() = default;
+		PointLight(const PointLight&) = delete;
+		PointLight& operator = (const PointLight&) = delete;
+
+		void Bind(KDGraphics& gfx)
+		{
+			Mesh->Bind(gfx);
+		}
+	};
 }
