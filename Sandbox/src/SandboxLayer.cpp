@@ -52,11 +52,11 @@ void SandboxLayer::OnAttach()
 	PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling = {0.15f, 0.15f, 0.15f};
 	PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {0.0f, 2.0f, 4.0f};
 
-	Entities[0]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -2.0f, -1.0f, 4.0f };
-	Entities[1]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  0.0f, -1.0f, 4.0f };
-	Entities[2]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  2.0f, -1.0f, 4.0f };
-	Entities[3]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -1.0f,  1.0f, 4.0f };
-	Entities[4]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  1.0f,  1.0f, 4.0f };
+	Entities[0]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -2.0f, 0.0f, 4.0f };
+	Entities[1]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  0.0f, 0.0f, 4.0f };
+	Entities[2]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  2.0f, 0.0f, 4.0f };
+	Entities[3]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -1.0f, 0.0f, 2.0f };
+	Entities[4]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  1.0f, 0.0f, 2.0f };
 
 	for (auto& e : Entities)
 	{
