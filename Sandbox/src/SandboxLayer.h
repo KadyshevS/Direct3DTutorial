@@ -19,4 +19,5 @@ public:
 private:
 	std::unique_ptr<KDE::KDScene> Scene;
 	std::vector<std::unique_ptr<KDE::KDEntity>> Entities;
+	std::unique_ptr<KDE::KDEntity> PointLight;
 };

@@ -9,11 +9,11 @@ namespace KDE
 	KDScene::KDScene(KDGraphics& gfx)
 		: m_Graphics(&gfx)
 	{
-		auto pvs = std::make_unique<KDE::VertexShader>(gfx, L"../KDEngine/src/Shaders/VertexShader.cso");
+		auto pvs = std::make_unique<KDE::VertexShader>(gfx, L"assets/shaders/PhongVS.cso");
 		auto pvsbc = pvs->Bytecode();
 		m_Binds.emplace_back(std::move(pvs));
 
-		m_Binds.emplace_back(std::make_unique<KDE::PixelShader>(gfx, L"../KDEngine/src/Shaders/PixelShader.cso"));
+		m_Binds.emplace_back(std::make_unique<KDE::PixelShader>(gfx, L"assets/shaders/PhongPS.cso"));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{

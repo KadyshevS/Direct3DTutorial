@@ -32,6 +32,9 @@ void SandboxLayer::OnAttach()
 	Entities.emplace_back(
 		std::make_unique<KDEntity>(Scene->CreateEntity("Sphere"))
 	);
+
+	PointLight = std::make_unique<KDEntity>(Scene->CreateEntity("Point Light"));
+	PointLight->AddComponent<CS::PointLightComponent>();
 	
 	Entities[0]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Cube::Make());
@@ -43,6 +46,11 @@ void SandboxLayer::OnAttach()
 		std::make_unique<KDMesh>(GP::Cone::Make());
 	Entities[4]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Sphere::Make());
+
+	PointLight->GetComponent<CS::RenderComponent>().Mesh =
+		std::make_unique<KDMesh>(GP::Sphere::Make());
+	PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling = {0.15f, 0.15f, 0.15f};
+	PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {0.0f, 2.0f, 4.0f};
 
 	Entities[0]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -2.0f, -1.0f, 4.0f };
 	Entities[1]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = {  0.0f, -1.0f, 4.0f };
@@ -56,7 +64,8 @@ void SandboxLayer::OnAttach()
 		scale = {0.8f, 0.8f, 0.8f};
 	}
 
-	Scene->Bind();
+	PointLight->Bind(Window->Graphics());
+	Scene->Draw();
 }
 void SandboxLayer::OnDetach()
 {
@@ -64,10 +73,22 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
+	PointLight->Bind(Window->Graphics());
 	Scene->Draw();
 }
 void SandboxLayer::OnImGuiUpdate()
 {
+	{
+		auto& mesh = PointLight->GetComponent<CS::RenderComponent>().Mesh;
+
+		auto& pos = mesh->Transform.Position;
+		auto& rot = mesh->Transform.Rotation;
+
+		ImGui::Begin("Point Light");
+		ImGui::SliderFloat3(" Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
+		ImGui::SliderFloat3(" Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
+		ImGui::End();
+	}
 	for (auto& e : Entities)
 	{
 		auto& mesh = e->GetComponent<CS::RenderComponent>().Mesh;
