@@ -22,6 +22,13 @@ namespace KDE
 			auto& rc = GetComponent<CS::RenderComponent>();
 			rc.Bind(gfx);
 		}
+		if (HasComponent<CS::PointLightComponent>())
+		{
+			auto& pos = GetComponent<CS::RenderComponent>().Mesh->Transform.Position;
+			auto& plc = GetComponent<CS::PointLightComponent>();
+
+			plc.Bind(gfx, {pos.X, pos.Y, pos.Z});
+		}
 	}
 	void KDEntity::Update()
 	{
