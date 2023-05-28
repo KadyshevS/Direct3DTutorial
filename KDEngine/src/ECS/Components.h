@@ -46,7 +46,7 @@ namespace KDE::CS
 		{
 			if (!ObjectCBuf)
 			{
-				ObjectCBuffer.MaterialColor = { 0.2f, 0.8f, 0.3f };
+				ObjectCBuffer.MaterialColor = { 0.85f, 0.85f, 0.85f };
 				ObjectCBuf = std::make_unique<PixelConstantBuffer<ObjectCBufferInfo>>(gfx, ObjectCBuffer, 1);
 			}
 

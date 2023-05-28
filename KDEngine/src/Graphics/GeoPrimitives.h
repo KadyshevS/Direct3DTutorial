@@ -418,7 +418,7 @@ namespace KDE::GP
 			std::vector<uint32_t> indices;
 
 			// near base indices
-			for (uint32_t iLong = 0; iLong < longDiv; iLong++)
+			for (int iLong = 0; iLong < longDiv; iLong++)
 			{
 				const auto i = iLong;
 				const auto mod = longDiv;
@@ -428,7 +428,7 @@ namespace KDE::GP
 				indices.push_back((i + 1) % mod + iBaseNear);
 			}
 			// far base indices
-			for (uint32_t iLong = 0; iLong < longDiv; iLong++)
+			for (int iLong = 0; iLong < longDiv; iLong++)
 			{
 				const auto i = iLong;
 				const auto mod = longDiv;
@@ -438,7 +438,7 @@ namespace KDE::GP
 				indices.push_back((i + 1) % mod + iBaseFar);
 			}
 			// fusilage indices
-			for (uint32_t iLong = 0; iLong < longDiv; iLong++)
+			for (int iLong = 0; iLong < longDiv; iLong++)
 			{
 				const auto i = iLong * 2;
 				const auto mod = longDiv * 2;
