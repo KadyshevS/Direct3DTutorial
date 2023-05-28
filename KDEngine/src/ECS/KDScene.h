@@ -25,6 +25,7 @@ namespace KDE
 	protected:
 		KDGraphics* m_Graphics = nullptr;
 		std::vector<std::unique_ptr<Bindable>> m_Binds;
+		std::vector<std::unique_ptr<Bindable>> m_LightBinds;
 		entt::registry m_Registry;
 	};
 }

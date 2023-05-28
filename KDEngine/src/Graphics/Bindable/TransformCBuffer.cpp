@@ -17,13 +17,12 @@ namespace KDE
 	{
 		using namespace DirectX;
 
-		const auto model = parent.TransformMat();
+		const auto modelView = parent.TransformMat() * gfx.Camera.ViewMat();
 		const Transforms tf =
 		{
-			XMMatrixTranspose(model),
+			XMMatrixTranspose(modelView),
 			XMMatrixTranspose(
-				model *
-				gfx.Camera.ViewMat() *
+				modelView *
 				gfx.Camera.ProjectionMat())
 		};
 
