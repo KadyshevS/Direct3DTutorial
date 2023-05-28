@@ -2,8 +2,6 @@
 
 #include "Graphics/GeoPrimitives.h"
 #include "WinBase/GDIPlusManager.h"
-#include "Graphics/Drawable/ChiliTest.h"
-#include "Graphics/Drawable/ChiliTestTextured.h"
 #include "ECS/Components.h"
 #include "imgui/imgui.h"
 
@@ -37,7 +35,7 @@ void SandboxLayer::OnAttach()
 	PointLight->AddComponent<CS::PointLightComponent>();
 	
 	Entities[0]->GetComponent<CS::RenderComponent>().Mesh =
-		std::make_unique<KDMesh>(GP::Cube::Make());
+		std::make_unique<KDMesh>(GP::Cube::MakeIndependent());
 	Entities[1]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Prism::Make());
 	Entities[2]->GetComponent<CS::RenderComponent>().Mesh =
@@ -61,11 +59,8 @@ void SandboxLayer::OnAttach()
 	for (auto& e : Entities)
 	{
 		auto& scale = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling;
-		scale = {0.8f, 0.8f, 0.8f};
+		scale = { 0.8f, 0.8f, 0.8f };
 	}
-
-	PointLight->Bind(Window->Graphics());
-	Scene->Draw();
 }
 void SandboxLayer::OnDetach()
 {
@@ -73,6 +68,13 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnUpdate(float ts)
 {
+	for (auto& e : Entities)
+	{
+		auto& rot = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Rotation;
+		rot.X = Math::WrapAngle(rot.X + ts * 20.0f);
+		rot.Y = Math::WrapAngle(rot.Y + ts * 20.0f);
+	}
+
 	PointLight->Bind(Window->Graphics());
 	Scene->Draw();
 }
@@ -80,13 +82,30 @@ void SandboxLayer::OnImGuiUpdate()
 {
 	{
 		auto& mesh = PointLight->GetComponent<CS::RenderComponent>().Mesh;
+		auto& lightCBuf = PointLight->GetComponent<CS::PointLightComponent>().LightCBuffer;
 
 		auto& pos = mesh->Transform.Position;
 		auto& rot = mesh->Transform.Rotation;
 
+		auto& amb = lightCBuf.Ambient;
+		auto& dif = lightCBuf.DiffuseColor;
+		auto& difInt = lightCBuf.DiffuseIntensity;
+		auto& attCst = lightCBuf.AttenuateConst;
+		auto& attLat = lightCBuf.AttenuateLatency;
+		auto& attQuad = lightCBuf.AttenuateQuad;
+
 		ImGui::Begin("Point Light");
-		ImGui::SliderFloat3(" Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
-		ImGui::SliderFloat3(" Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
+		ImGui::TextColored({ 0.2f, 0.8f, 0.3f, 1.0f }, "Transform");
+		ImGui::DragFloat3("Position", reinterpret_cast<float*>(&pos), 0.01f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat3("Rotation", reinterpret_cast<float*>(&rot), 1.0f, 0.0f, 0.0f, "%.2f");
+		ImGui::TextColored({ 0.2f, 0.8f, 0.3f, 1.0f }, "Light");
+		ImGui::ColorPicker3("Ambient", reinterpret_cast<float*>(&amb));
+		ImGui::ColorPicker3("Diffuse", reinterpret_cast<float*>(&dif));
+		ImGui::DragFloat("Intensity", &difInt);
+		ImGui::TextColored({ 0.2f, 0.8f, 0.3f, 1.0f }, "Attenuate");
+		ImGui::DragFloat("Const", &attCst, 0.001f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("Linear", &attLat, 0.001f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("Quadratic", &attQuad, 0.001f, 0.0f, 0.0f, "%.2f");
 		ImGui::End();
 	}
 	for (auto& e : Entities)
@@ -111,8 +130,8 @@ void SandboxLayer::OnImGuiUpdate()
 		auto& rot = cam.Transform.Rotation;
 
 		ImGui::Begin("Camera");
-		ImGui::SliderFloat3(" Position", reinterpret_cast<float*>(&pos), -10.0f, 10.0f, "%.1f");
-		ImGui::SliderFloat3(" Rotation", reinterpret_cast<float*>(&rot), -180.0f, 180.0f, "%.1f");
+		ImGui::DragFloat3(" Position", reinterpret_cast<float*>(&pos), 0.01f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat3(" Rotation", reinterpret_cast<float*>(&rot), 1.0f, 0.0f, 0.0f, "%.2f");
 		ImGui::End();
 	}
 }

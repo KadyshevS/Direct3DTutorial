@@ -1,16 +1,18 @@
 cbuffer LightCBuf
 {
     float3 LightPos;
-    float4 face_colors[6];
+    float3 Ambient;
+    float3 DiffuseColor;
+    float DiffuseIntensity;
+    float AttenuateConst;
+    float AttenuateLatency;
+    float AttenuateQuad;
 };
 
-static const float3 MaterialColor = { 0.7f, 0.7f, 0.9f };
-static const float3 Ambient = { 0.15f, 0.15f, 0.15f };
-static const float3 DiffuseColor = { 1.0f, 1.0f, 1.0f, };
-static const float DiffuseIntensity = 1.0f;
-static const float AttenuateConst = 1.0f;
-static const float AttenuateLatency = 0.045f;
-static const float AttenuateQuad = 0.0075f;
+cbuffer ObjectCBuf
+{
+    float3 MaterialColor;
+};
 
 float4 main(float3 WorldPos : Position, float3 N : Normal) : SV_Target
 {
@@ -21,5 +23,5 @@ float4 main(float3 WorldPos : Position, float3 N : Normal) : SV_Target
     const float att = 1.0f / (AttenuateConst + AttenuateLatency * distToL + AttenuateQuad * (distToL * distToL));
     const float3 diffuse = DiffuseColor * DiffuseIntensity * att * max(0.0f, dot(dirToL, N));
     
-    return float4(saturate(diffuse + Ambient), 1.0f);
+    return float4(saturate(diffuse + Ambient) * MaterialColor, 1.0f);
 }

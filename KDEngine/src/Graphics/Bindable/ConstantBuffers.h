@@ -9,7 +9,8 @@ namespace KDE
 	class ConstantBuffer : public Bindable
 	{
 	public:
-		ConstantBuffer(KDGraphics& gfx, const C& consts)
+		ConstantBuffer(KDGraphics& gfx, const C& consts, UINT slot = 0u)
+			: slot(slot)
 		{
 			INFOMAN(gfx);
 
@@ -25,7 +26,8 @@ namespace KDE
 			csd.pSysMem = &consts;
 			GFX_THROW_INFO(Device(gfx)->CreateBuffer(&cbd, &csd, &pConstantBuffer));
 		}
-		ConstantBuffer(KDGraphics& gfx)
+		ConstantBuffer(KDGraphics& gfx, UINT slot = 0u)
+			: slot(slot)
 		{
 			INFOMAN(gfx);
 
@@ -53,6 +55,7 @@ namespace KDE
 			Context(gfx)->Unmap(pConstantBuffer.Get(), 0u);
 		}
 	protected:
+		UINT slot;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
 	};
 
@@ -60,12 +63,13 @@ namespace KDE
 	class VertexConstantBuffer : public ConstantBuffer<C>
 	{
 		using ConstantBuffer<C>::pConstantBuffer;
+		using ConstantBuffer<C>::slot;
 		using Bindable::Context;
 	public:
 		using ConstantBuffer<C>::ConstantBuffer;
 		void Bind(KDGraphics& gfx) noexcept override
 		{
-			Context(gfx)->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+			Context(gfx)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
 		}
 	};
 
@@ -73,12 +77,13 @@ namespace KDE
 	class PixelConstantBuffer : public ConstantBuffer<C>
 	{
 		using ConstantBuffer<C>::pConstantBuffer;
+		using ConstantBuffer<C>::slot;
 		using Bindable::Context;
 	public:
 		using ConstantBuffer<C>::ConstantBuffer;
 		void Bind(KDGraphics& gfx) noexcept override
 		{
-			Context(gfx)->PSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+			Context(gfx)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
 		}
 	};
 }

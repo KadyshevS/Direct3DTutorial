@@ -17,7 +17,7 @@ namespace KDE::Math
 	template<typename T>
 	T WrapAngle(T theta)
 	{
-		theta = fmod(theta, (T)360);
+		theta = (T)fmod(theta, (T)360);
 		if (theta < (T)0)
 			theta += (T)360;
 		return theta;
