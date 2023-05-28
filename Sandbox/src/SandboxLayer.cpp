@@ -41,7 +41,7 @@ void SandboxLayer::OnAttach()
 	Entities[2]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Plane::Make());
 	Entities[3]->GetComponent<CS::RenderComponent>().Mesh =
-		std::make_unique<KDMesh>(GP::Cone::Make());
+		std::make_unique<KDMesh>(GP::Cone::MakeIndependent(24));
 	Entities[4]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Sphere::Make());
 

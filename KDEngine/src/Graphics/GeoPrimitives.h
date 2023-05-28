@@ -134,6 +134,68 @@ namespace KDE::GP
 
 			return { std::move(vertices), std::move(indices) };
 		}
+		static KDMesh MakeIndependent(int longDiv)
+		{
+			namespace dx = DirectX;
+			assert(longDiv >= 3);
+
+			const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
+			const float longitudeAngle = 2.0f * Math::PI / longDiv;
+
+			std::vector<Vertex> vertices;
+
+			// cone vertices
+			const auto iCone = (uint32_t)vertices.size();
+			for (int iLong = 0; iLong < longDiv; iLong++)
+			{
+				const float thetas[] = {
+					longitudeAngle * iLong,
+					longitudeAngle * (((iLong + 1) == longDiv) ? 0 : (iLong + 1))
+				};
+				vertices.emplace_back();
+				vertices.back().pos = { 0.0f,0.0f,1.0f };
+				for (auto theta : thetas)
+				{
+					vertices.emplace_back();
+					const auto v = dx::XMVector3Transform(
+						base,
+						dx::XMMatrixRotationZ(theta)
+					);
+					dx::XMStoreFloat3(&vertices.back().pos, v);
+				}
+			}
+			// base vertices
+			const auto iBaseCenter = (uint32_t)vertices.size();
+			vertices.emplace_back();
+			vertices.back().pos = { 0.0f,0.0f,-1.0f };
+			const auto iBaseEdge = (uint32_t)vertices.size();
+			for (int iLong = 0; iLong < longDiv; iLong++)
+			{
+				vertices.emplace_back();
+				auto v = dx::XMVector3Transform(
+					base,
+					dx::XMMatrixRotationZ(longitudeAngle * iLong)
+				);
+				dx::XMStoreFloat3(&vertices.back().pos, v);
+			}
+
+			std::vector<uint32_t> indices;
+
+			// cone indices
+			for (int i = 0; i < longDiv * 3; i++)
+			{
+				indices.push_back(i + iCone);
+			}
+			// base indices
+			for (int iLong = 0; iLong < longDiv; iLong++)
+			{
+				indices.push_back(iBaseCenter);
+				indices.push_back((iLong + 1) % longDiv + iBaseEdge);
+				indices.push_back(iLong + iBaseEdge);
+			}
+
+			return { std::move(vertices),std::move(indices) };
+		}
 		static KDMesh Make()
 		{
 			return MakeTesselated(24);
