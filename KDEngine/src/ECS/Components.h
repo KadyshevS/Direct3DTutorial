@@ -24,6 +24,15 @@ namespace KDE::CS
 
 	struct RenderComponent
 	{
+	private:
+		struct ObjectCBufferInfo
+		{
+			alignas(16) DirectX::XMFLOAT3 MaterialColor;
+		};
+		std::unique_ptr<PixelConstantBuffer<ObjectCBufferInfo>> ObjectCBuf;
+	public:
+		ObjectCBufferInfo ObjectCBuffer{};
+	public:
 		std::unique_ptr<KDMesh> Mesh;
 
 		RenderComponent() = default;
@@ -32,6 +41,15 @@ namespace KDE::CS
 
 		void Bind(KDGraphics& gfx)
 		{
+			if (!ObjectCBuf)
+			{
+				ObjectCBuffer.MaterialColor = { 0.2f, 0.8f, 0.3f };
+				ObjectCBuf = std::make_unique<PixelConstantBuffer<ObjectCBufferInfo>>(gfx, ObjectCBuffer, 1);
+			}
+
+			ObjectCBuf->Update(gfx, ObjectCBuffer);
+			ObjectCBuf->Bind(gfx);
+
 			Mesh->Bind(gfx);
 		}
 	};
@@ -39,14 +57,19 @@ namespace KDE::CS
 	struct PointLightComponent
 	{
 	private:
-		struct LightCBuffer
+		struct LightCBufferInfo
 		{
-			DirectX::XMFLOAT3 pos;
-			float padding;
+			alignas(16) DirectX::XMFLOAT3 LightPos;
+			alignas(16) DirectX::XMFLOAT3 Ambient{ 0.15f, 0.15f, 0.15f };
+			alignas(16) DirectX::XMFLOAT3 DiffuseColor{ 1.0f, 1.0f, 1.0f, };
+			float DiffuseIntensity = 1.0f;
+			float AttenuateConst = 1.0f;
+			float AttenuateLatency = 0.045f;
+			float AttenuateQuad = 0.0075f;
 		};
-		LightCBuffer lightCbuf{};
-		std::unique_ptr<PixelConstantBuffer<LightCBuffer>> LightCBufferStr;
-
+		std::unique_ptr<PixelConstantBuffer<LightCBufferInfo>> LightCBuf;
+	public:
+		LightCBufferInfo LightCBuffer{};
 	public:
 		PointLightComponent() = default;
 		PointLightComponent(const PointLightComponent&) = delete;
@@ -54,15 +77,15 @@ namespace KDE::CS
 
 		void Bind(KDGraphics& gfx, const DirectX::XMFLOAT3& data)
 		{
-			if (!LightCBufferStr)
+			if (!LightCBuf)
 			{
-				LightCBufferStr = std::make_unique<PixelConstantBuffer<LightCBuffer>>(gfx, lightCbuf);
+				LightCBuf = std::make_unique<PixelConstantBuffer<LightCBufferInfo>>(gfx, LightCBuffer);
 			}
 
-			lightCbuf.pos = { data.x, data.y, data.z };
+			LightCBuffer.LightPos = { data.x, data.y, data.z };
 
-			LightCBufferStr->Update(gfx, lightCbuf);
-			LightCBufferStr->Bind(gfx);
+			LightCBuf->Update(gfx, LightCBuffer);
+			LightCBuf->Bind(gfx);
 		}
 	};
 }
