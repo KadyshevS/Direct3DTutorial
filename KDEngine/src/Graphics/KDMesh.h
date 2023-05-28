@@ -52,12 +52,10 @@ namespace KDE
 		void Clear();
 
 		DirectX::XMMATRIX TransformMat() const;
-
-		const std::vector<Vertex>& Vertices() const;
-		const std::vector<uint32_t>& Indices() const;
 	private:
 		std::vector<std::shared_ptr<Bindable>> m_Binds;
-		std::vector<Vertex> m_Vertices;
-		std::vector<uint32_t> m_Indices;
+	public:
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
 	};
 }

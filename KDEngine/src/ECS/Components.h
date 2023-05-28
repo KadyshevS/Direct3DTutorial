@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Graphics/Bindable/TransformCBuffer.h>
+#include <Graphics/Bindable/KDTexture.h>
 #include "Graphics/KDGraphics.h"
 #include "Graphics/KDMesh.h"
 #include "Graphics/KDMath.h"
@@ -37,6 +38,7 @@ namespace KDE::CS
 		ObjectCBufferInfo ObjectCBuffer{};
 	public:
 		std::unique_ptr<KDMesh> Mesh;
+		std::unique_ptr<KDTexture> Texture;
 
 		RenderComponent() = default;
 		RenderComponent(const RenderComponent&) = delete;
@@ -49,7 +51,11 @@ namespace KDE::CS
 				ObjectCBuffer.MaterialColor = { 0.85f, 0.85f, 0.85f };
 				ObjectCBuf = std::make_unique<PixelConstantBuffer<ObjectCBufferInfo>>(gfx, ObjectCBuffer, 1);
 			}
-
+			if (!(!Texture))
+			{
+				Texture->Bind(gfx);
+			}
+			
 			ObjectCBuf->Update(gfx, ObjectCBuffer);
 			ObjectCBuf->Bind(gfx);
 
