@@ -28,6 +28,9 @@ namespace KDE::CS
 		struct ObjectCBufferInfo
 		{
 			alignas(16) DirectX::XMFLOAT3 MaterialColor;
+			float SpecularIntensity = 0.6f;
+			float SpecularPower = 30.0f;
+			float padding[2];
 		};
 		std::unique_ptr<PixelConstantBuffer<ObjectCBufferInfo>> ObjectCBuf;
 	public:

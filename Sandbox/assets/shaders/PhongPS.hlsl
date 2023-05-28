@@ -12,16 +12,25 @@ cbuffer LightCBuf
 cbuffer ObjectCBuf
 {
     float3 MaterialColor;
+    float SpecularIntensity;
+    float SpecularPower;
 };
 
-float4 main(float3 WorldPos : Position, float3 N : Normal) : SV_Target
+float4 main(float3 CameraPos : Position, float3 N : Normal) : SV_Target
 {
-    const float3 vToL = LightPos - WorldPos;
+//  Diffuse
+    const float3 vToL = LightPos - CameraPos;
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
     
     const float att = 1.0f / (AttenuateConst + AttenuateLatency * distToL + AttenuateQuad * (distToL * distToL));
-    const float3 diffuse = DiffuseColor * DiffuseIntensity * att * max(0.0f, dot(dirToL, N));
+    const float3 Diffuse = DiffuseColor * DiffuseIntensity * att * max(0.0f, dot(dirToL, N));
     
-    return float4(saturate(diffuse + Ambient) * MaterialColor, 1.0f);
+//  Specular
+    const float3 w = N * dot(vToL, N);
+    const float3 r = w * 2.0f - vToL;
+	
+    const float3 Specular = (DiffuseColor * DiffuseIntensity) * SpecularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(CameraPos))), SpecularPower);
+    
+    return float4(saturate(Diffuse + Ambient + Specular) * MaterialColor, 1.0f);
 }

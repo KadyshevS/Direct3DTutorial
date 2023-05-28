@@ -37,7 +37,7 @@ void SandboxLayer::OnAttach()
 	Entities[0]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Cube::MakeIndependent());
 	Entities[1]->GetComponent<CS::RenderComponent>().Mesh =
-		std::make_unique<KDMesh>(GP::Prism::Make());
+		std::make_unique<KDMesh>(GP::Prism::MakeIndependent(24));
 	Entities[2]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Plane::Make());
 	Entities[3]->GetComponent<CS::RenderComponent>().Mesh =
@@ -103,9 +103,9 @@ void SandboxLayer::OnImGuiUpdate()
 		ImGui::ColorPicker3("Diffuse", reinterpret_cast<float*>(&dif));
 		ImGui::DragFloat("Intensity", &difInt);
 		ImGui::TextColored({ 0.2f, 0.8f, 0.3f, 1.0f }, "Attenuate");
-		ImGui::DragFloat("Const", &attCst, 0.001f, 0.0f, 0.0f, "%.2f");
-		ImGui::DragFloat("Linear", &attLat, 0.001f, 0.0f, 0.0f, "%.2f");
-		ImGui::DragFloat("Quadratic", &attQuad, 0.001f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("Constant", &attCst, 0.01f, 0.0f, 0.0f, "%.2f");
+		ImGui::DragFloat("Linear", &attLat, 0.001f, 0.0f, 0.0f, "%.4f");
+		ImGui::DragFloat("Quadratic", &attQuad, 0.001f, 0.0f, 0.0f, "%.4f");
 		ImGui::End();
 	}
 	for (auto& e : Entities)

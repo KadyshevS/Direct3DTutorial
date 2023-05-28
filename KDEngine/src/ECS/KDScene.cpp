@@ -25,6 +25,12 @@ namespace KDE
 		m_Binds.emplace_back(std::make_unique<KDE::InputLayout>(gfx, ied, pvsbc));
 
 		m_Binds.emplace_back(std::make_unique<KDE::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+
+	//	Point Light binds
+		pvs = std::make_unique<KDE::VertexShader>(gfx, L"assets/shaders/SolidVS.cso");
+		pvsbc = pvs->Bytecode();
+		m_LightBinds.emplace_back(std::move(pvs));
+		m_LightBinds.emplace_back(std::make_unique<KDE::PixelShader>(gfx, L"assets/shaders/SolidPS.cso"));
 	}
 
 	KDEntity KDScene::CreateEntity(const std::string& name)
@@ -58,6 +64,25 @@ namespace KDE
 		{
 			auto& componenet = view.get<CS::RenderComponent>(e);
 			componenet.Bind(*m_Graphics);
+
+			if (m_Registry.all_of<CS::PointLightComponent>(e))
+			{
+				for (auto& b : m_LightBinds)
+				{
+					b->Bind(*m_Graphics);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					m_Binds[i]->Bind(*m_Graphics);
+				}
+			}
+			for (int i = 2; i < m_Binds.size(); i++)
+			{
+				m_Binds[i]->Bind(*m_Graphics);
+			}
 
 			int indCount = (int)componenet.Mesh->Indices().size();
 			m_Graphics->DrawIndexed(indCount);
