@@ -18,19 +18,27 @@ namespace KDE
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "TexCoord",0,DXGI_FORMAT_R32G32_FLOAT,0,sizeof(float) * 2,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,sizeof(float) * 5,D3D11_INPUT_PER_VERTEX_DATA,0 }
+			{ "TexCoord",0,DXGI_FORMAT_R32G32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,D3D11_APPEND_ALIGNED_ELEMENT,D3D11_INPUT_PER_VERTEX_DATA,0 }
 		};
 		
 		m_Binds.emplace_back(std::make_unique<KDE::InputLayout>(gfx, ied, pvsbc));
 
 		m_Binds.emplace_back(std::make_unique<KDE::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
+		m_Binds.emplace_back(std::make_unique<KDE::Sampler>(gfx));
+
 	//	Point Light binds
 		pvs = std::make_unique<KDE::VertexShader>(gfx, L"assets/shaders/SolidVS.cso");
 		pvsbc = pvs->Bytecode();
 		m_LightBinds.emplace_back(std::move(pvs));
 		m_LightBinds.emplace_back(std::make_unique<KDE::PixelShader>(gfx, L"assets/shaders/SolidPS.cso"));
+
+	//	Texture binds
+		pvs = std::make_unique<KDE::VertexShader>(gfx, L"assets/shaders/TextureVS.cso");
+		pvsbc = pvs->Bytecode();
+		m_TextureBinds.emplace_back(std::move(pvs));
+		m_TextureBinds.emplace_back(std::make_unique<KDE::PixelShader>(gfx, L"assets/shaders/TexturePS.cso"));
 	}
 
 	KDEntity KDScene::CreateEntity(const std::string& name)
@@ -72,6 +80,13 @@ namespace KDE
 					b->Bind(*m_Graphics);
 				}
 			}
+			else if (!(!componenet.Texture))
+			{
+				for (auto& b : m_TextureBinds)
+				{
+					b->Bind(*m_Graphics);
+				}
+			}
 			else
 			{
 				for (int i = 0; i < 2; i++)
@@ -80,7 +95,7 @@ namespace KDE
 				}
 			}
 
-			int indCount = (int)componenet.Mesh->Indices().size();
+			int indCount = (int)componenet.Mesh->Indices.size();
 			m_Graphics->DrawIndexed(indCount);
 		}
 	}

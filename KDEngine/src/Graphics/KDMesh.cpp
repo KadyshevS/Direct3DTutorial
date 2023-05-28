@@ -14,8 +14,8 @@ namespace KDE
 		const std::vector<uint32_t>& indices)
 	{
 		assert("Indices must be divide by 3." && indices.size() % 3 == 0);
-		m_Vertices = vertices;
-		m_Indices = indices;
+		Vertices = vertices;
+		Indices = indices;
 		SetNormalsFlat();
 	}
 	KDMesh::KDMesh(const KDMesh& mesh)
@@ -25,11 +25,11 @@ namespace KDE
 
 	KDMesh& KDMesh::operator=(const KDMesh& mesh)
 	{
-		assert("Indices must be divide by 3." && mesh.m_Indices.size() % 3 == 0);
+		assert("Indices must be divide by 3." && mesh.Indices.size() % 3 == 0);
 
 		Clear();
-		m_Vertices = mesh.m_Vertices;
-		m_Indices = mesh.m_Indices;
+		Vertices = mesh.Vertices;
+		Indices = mesh.Indices;
 		m_Binds.resize(m_Binds.size());
 		for (int i = 0; i < mesh.m_Binds.size(); i++)
 		{
@@ -44,8 +44,8 @@ namespace KDE
 	{
 		if (m_Binds.empty())
 		{
-			m_Binds.emplace_back(std::make_shared<KDE::VertexBuffer>(gfx, m_Vertices));
-			m_Binds.emplace_back(std::make_shared<KDE::IndexBuffer>(gfx, m_Indices));
+			m_Binds.emplace_back(std::make_shared<KDE::VertexBuffer>(gfx, Vertices));
+			m_Binds.emplace_back(std::make_shared<KDE::IndexBuffer>(gfx, Indices));
 			m_Binds.emplace_back(std::make_shared<KDE::TransformCBuffer>(gfx, *this));
 		}
 
@@ -75,12 +75,12 @@ namespace KDE
 	void KDMesh::SetNormalsFlat()
 	{
 		using namespace DirectX;
-		assert(m_Indices.size() % 3 == 0 && m_Indices.size() > 0);
-		for (size_t i = 0; i < m_Indices.size(); i += 3)
+		assert(Indices.size() % 3 == 0 && Indices.size() > 0);
+		for (size_t i = 0; i < Indices.size(); i += 3)
 		{
-			auto& v0 = m_Vertices[m_Indices[i]];
-			auto& v1 = m_Vertices[m_Indices[i + 1]];
-			auto& v2 = m_Vertices[m_Indices[i + 2]];
+			auto& v0 = Vertices[Indices[i]];
+			auto& v1 = Vertices[Indices[i + 1]];
+			auto& v2 = Vertices[Indices[i + 2]];
 			const auto p0 = XMLoadFloat3(&v0.pos);
 			const auto p1 = XMLoadFloat3(&v1.pos);
 			const auto p2 = XMLoadFloat3(&v2.pos);
@@ -94,20 +94,11 @@ namespace KDE
 	}
 	void KDMesh::Clear()
 	{
-		if (!m_Vertices.empty())
-			m_Vertices.clear();
-		if (!m_Indices.empty())
-			m_Indices.clear();
+		if (!Vertices.empty())
+			Vertices.clear();
+		if (!Indices.empty())
+			Indices.clear();
 		if (!m_Binds.empty())
 			m_Binds.clear();
-	}
-
-	const std::vector<Vertex>& KDMesh::Vertices() const
-	{
-		return m_Vertices;
-	}
-	const std::vector<uint32_t>& KDMesh::Indices() const
-	{
-		return m_Indices;
 	}
 }

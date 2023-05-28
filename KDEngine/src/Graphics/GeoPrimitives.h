@@ -85,6 +85,37 @@ namespace KDE::GP
 				}
 			};
 		}
+		static KDMesh MakeTextured()
+		{
+			auto itl = MakeIndependent();
+
+			itl.Vertices[0].tex = { 0.0f,0.0f };
+			itl.Vertices[1].tex = { 1.0f,0.0f };
+			itl.Vertices[2].tex = { 0.0f,1.0f };
+			itl.Vertices[3].tex = { 1.0f,1.0f };
+			itl.Vertices[4].tex = { 0.0f,0.0f };
+			itl.Vertices[5].tex = { 1.0f,0.0f };
+			itl.Vertices[6].tex = { 0.0f,1.0f };
+			itl.Vertices[7].tex = { 1.0f,1.0f };
+			itl.Vertices[8].tex = { 0.0f,0.0f };
+			itl.Vertices[9].tex = { 1.0f,0.0f };
+			itl.Vertices[10].tex = { 0.0f,1.0f };
+			itl.Vertices[11].tex = { 1.0f,1.0f };
+			itl.Vertices[12].tex = { 0.0f,0.0f };
+			itl.Vertices[13].tex = { 1.0f,0.0f };
+			itl.Vertices[14].tex = { 0.0f,1.0f };
+			itl.Vertices[15].tex = { 1.0f,1.0f };
+			itl.Vertices[16].tex = { 0.0f,0.0f };
+			itl.Vertices[17].tex = { 1.0f,0.0f };
+			itl.Vertices[18].tex = { 0.0f,1.0f };
+			itl.Vertices[19].tex = { 1.0f,1.0f };
+			itl.Vertices[20].tex = { 0.0f,0.0f };
+			itl.Vertices[21].tex = { 1.0f,0.0f };
+			itl.Vertices[22].tex = { 0.0f,1.0f };
+			itl.Vertices[23].tex = { 1.0f,1.0f };
+
+			return itl;
+		}
 	};
 	class Cone
 	{

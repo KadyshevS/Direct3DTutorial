@@ -2,6 +2,7 @@
 
 #include "Graphics/GeoPrimitives.h"
 #include "WinBase/GDIPlusManager.h"
+#include "Graphics/KDSurface.h"
 #include "ECS/Components.h"
 #include "imgui/imgui.h"
 
@@ -35,7 +36,7 @@ void SandboxLayer::OnAttach()
 	PointLight->AddComponent<CS::PointLightComponent>();
 	
 	Entities[0]->GetComponent<CS::RenderComponent>().Mesh =
-		std::make_unique<KDMesh>(GP::Cube::MakeIndependent());
+		std::make_unique<KDMesh>(GP::Cube::MakeTextured());
 	Entities[1]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Prism::MakeIndependent(24));
 	Entities[2]->GetComponent<CS::RenderComponent>().Mesh =
@@ -44,6 +45,8 @@ void SandboxLayer::OnAttach()
 		std::make_unique<KDMesh>(GP::Cone::MakeIndependent(24));
 	Entities[4]->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Sphere::Make());
+
+	Entities[0]->GetComponent<CS::RenderComponent>().Texture = std::make_unique<KDTexture>(Window->Graphics(), KDE::KDSurface::FromFile("assets/textures/kappa50.png"));
 
 	PointLight->GetComponent<CS::RenderComponent>().Mesh =
 		std::make_unique<KDMesh>(GP::Sphere::Make());
