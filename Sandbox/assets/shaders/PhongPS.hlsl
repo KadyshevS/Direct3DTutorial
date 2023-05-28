@@ -30,7 +30,7 @@ float4 main(float3 CameraPos : Position, float3 N : Normal) : SV_Target
     const float3 w = N * dot(vToL, N);
     const float3 r = w * 2.0f - vToL;
 	
-    const float3 Specular = (DiffuseColor * DiffuseIntensity) * SpecularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(CameraPos))), SpecularPower);
+    const float3 Specular = att * ((DiffuseColor * DiffuseIntensity) * SpecularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(CameraPos))), SpecularPower));
     
     return float4(saturate(Diffuse + Ambient + Specular) * MaterialColor, 1.0f);
 }
