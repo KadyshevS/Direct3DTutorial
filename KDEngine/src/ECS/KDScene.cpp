@@ -79,10 +79,6 @@ namespace KDE
 					m_Binds[i]->Bind(*m_Graphics);
 				}
 			}
-			for (int i = 2; i < m_Binds.size(); i++)
-			{
-				m_Binds[i]->Bind(*m_Graphics);
-			}
 
 			int indCount = (int)componenet.Mesh->Indices().size();
 			m_Graphics->DrawIndexed(indCount);
