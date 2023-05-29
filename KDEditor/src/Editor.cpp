@@ -7,7 +7,7 @@ class Editor : public KDE::KDApplication
 public:
 	Editor()
 	{
-		PushLayer(new EditorLayer(m_Window.get()));
+		PushLayer(new KDE::EditorLayer(m_Window.get()));
 	}
 	~Editor() {}
 };

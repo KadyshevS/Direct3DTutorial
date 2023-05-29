@@ -5,6 +5,7 @@
 
 #include <sstream>
 #include <d3dcompiler.h>
+#include <imgui/imgui.h>
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
@@ -55,7 +56,7 @@ namespace KDE
 		GFX_THROW_INFO( m_Device->CreateRenderTargetView(
 			pBackBuffer.Get(), nullptr, &m_Target
 		) );
-
+		
 		D3D11_DEPTH_STENCIL_DESC dsc{};
 		dsc.DepthEnable = TRUE;
 		dsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -125,7 +126,7 @@ namespace KDE
 	{
 		GFX_THROW_INFO_ONLY(m_Context->DrawIndexed(count, 0, 0));
 	}
-	
+
 	void KDGraphics::OnResize(uint32_t width, uint32_t height)
 	{
 		HRESULT hr;

@@ -112,10 +112,10 @@ project "Sandbox"
 		"KDEngine"
 	}
 	
---	flags
---	{
---		"MultiProcessorCompile"
---	}
+	flags
+	{
+		"MultiProcessorCompile"
+	}
 
 	filter "system:windows"
 		systemversion "latest"
@@ -170,10 +170,10 @@ project "KDEditor"
 		"KDEngine"
 	}
 	
---	flags
---	{
---		"MultiProcessorCompile"
---	}
+	flags
+	{
+		"MultiProcessorCompile"
+	}
 
 	filter "system:windows"
 		systemversion "latest"
