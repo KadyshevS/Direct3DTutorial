@@ -132,7 +132,7 @@ namespace KDE
 			style.WindowMinSize.x = minWinSizeX;
 			ImGui::End();
 		}
-
+		
 		//	Viewport
 		{
 			ImGui::Begin("Viewport");
@@ -147,25 +147,34 @@ namespace KDE
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-			ID3D11Texture2D* pBackBuffer = nullptr;
-			HRESULT result = Window->Graphics().m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
+			HRESULT result = Window->Graphics().m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 			if (SUCCEEDED(result))
 			{
 				D3D11_TEXTURE2D_DESC desc;
 				pBackBuffer->GetDesc(&desc);
-
+				desc.BindFlags = 0;
+				desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+				desc.Usage = D3D11_USAGE_STAGING;
+				
 				desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-				ID3D11Texture2D* pImGuiTexture = nullptr;
+				Microsoft::WRL::ComPtr<ID3D11Texture2D> pImGuiTexture;
 				result = Window->Graphics().m_Device->CreateTexture2D(&desc, nullptr, &pImGuiTexture);
 				if (SUCCEEDED(result))
 				{
-					Window->Graphics().m_Context->CopyResource(pImGuiTexture, pBackBuffer);
+					Window->Graphics().m_Context->CopyResource(pImGuiTexture.Get(), pBackBuffer.Get());
+					D3D11_MAPPED_SUBRESOURCE resource;
+					unsigned int subresource = D3D11CalcSubresource(0, 0, 0);
+					HRESULT hr = Window->Graphics().m_Context->Map(pImGuiTexture.Get(), subresource, D3D11_MAP_READ_WRITE, 0, &resource);
 
-					pImGuiTexture->Release();
+					if (SUCCEEDED(hr))
+					{
+						ImTextureID textureID = resource.pData;
+
+						ImGui::Image(textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+					}				
 				}
-
-				pBackBuffer->Release();
 			}
 
 			m_ViewportFocused = ImGui::IsWindowFocused();
