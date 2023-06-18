@@ -5,6 +5,9 @@
 #include "DXErr/DXGIInfoManager.h"
 #include "ECS/KDCamera.h"
 
+#include "imgui/imgui.h"
+#include "imgui/backends/imgui_impl_dx11.h"
+
 #include <vector>
 #include <d3d11.h>
 #include <wrl.h>

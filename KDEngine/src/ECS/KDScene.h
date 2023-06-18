@@ -10,6 +10,7 @@ namespace KDE
 	class KDScene
 	{
 		friend class KDEntity;
+		friend class SceneHierarchyPanel;
 	public:
 		KDScene(KDGraphics& gfx);
 		KDScene(const KDScene&) = delete;

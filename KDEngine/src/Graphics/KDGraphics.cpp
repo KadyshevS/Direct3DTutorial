@@ -23,7 +23,7 @@ namespace KDE
 		DXGI_SWAP_CHAIN_DESC scd{};
 		scd.BufferDesc.Width = 0;
 		scd.BufferDesc.Height = 0;
-		scd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // Изменено на правильный формат
 		scd.BufferDesc.RefreshRate.Numerator = 0;
 		scd.BufferDesc.RefreshRate.Denominator = 0;
 		scd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -45,24 +45,24 @@ namespace KDE
 
 		HRESULT hr;
 
-		GFX_THROW_INFO( D3D11CreateDeviceAndSwapChain(
+		GFX_THROW_INFO(D3D11CreateDeviceAndSwapChain(
 			nullptr, D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, gfxCreateFlags, nullptr, 0, D3D11_SDK_VERSION,
 			&scd, &m_SwapChain, &m_Device, nullptr, &m_Context
-		) );
+		));
 
 		wrl::ComPtr<ID3D11Resource> pBackBuffer;
-		GFX_THROW_INFO( m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer) );
-		GFX_THROW_INFO( m_Device->CreateRenderTargetView(
+		GFX_THROW_INFO(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
+		GFX_THROW_INFO(m_Device->CreateRenderTargetView(
 			pBackBuffer.Get(), nullptr, &m_Target
-		) );
-		
+		));
+
 		D3D11_DEPTH_STENCIL_DESC dsc{};
 		dsc.DepthEnable = TRUE;
 		dsc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		dsc.DepthFunc = D3D11_COMPARISON_LESS;
 		wrl::ComPtr<ID3D11DepthStencilState> pDSState;
-		GFX_THROW_INFO( m_Device->CreateDepthStencilState(&dsc, &pDSState) );
+		GFX_THROW_INFO(m_Device->CreateDepthStencilState(&dsc, &pDSState));
 
 		m_Context->OMSetDepthStencilState(pDSState.Get(), 1);
 
@@ -77,7 +77,7 @@ namespace KDE
 		descDepth.SampleDesc.Count = 1;
 		descDepth.SampleDesc.Quality = 0;
 		descDepth.Usage = D3D11_USAGE_DEFAULT;
-		GFX_THROW_INFO( m_Device->CreateTexture2D(&descDepth, nullptr, &pDepthStencil) );
+		GFX_THROW_INFO(m_Device->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV{};
 		descDSV.Format = DXGI_FORMAT_D32_FLOAT;
@@ -85,20 +85,21 @@ namespace KDE
 		descDSV.Texture2D.MipSlice = 0;
 		GFX_THROW_INFO(m_Device->CreateDepthStencilView(
 			pDepthStencil.Get(), &descDSV, &m_DepthStencilView
-		) );
+		));
+
 		m_Context->OMSetRenderTargets(1, m_Target.GetAddressOf(), m_DepthStencilView.Get());
 
 		D3D11_VIEWPORT vp{};
-		vp.Width = (float)width;
-		vp.Height = (float)height;
-		vp.MinDepth = 0;
-		vp.MaxDepth = 1;
+		vp.Width = static_cast<float>(width);
+		vp.Height = static_cast<float>(height);
+		vp.MinDepth = 0.0f;
+		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		m_Context->RSSetViewports(1, &vp);
 
-		Camera.Projection.Width = float(width);
-		Camera.Projection.Height = float(height);
+		Camera.Projection.Width = static_cast<float>(width);
+		Camera.Projection.Height = static_cast<float>(height);
 	}
 
 	void KDGraphics::EndFrame()
@@ -135,7 +136,10 @@ namespace KDE
 		m_Target.Reset();
 		m_DepthStencilView.Reset();
 
-		GFX_THROW_INFO(m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
+		DXGI_SWAP_CHAIN_DESC scd{};
+		m_SwapChain->GetDesc(&scd);
+
+		GFX_THROW_INFO(m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 
 		wrl::ComPtr<ID3D11Resource> pBackBuffer;
 		GFX_THROW_INFO(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));

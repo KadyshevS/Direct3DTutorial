@@ -5,6 +5,7 @@
 #include "ECS/KDScene.h"
 #include "ECS/KDEntity.h"
 #include "Graphics/KDMath.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace KDE
 {
@@ -24,11 +25,7 @@ namespace KDE
 		std::vector<std::unique_ptr<KDE::KDEntity>> Entities;
 		std::unique_ptr<KDE::KDEntity> PointLight;
 
-		DirectX::XMFLOAT2 m_ViewportBounds[2] = { {0.0f, 0.0f}, {0.0f, 0.0f} };
-		DirectX::XMFLOAT2 m_ViewportSize = { 0.0f, 0.0f };
-
-		bool m_ViewportFocused = false;
-		bool m_ViewportHovered = false;
+		std::shared_ptr<SceneHierarchyPanel> SceneHierarchy;
 
 		float rotation = 0.0f;
 	};
