@@ -13,10 +13,6 @@ namespace KDE
 
 	void KDEntity::Bind(KDGraphics& gfx)
 	{
-		if (HasComponent<CS::TagComponent>())
-		{
-
-		}
 		if (HasComponent<CS::RenderComponent>())
 		{
 			auto& rc = GetComponent<CS::RenderComponent>();

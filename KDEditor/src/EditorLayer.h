@@ -21,10 +21,7 @@ namespace KDE
 		virtual void OnUpdate(float ts) override;
 		virtual void OnImGuiUpdate() override;
 	private:
-		std::unique_ptr<KDE::KDScene> Scene;
-		std::vector<std::unique_ptr<KDE::KDEntity>> Entities;
-		std::unique_ptr<KDE::KDEntity> PointLight;
-
+		std::unique_ptr<KDScene> Scene;
 		std::shared_ptr<SceneHierarchyPanel> SceneHierarchy;
 
 		float rotation = 0.0f;

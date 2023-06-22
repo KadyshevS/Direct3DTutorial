@@ -1,8 +1,9 @@
 #include "KDScene.h"
 
-#include "KDEntity.h"
 #include "Graphics/Bindable/BindableBase.h"
+#include "Graphics/GeoPrimitives.h"
 #include "Components.h"
+#include "KDEntity.h"
 
 namespace KDE
 {
@@ -44,11 +45,15 @@ namespace KDE
 	KDEntity KDScene::CreateEntity(const std::string& name)
 	{
 		KDEntity ent = { m_Registry.create(), this };
+
 		ent.AddComponent<CS::TagComponent>();
 		ent.AddComponent<CS::RenderComponent>();
 
 		auto& tag = ent.GetComponent<CS::TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
+
+		ent.GetComponent<CS::RenderComponent>().Mesh = std::make_unique<KDMesh>(GP::Cube::MakeIndependent());
+
 		return ent;
 	}
 	void KDScene::DestroyEntity(KDEntity entity)
@@ -67,20 +72,31 @@ namespace KDE
 	{
 		Bind();
 
-		auto view = m_Registry.view<CS::TagComponent, CS::RenderComponent>();
-		for (auto& e : view)
+	//	Light sources
+		auto plview = m_Registry.view<CS::PointLightComponent, CS::RenderComponent>(); 
+		for (auto& e : plview)
 		{
-			auto& componenet = view.get<CS::RenderComponent>(e);
-			componenet.Bind(*m_Graphics);
-
 			if (m_Registry.all_of<CS::PointLightComponent>(e))
 			{
 				for (auto& b : m_LightBinds)
 				{
 					b->Bind(*m_Graphics);
 				}
+
+				auto& plComp = plview.get<CS::PointLightComponent>(e);
+				auto& rComp = plview.get<CS::RenderComponent>(e);
+				plComp.Bind(*m_Graphics, reinterpret_cast<DirectX::XMFLOAT3&>(rComp.Mesh->Transform.Position));
 			}
-			else if (!(!componenet.Texture))
+		}
+
+	//	Render objects
+		auto view = m_Registry.view<CS::TagComponent, CS::RenderComponent>();
+		for (auto& e : view)
+		{
+			auto& componenet = view.get<CS::RenderComponent>(e);
+			componenet.Bind(*m_Graphics);
+
+			if (componenet.Texture)
 			{
 				for (auto& b : m_TextureBinds)
 				{

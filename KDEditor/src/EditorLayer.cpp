@@ -15,57 +15,7 @@ namespace KDE
 	void EditorLayer::OnAttach()
 	{
 		Scene = std::make_unique<KDScene>(Window->Graphics());
-
 		SceneHierarchy = std::make_shared<SceneHierarchyPanel>(*Scene.get(), Window->Keyboard);
-
-		Entities.emplace_back(
-			std::make_unique<KDEntity>(Scene->CreateEntity("Cube"))
-		);
-		Entities.emplace_back(
-			std::make_unique<KDEntity>(Scene->CreateEntity("Prism"))
-		);
-		Entities.emplace_back(
-			std::make_unique<KDEntity>(Scene->CreateEntity("Plane"))
-		);
-		Entities.emplace_back(
-			std::make_unique<KDEntity>(Scene->CreateEntity("Cone"))
-		);
-		Entities.emplace_back(
-			std::make_unique<KDEntity>(Scene->CreateEntity("Sphere"))
-		);
-
-		PointLight = std::make_unique<KDEntity>(Scene->CreateEntity("Point Light"));
-		PointLight->AddComponent<CS::PointLightComponent>();
-
-		Entities[0]->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Cube::MakeTextured());
-		Entities[1]->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Prism::MakeIndependent(24));
-		Entities[2]->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Plane::Make());
-		Entities[3]->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Cone::MakeIndependent(24));
-		Entities[4]->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Sphere::Make());
-
-		Entities[0]->GetComponent<CS::RenderComponent>().Texture = std::make_unique<KDTexture>(Window->Graphics(), "assets/textures/kappa50.png");
-
-		PointLight->GetComponent<CS::RenderComponent>().Mesh =
-			std::make_unique<KDMesh>(GP::Sphere::Make());
-		PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling = { 0.15f, 0.15f, 0.15f };
-		PointLight->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { 0.0f, 2.0f, 4.0f };
-
-		Entities[0]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -2.0f, 0.0f, 4.0f };
-		Entities[1]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { 0.0f, 0.0f, 4.0f };
-		Entities[2]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { 2.0f, 0.0f, 4.0f };
-		Entities[3]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { -1.0f, 0.0f, 2.0f };
-		Entities[4]->GetComponent<CS::RenderComponent>().Mesh->Transform.Position = { 1.0f, 0.0f, 2.0f };
-
-		for (auto& e : Entities)
-		{
-			auto& scale = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Scaling;
-			scale = { 0.8f, 0.8f, 0.8f };
-		}
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -73,14 +23,6 @@ namespace KDE
 
 	void EditorLayer::OnUpdate(float ts)
 	{
-		for (auto& e : Entities)
-		{
-			auto& rot = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Rotation;
-			rot.X = Math::WrapAngle(rot.X + ts * 20.0f);
-			rot.Y = Math::WrapAngle(rot.Y + ts * 20.0f);
-		}
-
-		PointLight->Bind(Window->Graphics());
 		Scene->Draw();
 	}
 	void EditorLayer::OnImGuiUpdate()
@@ -151,6 +93,27 @@ namespace KDE
 					ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 				}
 				style.WindowMinSize.x = minWinSizeX;
+
+				if (ImGui::BeginMenuBar())
+				{
+					if (ImGui::BeginMenu("File"))
+					{
+					//	if (ImGui::MenuItem("New"))
+					//		NewScene();
+					//	if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					//		LoadScene();
+					//	if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+					//		SaveSceneAs();
+					//
+					//	ImGui::Separator();
+
+						if (ImGui::MenuItem("Exit", "Alt+F4")) PostQuitMessage(0);
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenuBar();
+				}
 
 				ImGui::End();
 			}

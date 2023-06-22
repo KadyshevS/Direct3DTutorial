@@ -26,7 +26,7 @@ namespace KDE
 
 		if (ImGui::BeginPopupContextWindow(0, 1))
 		{
-			if (ImGui::MenuItem("Create Empty KDEntity"))
+			if (ImGui::MenuItem("Create Empty Entity"))
 				m_SelectionEntity = std::make_shared<KDEntity>(m_Context->CreateEntity("Empty Entity"));
 
 			ImGui::EndPopup();
@@ -87,7 +87,7 @@ namespace KDE
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
 		{
-			if (ImGui::MenuItem("Delete KDEntity"))
+			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
 
 			ImGui::EndPopup();
@@ -95,7 +95,6 @@ namespace KDE
 
 		if (opened)
 		{
-			;
 			bool openedEx = ImGui::TreeNodeEx((void*)((uint64_t)(uint32_t)entity->EntityHandle() + 1000), flags, tag.c_str());
 			ImGui::TreePop();
 			if (openedEx)

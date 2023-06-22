@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics/Bindable/Bindable.h"
-#include "ECS/entt.hpp"
+#include "entt.hpp"
 
 namespace KDE
 {
@@ -25,9 +25,10 @@ namespace KDE
 
 	protected:
 		KDGraphics* m_Graphics = nullptr;
+		entt::registry m_Registry;
+
 		std::vector<std::unique_ptr<Bindable>> m_Binds;
 		std::vector<std::unique_ptr<Bindable>> m_LightBinds;
 		std::vector<std::unique_ptr<Bindable>> m_TextureBinds;
-		entt::registry m_Registry;
 	};
 }
