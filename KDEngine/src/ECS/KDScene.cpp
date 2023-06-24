@@ -52,7 +52,8 @@ namespace KDE
 		auto& tag = ent.GetComponent<CS::TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 
-		ent.GetComponent<CS::RenderComponent>().Mesh = std::make_unique<KDMesh>(GP::Cube::MakeIndependent());
+		std::shared_ptr<KDMesh> mesh = std::make_shared<KDMesh>( GP::Cube::MakeIndependent() );
+		ent.GetComponent<CS::RenderComponent>().Mesh = mesh;
 
 		return ent;
 	}

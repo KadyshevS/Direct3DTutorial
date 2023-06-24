@@ -11,7 +11,9 @@
 namespace KDE
 {
 	KDMesh::KDMesh(const std::vector<Vertex>& vertices, 
-		const std::vector<uint32_t>& indices)
+		const std::vector<uint32_t>& indices,
+		const std::string& meshName)
+		: Name(meshName)
 	{
 		assert("Indices must be divide by 3." && indices.size() % 3 == 0);
 		Vertices = vertices;
@@ -29,7 +31,8 @@ namespace KDE
 
 		Clear();
 		Vertices = mesh.Vertices;
-		Indices = mesh.Indices;
+		Indices  = mesh.Indices;
+		Name     = mesh.Name;
 		m_Binds.resize(m_Binds.size());
 		for (int i = 0; i < mesh.m_Binds.size(); i++)
 		{

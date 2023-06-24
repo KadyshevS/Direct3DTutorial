@@ -41,7 +41,7 @@ namespace KDE::GP
 					4,5,7, 4,7,6,
 					0,4,2, 2,4,6,
 					0,1,4, 1,5,4
-				}
+				}, "Cube"
 			};
 		}
 		static KDMesh MakeIndependent()
@@ -82,7 +82,7 @@ namespace KDE::GP
 					12,13,15, 12,15,14,
 					16,17,18, 18,17,19,
 					20,23,21, 20,22,23
-				}
+				}, "Cube"
 			};
 		}
 		static KDMesh MakeTextured()
@@ -163,7 +163,7 @@ namespace KDE::GP
 				indices.push_back(iTip);
 			}
 
-			return { std::move(vertices), std::move(indices) };
+			return { std::move(vertices), std::move(indices), "Cone" };
 		}
 		static KDMesh MakeIndependent(int longDiv)
 		{
@@ -225,7 +225,7 @@ namespace KDE::GP
 				indices.push_back(iLong + iBaseEdge);
 			}
 
-			return { std::move(vertices),std::move(indices) };
+			return { std::move(vertices),std::move(indices), "Cone" };
 		}
 		static KDMesh Make()
 		{
@@ -293,7 +293,7 @@ namespace KDE::GP
 				}
 			}
 
-			return{ std::move(vertices),std::move(indices) };
+			return{ std::move(vertices),std::move(indices), "Plane" };
 		}
 		static KDMesh MakeTextured()
 		{
@@ -356,9 +356,8 @@ namespace KDE::GP
 				}
 			}
 
-			return{ std::move(vertices),std::move(indices) };
+			return{ std::move(vertices),std::move(indices), "Plane" };
 		}
-
 		static KDMesh Make()
 		{
 			return MakeTesselated(1, 1);
@@ -433,7 +432,7 @@ namespace KDE::GP
 				indices.push_back((i + 3) % mod + 2);
 			}
 
-			return { std::move(vertices),std::move(indices) };
+			return { std::move(vertices),std::move(indices), "Prism" };
 		}
 		static KDMesh MakeIndependent(int longDiv)
 		{
@@ -543,7 +542,7 @@ namespace KDE::GP
 				indices.push_back(i + 1 + iFusilage);
 			}
 
-			return { std::move(vertices),std::move(indices) };
+			return { std::move(vertices),std::move(indices), "Prism" };
 		}
 		static KDMesh Make()
 		{
@@ -630,7 +629,7 @@ namespace KDE::GP
 			indices.push_back(calcIdx(latDiv - 2, longDiv - 1));
 			indices.push_back(iSouthPole);
 
-			return { std::move(vertices),std::move(indices) };
+			return { std::move(vertices),std::move(indices), "Sphere" };
 		}
 		static KDMesh Make()
 		{

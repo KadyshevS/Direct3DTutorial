@@ -173,6 +173,45 @@ namespace KDE
 
 		ImGui::PopID();
 	}
+	void DrawFileSelectControl(const std::string& label, const std::string& value)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[1];
+
+		ImGui::PushID("LoadedMesh");
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, 100);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 165.0f, lineHeight };
+
+		if (ImGui::Button(value.c_str(), buttonSize));
+
+		ImVec2 buttonSize2 = { lineHeight + 25.0f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.15f, 0.15f, 0.15f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.3f, 0.3f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.15f, 0.15f, 0.15f, 1.0f });
+
+		ImGui::SameLine();
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Load", buttonSize2));
+		ImGui::PopFont();
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+		ImGui::PopID();
+	}
 
 	void SceneHierarchyPanel::DrawComponents(std::shared_ptr<KDEntity> entity)
 	{
@@ -219,11 +258,20 @@ namespace KDE
 			if (open)
 			{
 				auto& tc = entity->GetComponent<KDE::CS::RenderComponent>().Mesh->Transform;
+				
 				DrawVec3Control("Position", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Position));
-				DirectX::XMFLOAT3 rotation = { DirectX::XMConvertToDegrees(tc.Rotation.X),DirectX::XMConvertToDegrees(tc.Rotation.Y),DirectX::XMConvertToDegrees(tc.Rotation.Z) };
 				DrawVec3Control("Rotation", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Rotation));
-				tc.Rotation = { DirectX::XMConvertToRadians(rotation.x),DirectX::XMConvertToRadians(rotation.y),DirectX::XMConvertToRadians(rotation.z) };
 				DrawVec3Control("Scale", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Scaling), 1.0f);
+
+				ImGui::TreePop();
+			}
+
+			bool open2 = ImGui::TreeNodeEx((void*)typeid(KDE::CS::TagComponent).hash_code(), flags, "Render");
+			if(open2)
+			{
+				auto& mesh = entity->GetComponent<KDE::CS::RenderComponent>().Mesh;
+
+				DrawFileSelectControl("Mesh", mesh->Name);
 
 				ImGui::TreePop();
 			}

@@ -37,8 +37,8 @@ namespace KDE::CS
 	public:
 		ObjectCBufferInfo ObjectCBuffer{};
 	public:
-		std::unique_ptr<KDMesh> Mesh;
-		std::unique_ptr<KDTexture> Texture;
+		std::shared_ptr<KDMesh> Mesh;
+		std::shared_ptr<KDTexture> Texture;
 
 		RenderComponent() = default;
 		RenderComponent(const RenderComponent&) = delete;

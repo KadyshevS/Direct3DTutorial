@@ -41,7 +41,8 @@ namespace KDE
 		TransformInfo Transform{};
 	public:
 		KDMesh(const std::vector<Vertex>& vertices,
-			const std::vector<uint32_t>& indices);
+			const std::vector<uint32_t>& indices,
+			const std::string& meshName = "Unnamed Mesh");
 		KDMesh(const KDMesh& mesh);
 		~KDMesh() = default;
 
@@ -55,6 +56,7 @@ namespace KDE
 	private:
 		std::vector<std::shared_ptr<Bindable>> m_Binds;
 	public:
+		std::string Name;
 		std::vector<Vertex> Vertices;
 		std::vector<uint32_t> Indices;
 	};
