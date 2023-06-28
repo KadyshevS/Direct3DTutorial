@@ -1,4 +1,4 @@
-#include "KDMouse.h"
+#include "Input/KDMouse.h"
 
 #include "WinBase/KDWin.h"
 

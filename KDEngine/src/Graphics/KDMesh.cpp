@@ -1,9 +1,9 @@
-#include "KDMesh.h"
+#include "Graphics/KDMesh.h"
 
-#include "Bindable/VertexBuffer.h"
-#include "Bindable/IndexBuffer.h"
-#include "Bindable/TransformCBuffer.h"
-#include "GeoPrimitives.h"
+#include "Graphics/Bindable/VertexBuffer.h"
+#include "Graphics/Bindable/IndexBuffer.h"
+#include "Graphics/Bindable/TransformCBuffer.h"
+#include "Graphics/GeoPrimitives.h"
 #include "Graphics/KDMath.h"
 
 #include <cassert>

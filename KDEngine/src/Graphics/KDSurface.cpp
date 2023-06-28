@@ -1,5 +1,5 @@
 #define KD_INCLUDE_WINAPI_FULL
-#include "KDSurface.h"
+#include "Graphics/KDSurface.h"
 #include <algorithm>
 namespace Gdiplus
 {

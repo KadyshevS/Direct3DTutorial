@@ -1,4 +1,4 @@
-#include "DXGIInfoManager.h"
+#include "DXErr/DXGIInfoManager.h"
 
 #include "WinBase/KDWindow.h"
 #include "Graphics/KDGraphics.h"

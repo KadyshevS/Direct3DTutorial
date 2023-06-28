@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Graphics/Bindable/Texture.h"
 
 #include "Graphics/KDSurface.h"
 #include "Graphics/GraphicsThrowMacros.h"

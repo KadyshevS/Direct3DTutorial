@@ -1,4 +1,4 @@
-#include "SceneHierarchyPanel.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 #include "ECS/Components.h"
 

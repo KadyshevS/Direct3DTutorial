@@ -1,4 +1,4 @@
-#include "Sampler.h"
+#include "Graphics/Bindable/Sampler.h"
 
 #include "Graphics/GraphicsThrowMacros.h"
 

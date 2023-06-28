@@ -1,6 +1,6 @@
-#include "KDApplication.h"
+#include "WinBase/KDApplication.h"
 
-#include "KDWin.h"
+#include "WinBase/KDWin.h"
 
 namespace KDE
 {

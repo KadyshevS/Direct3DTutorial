@@ -1,4 +1,4 @@
-#include "IndexBuffer.h"
+#include "Graphics/Bindable/IndexBuffer.h"
 
 #include "Graphics/GraphicsThrowMacros.h"
 

@@ -1,4 +1,4 @@
-#include "InputLayout.h"
+#include "Graphics/Bindable/InputLayout.h"
 
 #include "Graphics/GraphicsThrowMacros.h"
 

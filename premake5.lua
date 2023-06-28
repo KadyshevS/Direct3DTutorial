@@ -26,22 +26,30 @@ project "KDEngine"
 	staticruntime "on"
 	characterset "MBCS"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{prj.name}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("%{prj.name}/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
-		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/src/**.inl",
-		"%{prj.name}/src/**.hlsl"
+		"%{prj.name}/src/**.hlsl",
+
+		"%{prj.name}/include/**.h",
+		"%{prj.name}/include/**.hpp",
+		"%{prj.name}/include/**.inl",
+		"%{prj.name}/include/**.hlsl",
+
+		"%{prj.name}/lib/**.lib",
 	}
 
 	includedirs
 	{
 		"%{prj.name}",
 		"%{prj.name}/src",
-		"%{prj.name}/vendor"
+		"%{prj.name}/vendor",
+		"%{prj.name}/include",
 	}
 
 	links 
@@ -64,7 +72,7 @@ project "KDEngine"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+			("{COPY} %{cfg.buildtarget.relpath} \" bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
@@ -101,7 +109,7 @@ project "Sandbox"
 
 	includedirs
 	{
-		"KDEngine/src",
+		"KDEngine/include",
 		"KDEngine/vendor",
 		"%{prj.name}",
 		"%{prj.name}/src"
@@ -159,7 +167,7 @@ project "KDEditor"
 
 	includedirs
 	{
-		"KDEngine/src",
+		"KDEngine/include",
 		"KDEngine/vendor",
 		"%{prj.name}",
 		"%{prj.name}/src"

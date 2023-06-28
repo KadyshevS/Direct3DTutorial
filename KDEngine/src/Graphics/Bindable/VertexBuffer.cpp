@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+#include "Graphics/Bindable/VertexBuffer.h"
 
 namespace KDE
 {

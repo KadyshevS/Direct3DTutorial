@@ -1,6 +1,6 @@
-#include "KDWindow.h"
+#include "WinBase/KDWindow.h"
 
-#include "WindowThrowMacros.h"
+#include "WinBase/WindowThrowMacros.h"
 #include "ImGui/backends/imgui_impl_win32.h"
 
 #include <sstream>

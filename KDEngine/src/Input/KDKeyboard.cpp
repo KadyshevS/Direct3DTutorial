@@ -1,4 +1,4 @@
-#include "KDKeyboard.h"
+#include "Input/KDKeyboard.h"
 
 namespace KDE
 {

@@ -1,9 +1,9 @@
-#include "KDScene.h"
+#include "ECS/KDScene.h"
 
 #include "Graphics/Bindable/BindableBase.h"
 #include "Graphics/GeoPrimitives.h"
-#include "Components.h"
-#include "KDEntity.h"
+#include "ECS/Components.h"
+#include "ECS/KDEntity.h"
 
 namespace KDE
 {

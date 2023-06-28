@@ -1,7 +1,7 @@
 #define KD_INCLUDE_WINAPI_FULL
-#include "KDWin.h"
+#include "WinBase/KDWin.h"
 
-#include "GDIPlusManager.h"
+#include "WinBase/GDIPlusManager.h"
 #include <algorithm>
 namespace Gdiplus
 {

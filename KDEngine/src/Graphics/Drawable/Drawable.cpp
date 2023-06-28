@@ -1,4 +1,4 @@
-#include "Drawable.h"
+#include "Graphics/Drawable/Drawable.h"
 
 #include "Graphics/GraphicsThrowMacros.h"
 #include "Graphics/Bindable/IndexBuffer.h"

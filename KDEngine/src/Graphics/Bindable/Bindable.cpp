@@ -1,4 +1,4 @@
-#include "Bindable.h"
+#include "Graphics/Bindable/Bindable.h"
 
 #include <stdexcept>
 

@@ -1,7 +1,7 @@
-#include "KDEntity.h"
+#include "ECS/KDEntity.h"
 
 #include "Graphics/Bindable/BindableBase.h"
-#include "Components.h"
+#include "ECS/Components.h"
 
 namespace KDE
 {

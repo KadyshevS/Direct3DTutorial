@@ -1,7 +1,7 @@
-#include "KDGraphics.h"
+#include "Graphics/KDGraphics.h"
 
 #include "DXErr/dxerr.h"
-#include "GraphicsThrowMacros.h"
+#include "Graphics/GraphicsThrowMacros.h"
 
 #include <sstream>
 #include <d3dcompiler.h>
