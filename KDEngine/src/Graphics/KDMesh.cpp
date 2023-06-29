@@ -62,17 +62,17 @@ namespace KDE
 	{
 		return
 			DirectX::XMMatrixRotationRollPitchYaw(
-				Math::ToRadians(Transform.Rotation.X),
-				Math::ToRadians(Transform.Rotation.Y),
-				Math::ToRadians(Transform.Rotation.Z)) *
+				Math::ToRadians(Transform.Rotation.x),
+				Math::ToRadians(Transform.Rotation.y),
+				Math::ToRadians(Transform.Rotation.z)) *
 			DirectX::XMMatrixScaling(
-				Transform.Scaling.X,
-				Transform.Scaling.Y,
-				Transform.Scaling.Z) *
+				Transform.Scaling.x,
+				Transform.Scaling.y,
+				Transform.Scaling.z) *
 			DirectX::XMMatrixTranslation(
-				Transform.Position.X,
-				Transform.Position.Y,
-				Transform.Position.Z);
+				Transform.Position.x,
+				Transform.Position.y,
+				Transform.Position.z);
 	}
 
 	void KDMesh::SetNormalsFlat()

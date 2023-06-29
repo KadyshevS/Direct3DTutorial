@@ -6,6 +6,7 @@
 #include "ECS/KDEntity.h"
 #include "Graphics/KDMath.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "ECS/SceneSerializer.h"
 
 namespace KDE
 {
@@ -20,9 +21,15 @@ namespace KDE
 		virtual void OnDetach() override;
 		virtual void OnUpdate(float ts) override;
 		virtual void OnImGuiUpdate() override;
+
+	private:
+		void NewScene();
+		void LoadScene();
+		void SaveSceneAs();
 	private:
 		std::unique_ptr<KDScene> Scene;
 		std::shared_ptr<SceneHierarchyPanel> SceneHierarchy;
+		std::shared_ptr<SceneSerializer> SceneSerialize;
 
 		float rotation = 0.0f;
 	};

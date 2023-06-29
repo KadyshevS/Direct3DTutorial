@@ -74,8 +74,8 @@ void SandboxLayer::OnUpdate(float ts)
 	for (auto& e : Entities)
 	{
 		auto& rot = e->GetComponent<CS::RenderComponent>().Mesh->Transform.Rotation;
-		rot.X = Math::WrapAngle(rot.X + ts * 20.0f);
-		rot.Y = Math::WrapAngle(rot.Y + ts * 20.0f);
+		rot.x = Math::WrapAngle(rot.x + ts * 20.0f);
+		rot.y = Math::WrapAngle(rot.y + ts * 20.0f);
 	}
 
 	PointLight->Bind(Window->Graphics());

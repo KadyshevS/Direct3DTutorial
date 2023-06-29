@@ -259,9 +259,9 @@ namespace KDE
 			{
 				auto& tc = entity->GetComponent<KDE::CS::RenderComponent>().Mesh->Transform;
 				
-				DrawVec3Control("Position", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Position));
-				DrawVec3Control("Rotation", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Rotation));
-				DrawVec3Control("Scale", reinterpret_cast<DirectX::XMFLOAT3&>(tc.Scaling), 1.0f);
+				DrawVec3Control("Position", tc.Position);
+				DrawVec3Control("Rotation", tc.Rotation);
+				DrawVec3Control("Scale", tc.Scaling, 1.0f);
 
 				ImGui::TreePop();
 			}

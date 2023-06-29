@@ -3,6 +3,7 @@
 #include "Graphics/GeoPrimitives.h"
 #include "WinBase/GDIPlusManager.h"
 #include "Graphics/KDSurface.h"
+#include "WinBase/FileDialog.h"
 #include "ECS/Components.h"
 #include "imgui/imgui.h"
 
@@ -16,6 +17,7 @@ namespace KDE
 	{
 		Scene = std::make_unique<KDScene>(Window->Graphics());
 		SceneHierarchy = std::make_shared<SceneHierarchyPanel>(*Scene.get(), Window->Keyboard);
+		SceneSerialize = std::make_shared<SceneSerializer>(*Scene.get());
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -24,6 +26,34 @@ namespace KDE
 	void EditorLayer::OnUpdate(float ts)
 	{
 		Scene->Draw();
+	}
+	void EditorLayer::NewScene()
+	{
+		Scene = std::make_unique<KDScene>(Window->Graphics());
+		//	Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		SceneHierarchy->SetContext(*Scene);
+	}
+	void EditorLayer::LoadScene()
+	{
+		Scene = std::make_unique<KDScene>(Window->Graphics());
+		//	m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		SceneHierarchy->SetContext(*Scene);
+
+		std::string filepath = FileDialog::OpenFile("KDEngine Scene (*.kds)\0*.kds\0", *Window);
+		if (!filepath.empty())
+		{
+			SceneSerializer ser(*Scene);
+			ser.Deserialize(filepath);
+		}
+	}
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialog::SaveFile("KDEngine Scene (*.kds)\0*.kds\0", *Window);
+		if (!filepath.empty())
+		{
+			SceneSerializer ser(*Scene);
+			ser.Serialize(filepath.ends_with(".kds") ? filepath : (filepath + ".kds"));
+		}
 	}
 	void EditorLayer::OnImGuiUpdate()
 	{
@@ -98,14 +128,14 @@ namespace KDE
 				{
 					if (ImGui::BeginMenu("File"))
 					{
-					//	if (ImGui::MenuItem("New"))
-					//		NewScene();
-					//	if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					//		LoadScene();
-					//	if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
-					//		SaveSceneAs();
-					//
-					//	ImGui::Separator();
+						if (ImGui::MenuItem("New"))
+							NewScene();
+						if (ImGui::MenuItem("Open...", "Ctrl+O"))
+							LoadScene();
+						if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+							SaveSceneAs();
+					
+						ImGui::Separator();
 
 						if (ImGui::MenuItem("Exit", "Alt+F4")) PostQuitMessage(0);
 
@@ -116,10 +146,6 @@ namespace KDE
 				}
 
 				ImGui::End();
-			}
-			{
-				static bool p_open = true;
-				ImGui::ShowDemoWindow(&p_open);
 			}
 			{
 				SceneHierarchy->OnImGuiRender();

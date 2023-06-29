@@ -1,6 +1,3 @@
 [submodule "KDEngine/vendor/imgui"]
 	path = KDEngine/vendor/imgui
 	url = https://github.com/KadyshevS/imgui.git
-[submodule "KDEngine/vendor/yaml-cpp"]
-	path = KDEngine/vendor/yaml-cpp
-	url = https://github.com/KadyshevS/yaml-cpp.git

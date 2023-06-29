@@ -14,6 +14,7 @@ namespace KDE
 	class KDWindow
 	{
 		friend class ImGuiLayer;
+		friend class FileDialog;
 	public:
 		KDWindow(const char* title, int width, int height);
 		KDWindow(const KDWindow&) = delete;

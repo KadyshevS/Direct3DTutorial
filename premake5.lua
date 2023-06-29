@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}"
 
 IncludeDir = {}
 IncludeDir["ImGui"] = "KDEngine/vendor/imgui"
+IncludeDir["YAML"] = "KDEngine/vendor/yaml-cpp/include"
 
 group "Dependencies"
 	include "KDEngine/vendor/imgui"
@@ -50,6 +51,8 @@ project "KDEngine"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor",
 		"%{prj.name}/include",
+		"%{IncludeDir.YAML}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links 
@@ -115,7 +118,9 @@ project "Sandbox"
 		"KDEngine/include",
 		"KDEngine/vendor",
 		"%{prj.name}",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.YAML}",
+		"%{IncludeDir.ImGui}"
 	}
 	
 	links
@@ -173,7 +178,9 @@ project "KDEditor"
 		"KDEngine/include",
 		"KDEngine/vendor",
 		"%{prj.name}",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.YAML}",
+		"%{IncludeDir.ImGui}"
 	}
 	
 	links

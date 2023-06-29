@@ -11,6 +11,7 @@ namespace KDE
 	{
 		friend class KDEntity;
 		friend class SceneHierarchyPanel;
+		friend class SceneSerializer;
 	public:
 		KDScene(KDGraphics& gfx);
 		KDScene(const KDScene&) = delete;

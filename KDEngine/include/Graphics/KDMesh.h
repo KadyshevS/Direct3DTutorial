@@ -25,18 +25,9 @@ namespace KDE
 	public:
 		struct TransformInfo
 		{
-			struct
-			{
-				float X = 0.0f, Y = 0.0f, Z = 0.0f;
-			} Position;
-			struct
-			{
-				float X = 0.0f, Y = 0.0f, Z = 0.0f;
-			} Rotation;
-			struct
-			{
-				float X = 1.0f, Y = 1.0f, Z = 1.0f;
-			} Scaling;
+			DirectX::XMFLOAT3 Position{ 0.0f, 0.0f, 0.0f };
+			DirectX::XMFLOAT3 Rotation{ 0.0f, 0.0f, 0.0f };
+			DirectX::XMFLOAT3 Scaling{ 1.0f, 1.0f, 1.0f };
 		};
 		TransformInfo Transform{};
 	public:

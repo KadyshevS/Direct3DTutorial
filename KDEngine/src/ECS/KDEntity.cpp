@@ -23,7 +23,7 @@ namespace KDE
 			auto& pos = GetComponent<CS::RenderComponent>().Mesh->Transform.Position;
 			auto& plc = GetComponent<CS::PointLightComponent>();
 
-			plc.Bind(gfx, {pos.X, pos.Y, pos.Z});
+			plc.Bind(gfx, pos);
 		}
 	}
 	void KDEntity::Update()
