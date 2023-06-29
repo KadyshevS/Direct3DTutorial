@@ -9,7 +9,7 @@ workspace "KDEngine"
 		"Dist"
 	}
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputdir = "%{cfg.buildcfg}"
 
 IncludeDir = {}
 IncludeDir["ImGui"] = "KDEngine/vendor/imgui"
@@ -72,7 +72,10 @@ project "KDEngine"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} \" bin/" .. outputdir .. "/Sandbox/\"")
+			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/Sandbox/\""),
+			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/KDEditor/\""),
+			("{COPYDIR} assets \"bin/" .. outputdir .. "/Sandbox/assets\""),
+			("{COPYDIR} assets \"bin/" .. outputdir .. "/KDEditor/assets\"")
 		}
 
 	filter "configurations:Debug"
@@ -98,8 +101,8 @@ project "Sandbox"
 	staticruntime "on"
 	characterset "MBCS"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("KDEngine/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("KDEngine/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
@@ -156,8 +159,8 @@ project "KDEditor"
 	staticruntime "on"
 	characterset "MBCS"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("KDEngine/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("KDEngine/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
