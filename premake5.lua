@@ -17,6 +17,7 @@ IncludeDir["YAML"] = "KDEngine/vendor/yaml-cpp/include"
 
 group "Dependencies"
 	include "KDEngine/vendor/imgui"
+	include "KDEngine/vendor/yaml-cpp"
 group ""
 
 project "KDEngine"
@@ -57,7 +58,8 @@ project "KDEngine"
 
 	links 
 	{
-		"ImGui"
+		"ImGui",
+		"yaml-cpp"
 	}
 	
 	flags
@@ -77,8 +79,8 @@ project "KDEngine"
 		{
 			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/Sandbox/\""),
 			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/KDEditor/\""),
-			("{COPYDIR} assets \"bin/" .. outputdir .. "/Sandbox/assets\""),
-			("{COPYDIR} assets \"bin/" .. outputdir .. "/KDEditor/assets\"")
+	--		("{COPYDIR} assets \"bin/" .. outputdir .. "/Sandbox/assets\""),
+	--		("{COPYDIR} assets \"bin/" .. outputdir .. "/KDEditor/assets\"")
 		}
 
 	filter "configurations:Debug"

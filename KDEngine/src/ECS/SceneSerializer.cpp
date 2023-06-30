@@ -1,15 +1,12 @@
 #include "ECS/SceneSerializer.h"
 
-#include "yaml-cpp/yaml.h"
-#include "yaml-cpp/emitter.h"
-#include "yaml-cpp/exceptions.h"
 #include "ECS/KDEntity.h"
 #include "ECS/Components.h"
 #include "Graphics/GeoPrimitives.h"
 
+#include <yaml-cpp/yaml.h>
 #include <DirectXMath.h>
 #include <fstream>
-#include <string>
 
 namespace YAML
 {
@@ -93,7 +90,7 @@ namespace KDE
 		{
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap;
-			
+
 			auto& tag = ent.GetComponent<CS::TagComponent>().Tag;
 			out << YAML::Key << "Tag" << YAML::Value << tag;
 
@@ -119,50 +116,50 @@ namespace KDE
 			out << YAML::BeginMap;
 
 			auto& plc = ent.GetComponent<CS::PointLightComponent>();
-			out << YAML::Key << "Ambient"			<< YAML::Value << plc.LightCBuffer.Ambient;
-			out << YAML::Key << "AttenuateConst"	<< YAML::Value << plc.LightCBuffer.AttenuateConst;
-			out << YAML::Key << "AttenuateLatency"	<< YAML::Value << plc.LightCBuffer.AttenuateLatency;
-			out << YAML::Key << "AttenuateQuad"		<< YAML::Value << plc.LightCBuffer.AttenuateQuad;
-			out << YAML::Key << "DiffuseColor"		<< YAML::Value << plc.LightCBuffer.DiffuseColor;
-			out << YAML::Key << "DiffuseIntensity"	<< YAML::Value << plc.LightCBuffer.DiffuseIntensity;
-			out << YAML::Key << "LightPos"			<< YAML::Value << plc.LightCBuffer.LightPos;
+			out << YAML::Key << "Ambient" << YAML::Value << plc.LightCBuffer.Ambient;
+			out << YAML::Key << "AttenuateConst" << YAML::Value << plc.LightCBuffer.AttenuateConst;
+			out << YAML::Key << "AttenuateLatency" << YAML::Value << plc.LightCBuffer.AttenuateLatency;
+			out << YAML::Key << "AttenuateQuad" << YAML::Value << plc.LightCBuffer.AttenuateQuad;
+			out << YAML::Key << "DiffuseColor" << YAML::Value << plc.LightCBuffer.DiffuseColor;
+			out << YAML::Key << "DiffuseIntensity" << YAML::Value << plc.LightCBuffer.DiffuseIntensity;
+			out << YAML::Key << "LightPos" << YAML::Value << plc.LightCBuffer.LightPos;
 
 			out << YAML::EndMap;
 		}
-	//	if (ent.HasComponent<CameraComponent>())
-	//	{
-	//		out << YAML::Key << "CameraComponent";
-	//		out << YAML::BeginMap; // CameraComponent
-	//
-	//		auto& cameraComponent = ent.GetComponent<CameraComponent>();
-	//		auto& camera = cameraComponent.Camera;
-	//
-	//		out << YAML::Key << "Camera" << YAML::Value;
-	//		out << YAML::BeginMap; // Camera
-	//		out << YAML::Key << "ProjectionType" << YAML::Value << (int)camera.GetProjectionType();
-	//		out << YAML::Key << "PerspectiveFOV" << YAML::Value << camera.GetPerspFOV();
-	//		out << YAML::Key << "PerspectiveNear" << YAML::Value << camera.GetPerspNearClip();
-	//		out << YAML::Key << "PerspectiveFar" << YAML::Value << camera.GetPerspFarClip();
-	//		out << YAML::Key << "OrthographicSize" << YAML::Value << camera.GetOrthoSize();
-	//		out << YAML::Key << "OrthographicNear" << YAML::Value << camera.GetOrthoNearClip();
-	//		out << YAML::Key << "OrthographicFar" << YAML::Value << camera.GetOrthoFarClip();
-	//		out << YAML::EndMap; // Camera
-	//
-	//		out << YAML::Key << "Primary" << YAML::Value << cameraComponent.Primary;
-	//		out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.FixedAspectRatio;
-	//
-	//		out << YAML::EndMap; // CameraComponent
-	//	}
-	//	if (ent.HasComponent<SpriteRendererComponent>())
-	//	{
-	//		out << YAML::Key << "SpriteRendererComponent";
-	//		out << YAML::BeginMap; // SpriteRendererComponent
-	//
-	//		auto& spriteRendererComponent = ent.GetComponent<SpriteRendererComponent>();
-	//		out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
-	//
-	//		out << YAML::EndMap; // SpriteRendererComponent
-	//	}
+		//	if (ent.HasComponent<CameraComponent>())
+		//	{
+		//		out << YAML::Key << "CameraComponent";
+		//		out << YAML::BeginMap; // CameraComponent
+		//
+		//		auto& cameraComponent = ent.GetComponent<CameraComponent>();
+		//		auto& camera = cameraComponent.Camera;
+		//
+		//		out << YAML::Key << "Camera" << YAML::Value;
+		//		out << YAML::BeginMap; // Camera
+		//		out << YAML::Key << "ProjectionType" << YAML::Value << (int)camera.GetProjectionType();
+		//		out << YAML::Key << "PerspectiveFOV" << YAML::Value << camera.GetPerspFOV();
+		//		out << YAML::Key << "PerspectiveNear" << YAML::Value << camera.GetPerspNearClip();
+		//		out << YAML::Key << "PerspectiveFar" << YAML::Value << camera.GetPerspFarClip();
+		//		out << YAML::Key << "OrthographicSize" << YAML::Value << camera.GetOrthoSize();
+		//		out << YAML::Key << "OrthographicNear" << YAML::Value << camera.GetOrthoNearClip();
+		//		out << YAML::Key << "OrthographicFar" << YAML::Value << camera.GetOrthoFarClip();
+		//		out << YAML::EndMap; // Camera
+		//
+		//		out << YAML::Key << "Primary" << YAML::Value << cameraComponent.Primary;
+		//		out << YAML::Key << "FixedAspectRatio" << YAML::Value << cameraComponent.FixedAspectRatio;
+		//
+		//		out << YAML::EndMap; // CameraComponent
+		//	}
+		//	if (ent.HasComponent<SpriteRendererComponent>())
+		//	{
+		//		out << YAML::Key << "SpriteRendererComponent";
+		//		out << YAML::BeginMap; // SpriteRendererComponent
+		//
+		//		auto& spriteRendererComponent = ent.GetComponent<SpriteRendererComponent>();
+		//		out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
+		//
+		//		out << YAML::EndMap; // SpriteRendererComponent
+		//	}
 
 		out << YAML::EndMap;
 	}
@@ -173,16 +170,16 @@ namespace KDE
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled Scene";
 
-	//	out << YAML::Key << "EditorCamera" << YAML::Value << YAML::BeginMap;
-	//	out << YAML::Key << "Position" << YAML::Value << m_EditorCamera->GetPosition();
-	//	out << YAML::Key << "Orientation" << YAML::Value << m_EditorCamera->GetOrientation();
-	//	out << YAML::Key << "PerspectiveFOV" << YAML::Value << m_EditorCamera->GetFOV();
-	//	out << YAML::Key << "PerspectiveNear" << YAML::Value << m_EditorCamera->GetNearClip();
-	//	out << YAML::Key << "PerspectiveFar" << YAML::Value << m_EditorCamera->GetFarClip();
-	//	out << YAML::EndMap;
+		//	out << YAML::Key << "EditorCamera" << YAML::Value << YAML::BeginMap;
+		//	out << YAML::Key << "Position" << YAML::Value << m_EditorCamera->GetPosition();
+		//	out << YAML::Key << "Orientation" << YAML::Value << m_EditorCamera->GetOrientation();
+		//	out << YAML::Key << "PerspectiveFOV" << YAML::Value << m_EditorCamera->GetFOV();
+		//	out << YAML::Key << "PerspectiveNear" << YAML::Value << m_EditorCamera->GetNearClip();
+		//	out << YAML::Key << "PerspectiveFar" << YAML::Value << m_EditorCamera->GetFarClip();
+		//	out << YAML::EndMap;
 
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		
+
 		m_Scene->m_Registry.each(
 			[&](auto entID)
 			{
@@ -198,7 +195,7 @@ namespace KDE
 	bool SceneSerializer::Deserialize(const std::string& src)
 	{
 		std::ifstream stream(src);
-		if (!stream.is_open()) throw std::exception((std::string("Failed to open file:" ) + src).c_str());
+		if (!stream.is_open()) throw std::exception((std::string("Failed to open file:") + src).c_str());
 
 		std::stringstream strStream;
 		strStream << stream.rdbuf();
@@ -207,21 +204,21 @@ namespace KDE
 		if (!data["Scene"])
 			return false;
 
-		std::string sceneName = data["Scene"].as<std::string>();
+		//	std::string sceneName = data["Scene"].as<std::string>();
 
-	//	if (auto editCameraData = data["EditorCamera"]; editCameraData.IsDefined())
-	//	{
-	//		DirectX::XMFLOAT3 editCamPos = editCameraData["Position"].as<DirectX::XMFLOAT3>();
-	//		DirectX::XMFLOAT3 editCamOri = editCameraData["Orientation"].as<DirectX::XMFLOAT3>();
-	//		float editCamFov = editCameraData["PerspectiveFOV"].as<float>();
-	//		float editCamNear = editCameraData["PerspectiveNear"].as<float>();
-	//		float editCamFar = editCameraData["PerspectiveFar"].as<float>();
-	//		m_EditorCamera->SetPosition(editCamPos);
-	//		m_EditorCamera->SetOrientation(editCamOri);
-	//		m_EditorCamera->SetFOV(editCamFov);
-	//		m_EditorCamera->SetNearClip(editCamNear);
-	//		m_EditorCamera->SetFarClip(editCamFar);
-	//	}
+		//	if (auto editCameraData = data["EditorCamera"]; editCameraData.IsDefined())
+		//	{
+		//		DirectX::XMFLOAT3 editCamPos = editCameraData["Position"].as<DirectX::XMFLOAT3>();
+		//		DirectX::XMFLOAT3 editCamOri = editCameraData["Orientation"].as<DirectX::XMFLOAT3>();
+		//		float editCamFov = editCameraData["PerspectiveFOV"].as<float>();
+		//		float editCamNear = editCameraData["PerspectiveNear"].as<float>();
+		//		float editCamFar = editCameraData["PerspectiveFar"].as<float>();
+		//		m_EditorCamera->SetPosition(editCamPos);
+		//		m_EditorCamera->SetOrientation(editCamOri);
+		//		m_EditorCamera->SetFOV(editCamFov);
+		//		m_EditorCamera->SetNearClip(editCamNear);
+		//		m_EditorCamera->SetFarClip(editCamFar);
+		//	}
 
 		auto entities = data["Entities"];
 		if (entities)
@@ -252,19 +249,19 @@ namespace KDE
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Cube::MakeIndependent());
 					}
-					if (meshName == "Cone")
+					else if (meshName == "Cone")
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Cone::MakeIndependent(24));
 					}
-					if (meshName == "Plane")
+					else if (meshName == "Plane")
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Plane::Make());
 					}
-					if (meshName == "Prism")
+					else if (meshName == "Prism")
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Prism::MakeIndependent(24));
 					}
-					if (meshName == "Sphere")
+					else if (meshName == "Sphere")
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Sphere::Make());
 					}
@@ -273,13 +270,13 @@ namespace KDE
 				if (plComp)
 				{
 					auto& plc = deserEntity.AddComponent<CS::PointLightComponent>();
-					plc.LightCBuffer.Ambient			= renderComp["Ambient"].as<DirectX::XMFLOAT3>();
-					plc.LightCBuffer.AttenuateConst		= renderComp["AttenuateConst"].as<float>();
-					plc.LightCBuffer.AttenuateLatency	= renderComp["AttenuateLatency"].as<float>();
-					plc.LightCBuffer.AttenuateQuad		= renderComp["AttenuateQuad"].as<float>();
-					plc.LightCBuffer.DiffuseColor		= renderComp["DiffuseColor"].as<DirectX::XMFLOAT3>();
-					plc.LightCBuffer.DiffuseIntensity	= renderComp["DiffuseIntensity"].as<float>();
-					plc.LightCBuffer.LightPos			= renderComp["LightPos"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.Ambient = renderComp["Ambient"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.AttenuateConst = renderComp["AttenuateConst"].as<float>();
+					plc.LightCBuffer.AttenuateLatency = renderComp["AttenuateLatency"].as<float>();
+					plc.LightCBuffer.AttenuateQuad = renderComp["AttenuateQuad"].as<float>();
+					plc.LightCBuffer.DiffuseColor = renderComp["DiffuseColor"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.DiffuseIntensity = renderComp["DiffuseIntensity"].as<float>();
+					plc.LightCBuffer.LightPos = renderComp["LightPos"].as<DirectX::XMFLOAT3>();
 				}
 				//	auto camDiffuseIntensityComp = ent["CameraComponent"];
 				//	if (camCLightPos;omp)

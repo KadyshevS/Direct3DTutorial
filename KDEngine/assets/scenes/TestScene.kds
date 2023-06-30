@@ -1,0 +1,26 @@
+Scene: Untitled Scene
+Entities:
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: LightSource
+    RenderComponent:
+      Position: [1.79999995, 1.60000002, 6.5999999]
+      Rotation: [0, 0, 0]
+      Scaling: [1, 1, 1]
+      Mesh: Cube
+    PointLightComponent:
+      Ambient: [0.150000006, 0.150000006, 0.150000006]
+      AttenuateConst: 1
+      AttenuateLatency: 0.0450000018
+      AttenuateQuad: 0.00749999983
+      DiffuseColor: [1, 1, 1]
+      DiffuseIntensity: 1
+      LightPos: [1.79999995, 1.60000002, 6.5999999]
+  - Entity: 12837192831273
+    TagComponent:
+      Tag: TestEntity
+    RenderComponent:
+      Position: [-0.400000006, -2.4000001, 11.1999998]
+      Rotation: [-13.8999996, 29.6000004, 0]
+      Scaling: [1, 1, 1]
+      Mesh: Cube

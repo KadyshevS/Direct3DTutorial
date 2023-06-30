@@ -30,7 +30,5 @@ namespace KDE
 		std::unique_ptr<KDScene> Scene;
 		std::shared_ptr<SceneHierarchyPanel> SceneHierarchy;
 		std::shared_ptr<SceneSerializer> SceneSerialize;
-
-		float rotation = 0.0f;
 	};
 }
