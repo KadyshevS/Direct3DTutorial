@@ -74,14 +74,14 @@ namespace KDE
 		return out;
 	}
 
-	SceneSerializer::SceneSerializer(KDScene& scene)
-		: m_Scene(&scene)
+	SceneSerializer::SceneSerializer(KDScene* scene)
+		: m_Scene(scene)
 	{}
 	// SceneSerializer::SceneSerializer(const Ref<Scene>& scene, const Ref<EditorCamera>& editCamera)
 	// 	: m_Scene(scene), m_EditorCamera(editCamera)
 	// {}
 
-	static void SerializeEntity(YAML::Emitter& out, KDEntity ent)
+	static void SerializeEntity(YAML::Emitter& out, KDEntity& ent)
 	{
 		out << YAML::BeginMap;
 		out << YAML::Key << "Entity" << YAML::Value << "12837192831273";
@@ -204,7 +204,7 @@ namespace KDE
 		if (!data["Scene"])
 			return false;
 
-		//	std::string sceneName = data["Scene"].as<std::string>();
+		std::string sceneName = data["Scene"].as<std::string>();
 
 		//	if (auto editCameraData = data["EditorCamera"]; editCameraData.IsDefined())
 		//	{
@@ -270,13 +270,13 @@ namespace KDE
 				if (plComp)
 				{
 					auto& plc = deserEntity.AddComponent<CS::PointLightComponent>();
-					plc.LightCBuffer.Ambient = renderComp["Ambient"].as<DirectX::XMFLOAT3>();
-					plc.LightCBuffer.AttenuateConst = renderComp["AttenuateConst"].as<float>();
-					plc.LightCBuffer.AttenuateLatency = renderComp["AttenuateLatency"].as<float>();
-					plc.LightCBuffer.AttenuateQuad = renderComp["AttenuateQuad"].as<float>();
-					plc.LightCBuffer.DiffuseColor = renderComp["DiffuseColor"].as<DirectX::XMFLOAT3>();
-					plc.LightCBuffer.DiffuseIntensity = renderComp["DiffuseIntensity"].as<float>();
-					plc.LightCBuffer.LightPos = renderComp["LightPos"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.Ambient = plComp["Ambient"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.AttenuateConst = plComp["AttenuateConst"].as<float>();
+					plc.LightCBuffer.AttenuateLatency = plComp["AttenuateLatency"].as<float>();
+					plc.LightCBuffer.AttenuateQuad = plComp["AttenuateQuad"].as<float>();
+					plc.LightCBuffer.DiffuseColor = plComp["DiffuseColor"].as<DirectX::XMFLOAT3>();
+					plc.LightCBuffer.DiffuseIntensity = plComp["DiffuseIntensity"].as<float>();
+					plc.LightCBuffer.LightPos = plComp["LightPos"].as<DirectX::XMFLOAT3>();
 				}
 				//	auto camDiffuseIntensityComp = ent["CameraComponent"];
 				//	if (camCLightPos;omp)

@@ -9,7 +9,7 @@ namespace KDE
 	class SceneSerializer
 	{
 	public:
-		SceneSerializer(KDScene& scene);
+		SceneSerializer(KDScene* scene);
 	// TODO:	SceneSerializer(const Scene>& scene, const Ref<EditorCamera>& editCamera);
 
 		void Serialize(const std::string& src);

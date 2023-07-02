@@ -17,7 +17,6 @@ namespace KDE
 	{
 		Scene = std::make_unique<KDScene>(Window->Graphics());
 		SceneHierarchy = std::make_shared<SceneHierarchyPanel>(*Scene.get(), Window->Keyboard);
-		SceneSerialize = std::make_shared<SceneSerializer>(*Scene.get());
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -25,13 +24,28 @@ namespace KDE
 
 	void EditorLayer::OnUpdate(float ts)
 	{
+		if (Window->Keyboard.IsKeyPressed(Key::Control))
+		{
+		//	if (Window->Keyboard.IsKeyPressed(Key::Shift))
+		//	{
+				if (Window->Keyboard.IsKeyPressed('S'))
+				{
+					SaveSceneAs();
+				}
+		//	}
+			else if (Window->Keyboard.IsKeyPressed('O'))
+			{
+				LoadScene();
+			}
+		}
+
 		Scene->Draw();
 	}
 	void EditorLayer::NewScene()
 	{
 		Scene = std::make_unique<KDScene>(Window->Graphics());
 		//	Scene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		SceneHierarchy->SetContext(*Scene);
+		SceneHierarchy->SetContext(*Scene.get());
 	}
 	void EditorLayer::LoadScene()
 	{
@@ -42,7 +56,7 @@ namespace KDE
 		std::string filepath = FileDialog::OpenFile("KDEngine Scene (*.kds)\0*.kds\0", *Window);
 		if (!filepath.empty())
 		{
-			SceneSerializer ser(*Scene);
+			SceneSerializer ser(Scene.get());
 			ser.Deserialize(filepath);
 		}
 	}
@@ -51,7 +65,7 @@ namespace KDE
 		std::string filepath = FileDialog::SaveFile("KDEngine Scene (*.kds)\0*.kds\0", *Window);
 		if (!filepath.empty())
 		{
-			SceneSerializer ser(*Scene);
+			SceneSerializer ser(Scene.get());
 			ser.Serialize(filepath.ends_with(".kds") ? filepath : (filepath + ".kds"));
 		}
 	}

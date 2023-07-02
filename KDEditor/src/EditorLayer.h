@@ -29,6 +29,5 @@ namespace KDE
 	private:
 		std::unique_ptr<KDScene> Scene;
 		std::shared_ptr<SceneHierarchyPanel> SceneHierarchy;
-		std::shared_ptr<SceneSerializer> SceneSerialize;
 	};
 }

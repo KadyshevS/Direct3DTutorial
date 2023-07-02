@@ -23,4 +23,4 @@ Entities:
       Position: [-0.400000006, -2.4000001, 11.1999998]
       Rotation: [-13.8999996, 29.6000004, 0]
       Scaling: [1, 1, 1]
-      Mesh: Cube
+      Mesh: Sphere

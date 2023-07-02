@@ -191,7 +191,7 @@ namespace KDE
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 165.0f, lineHeight };
 
-		if (ImGui::Button(value.c_str(), buttonSize));
+		if (ImGui::Button(value.c_str(), buttonSize)) {}
 
 		ImVec2 buttonSize2 = { lineHeight + 25.0f, lineHeight };
 
@@ -201,7 +201,7 @@ namespace KDE
 
 		ImGui::SameLine();
 		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Load", buttonSize2));
+		if (ImGui::Button("Load", buttonSize2)) {}
 		ImGui::PopFont();
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
@@ -228,12 +228,12 @@ namespace KDE
 			{
 				tag = std::string(buf);
 			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponent");
 		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Add Component"))
-			ImGui::OpenPopup("AddComponent");
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
