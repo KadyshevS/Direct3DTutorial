@@ -233,18 +233,13 @@ namespace KDE
 					name = tagComp["Tag"].as<std::string>();
 
 				KDEntity deserEntity = m_Scene->CreateEntity(name);
-
 				auto renderComp = ent["RenderComponent"];
+
 				if (renderComp)
 				{
-					auto& tc = deserEntity.GetComponent<CS::RenderComponent>();
-					tc.Mesh->Transform.Position = renderComp["Position"].as<DirectX::XMFLOAT3>();
-					tc.Mesh->Transform.Rotation = renderComp["Rotation"].as<DirectX::XMFLOAT3>();
-					tc.Mesh->Transform.Scaling = renderComp["Scaling"].as<DirectX::XMFLOAT3>();
-
 					auto meshName = renderComp["Mesh"].as<std::string>();
-					auto& pMesh = tc.Mesh;
-
+					auto& pMesh = deserEntity.GetComponent<CS::RenderComponent>().Mesh;
+					
 					if (meshName == "Cube")
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Cube::MakeIndependent());
@@ -265,6 +260,12 @@ namespace KDE
 					{
 						pMesh = std::make_shared<KDMesh>(GP::Sphere::Make());
 					}
+
+					auto& tc = pMesh->Transform;
+
+					tc.Position = renderComp["Position"].as<DirectX::XMFLOAT3>();
+					tc.Rotation = renderComp["Rotation"].as<DirectX::XMFLOAT3>();
+					tc.Scaling = renderComp["Scaling"].as<DirectX::XMFLOAT3>();
 				}
 				auto plComp = ent["PointLightComponent"];
 				if (plComp)
