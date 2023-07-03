@@ -1,6 +1,6 @@
 workspace "KDEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "KDEditor"
 
 	configurations
 	{
@@ -61,6 +61,11 @@ project "KDEngine"
 		"ImGui",
 		"yaml-cpp"
 	}
+
+	libdirs
+	{
+		"%{prj.name}/lib/Shared"
+	}
 	
 	flags
 	{
@@ -77,26 +82,35 @@ project "KDEngine"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/Sandbox/\""),
 			("{COPY} %{cfg.buildtarget.relpath} \"bin/" .. outputdir .. "/KDEditor/\""),
-	--		("{COPYDIR} assets \"bin/" .. outputdir .. "/Sandbox/assets\""),
-	--		("{COPYDIR} assets \"bin/" .. outputdir .. "/KDEditor/assets\"")
 		}
 
 	filter "configurations:Debug"
 		defines "_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		libdirs
+		{
+			"%{prj.name}/lib/Debug"
+		}
 
 	filter "configurations:Release"
 		defines "_RELEASE"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"%{prj.name}/lib/Release"
+		}
 
 	filter "configurations:Dist"
 		defines "_DIST"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"%{prj.name}/lib/Release"
+		}
 		
 project "Sandbox"
 	location "Sandbox"
@@ -129,6 +143,11 @@ project "Sandbox"
 	{
 		"KDEngine"
 	}
+
+	libdirs
+	{
+		"KDEngine/lib/Shared"
+	}
 	
 	flags
 	{
@@ -147,16 +166,28 @@ project "Sandbox"
 		defines "_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		libdirs
+		{
+			"KDEngine/lib/Debug"
+		}
 
 	filter "configurations:Release"
 		defines "_RELEASE"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"KDEngine/lib/Release"
+		}
 
 	filter "configurations:Dist"
 		defines "_DIST"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"KDEngine/lib/Release"
+		}
 
 project "KDEditor"
 	location "KDEditor"
@@ -189,6 +220,11 @@ project "KDEditor"
 	{
 		"KDEngine"
 	}
+
+	libdirs
+	{
+		"KDEngine/lib/Shared"
+	}
 	
 	flags
 	{
@@ -207,13 +243,25 @@ project "KDEditor"
 		defines "_DEBUG"
 		runtime "Debug"
 		symbols "on"
+		libdirs
+		{
+			"KDEngine/lib/Debug"
+		}
 
 	filter "configurations:Release"
 		defines "_RELEASE"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"KDEngine/lib/Release"
+		}
 
 	filter "configurations:Dist"
 		defines "_DIST"
 		runtime "Release"
 		optimize "on"
+		libdirs
+		{
+			"KDEngine/lib/Release"
+		}
